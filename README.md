@@ -1,4 +1,4 @@
-··* Alex Contreras
-··* Pol Moya
-··* Sergio Paredes
-··* Joan Sanchez
+* Alex Contreras
+* Pol Moya
+* Sergio Paredes
+* Joan Sanchez
