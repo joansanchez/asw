@@ -21,3 +21,7 @@ class Contribution:
                          'text' TEXT,
                          time TIMESTAMP
                          )'''
+
+    @staticmethod
+    def get_contributions(repository):
+        return repository.list('SELECT * FROM contribution')
