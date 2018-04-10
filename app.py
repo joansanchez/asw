@@ -4,6 +4,7 @@ from flask import Flask, logging
 
 from contribution import Contribution
 from persistence import Persistence
+from user import User
 
 app = Flask(__name__)
 
@@ -15,5 +16,5 @@ def hello_world():
 
 if __name__ == '__main__':
     repository = Persistence(os.environ['DB_PATH'], logging.getLogger(__name__))
-    repository.init_db([Contribution.get_table_creation()])
+    repository.init_db([Contribution.get_table_creation(), User.get_table_creation()])
     app.run()
