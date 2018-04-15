@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, logging
+from flask import Flask, logging, render_template
 
 from contribution import Contribution
 from persistence import Persistence
@@ -14,7 +14,17 @@ def hello_world():
     return 'Hello World!'
 
 
+@app.route('/Submit')
+def submit():
+    return render_template('submit.html')
+
+@app.route('/BookMarklet')
+def bookmarklet():
+    return render_template('marklet.html')
+
+
 if __name__ == '__main__':
     repository = Persistence(os.environ['DB_PATH'], logging.getLogger(__name__))
     repository.init_db([User.get_table_creation(), Contribution.get_table_creation()])
-    app.run()
+    app.run(debug=True)
+
