@@ -1,4 +1,3 @@
-
 import os
 
 from flask import Flask, logging, render_template
@@ -17,7 +16,7 @@ def home(p=1):
     offset = pageSize * (p-1)
     contributions = contributions[offset:offset+pageSize]
     p = p+1
-    return render_template('home.html', contributions=contributions, p = p)
+    return render_template('new.html', contributions=contributions, p=p)
 
 if __name__ == '__main__':
     repository = Persistence(os.environ['DB_PATH'], logging.getLogger(__name__))
