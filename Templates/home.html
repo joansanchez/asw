@@ -40,11 +40,7 @@
                                         <td style="text-align:right;padding-right:4px;">
                                             <span class="pagetop">
                                                 <a id="" href="">
-                                                    polmoya
-                                                </a>
-                                                 (1) &nbsp;|&nbsp;
-                                                <a id="" href="">
-                                                    logout
+                                                    login
                                                 </a>
                                             </span>
                                         </td>
@@ -58,24 +54,24 @@
                         <td>
                             <table>
                                 <tbody>
-                                {% for i in contributions: %}
-                                    {% c = contributions[i] %}
-                                    <tr class="athing" id="{{ c.id }}">
+                                {% for i in contributions %}
+                                    <tr class="athing" id="{{ i.id }}">
                                         <td align="right" valign="top" class="title">
-                                            <span class="rank">{{ i }}.</span>
+                                            <span class="rank">{{ i.id }}.</span>
                                         </td>
                                         <td valign="top" class="votelinks">
                                             <center>
-                                                <a id="up_{{ c.id }}" onclick="return vote(event, this, &quot;up&quot;)" href="">
+                                                <a id="up_{{ i.id }}" onclick="return vote(event, this, &quot;up&quot;)"
+                                                   href="">
                                                     <div class="votearrow" title="upvote"></div>
                                                 </a>
                                             </center>
                                         </td>
                                         <td class="title">
-                                            <a href= {{ c.url }}> {{ c.title }}</a>
+                                            <a href= {{ i.url }}> {{ i.title }}</a>
                                             <span class="sitebit comhead"> (
-                                                <a href= {{ c.url }}>
-                                                    <span class="sitestr">{{ c.url }}</span>
+                                                <a href= {{ i.url }}>
+                                                    <span class="sitestr">{{ i.url }}</span>
                                                 </a>)
                                             </span>
                                         </td>
@@ -83,29 +79,23 @@
                                     <tr>
                                         <td colspan="2"></td>
                                         <td class="subtext">
-                                            <span class="score" id="score_{{ c.id }}"> points</span>
+                                            <span class="score" id="score_{{ i.id }}"> points</span>
                                             by
-                                            <a href="user?id={{ c.username }}"> {{ c.username }}</a>
+                                            <a href="user?id={{ i.user }}"> {{ i.user }}</a>
                                             <span class="age">
-                                                <a href="item?id={{ c.id }}">{{ c.time }} ago</a>
+                                                <a href="item?id={{ i.id }}">{{ i.time }} ago</a>
                                             </span>
-                                            <span id="unv_{{ c.id }}"></span>
+                                            <span id="unv_{{ i.id }}"></span>
                                             |
-                                            <a href="" onclick="return hidestory(event, this, {{ c.id }})">hide</a>
+                                            <a href="" onclick="return hidestory(event, this, {{ i.id }})">hide</a>
                                             |
-                                            <a href="item?id={{ c.id }}">0&nbsp;comment</a>
+                                            <a href="item?id={{ i.id }}">0&nbsp;comment</a>
                                         </td>
                                     </tr>
                                     <tr class="spacer" style="height:5px"></tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td class="title">
-                            <a href="news?p={{ p }}" class="morelink" rel="nofollow" style="color: black">More</a>
                         </td>
                     </tr>
                     <tr>
