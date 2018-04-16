@@ -16,6 +16,8 @@ Add following environment variables:
 
 ```
 DB_PATH -> path to sqlite file
+HOST -> host to listen
+PORT -> port to deploy
 ```
 
 ## PyCharm Setup
