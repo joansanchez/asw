@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>Hacker News</title>
+        <link rel="stylesheet" href="./../static/css/home.css"/>
+    </head>
+    <body>
+        <center>
+            <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+                <tbody>
+                    <tr>
+                        <td bgcolor="#ff6600">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:18px;padding-right:4px">
+                                            <a>
+                                              <img src={{ url_for('static', filename='img/favicon.ico') }} width="18" height="18" style="border:1px white solid;">
+                                            </a>
+                                        </td>
+                                        <td style="line-height: 12pt; height: 10px;">
+                                            <span class="pagetop">
+                                                <b class="hnname">
+                                                    <a href="" style="color: black"> Hacker News</a>
+                                                </b>
+                                                <a href=""> &nbsp; welcome</a>
+                                                &nbsp;|&nbsp;
+                                                <a href="">threads</a>
+                                                &nbsp;|&nbsp;
+                                                <a href="">comments</a>
+                                                &nbsp;|&nbsp;
+                                                <a href="">show</a>
+                                                 &nbsp;|&nbsp;
+                                                <a href="">ask</a>
+                                                 &nbsp;|&nbsp;
+                                                <a href="">jobs</a>
+                                                 &nbsp;|&nbsp;
+                                                <a href="">submit</a>
+                                            </span>
+                                        </td>
+                                        <td style="text-align:right;padding-right:4px;">
+                                            <span class="pagetop">
+                                                <a id="" href="">
+                                                    login
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="height:10px"></tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tbody>
+                                {% for i in contributions %}
+                                    <tr class="athing" id="{{ i.id }}">
+                                        <td align="right" valign="top" class="title">
+                                            <span class="rank">{{ i.id }}.</span>
+                                        </td>
+                                        <td valign="top" class="votelinks">
+                                            <center>
+                                                <a id="up_{{ i.id }}" onclick="return vote(event, this, &quot;up&quot;)"
+                                                   href="">
+                                                    <div class="votearrow" title="upvote"></div>
+                                                </a>
+                                            </center>
+                                        </td>
+                                        <td class="title">
+                                            <a href= {{ i.url }}> {{ i.title }}</a>
+                                            <span class="sitebit comhead"> (
+                                                <a href= {{ i.url }}>
+                                                    <span class="sitestr">{{ i.url }}</span>
+                                                </a>)
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td class="subtext">
+                                            <span class="score" id="score_{{ i.id }}"> points</span>
+                                            by
+                                            <a href="user?id={{ i.user }}"> {{ i.user }}</a>
+                                            <span class="age">
+                                                <a href="item?id={{ i.id }}">{{ i.time }} ago</a>
+                                            </span>
+                                            <span id="unv_{{ i.id }}"></span>
+                                            |
+                                            <a href="" onclick="return hidestory(event, this, {{ i.id }})">hide</a>
+                                            |
+                                            <a href="item?id={{ i.id }}">0&nbsp;comment</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="spacer" style="height:5px"></tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="../static/img/s.gif" height="10" width="0">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </center>
+    </body>
+</html>
+
+
+
+

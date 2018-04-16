@@ -6,12 +6,13 @@ from contribution import Contribution
 from persistence import Persistence
 from user import User
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./static')
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def home():
+    contributions = Contribution.get_news(repository)
+    return render_template('home.html', contributions=contributions)
 
 
 @app.route('/Submit')
