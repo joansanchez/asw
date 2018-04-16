@@ -19,6 +19,13 @@ def home():
 def submit():
     return render_template('submit.html')
 
+
+@app.route('/new')
+def new():
+    contributions = Contribution.get_news(repository)
+    return render_template('new.html', contributions=contributions)
+
+
 @app.route('/BookMarklet')
 def bookmarklet():
     return render_template('marklet.html')
