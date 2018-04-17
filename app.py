@@ -12,7 +12,12 @@ app = Flask(__name__, static_folder='./static')
 @app.route('/')
 def home():
     contributions = Contribution.get_news(repository)
-    return render_template('home.html', contributions=contributions)
+    return render_template('home.html', contributions=contributions)\
+
+@app.route('/login')
+def login():
+    return render_template('login.html')\
+
 
 
 @app.route('/submit')
