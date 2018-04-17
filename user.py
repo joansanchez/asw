@@ -8,7 +8,7 @@ class User:
     def get_table_creation():
         return '''CREATE TABLE IF NOT EXISTS 'user'
                             (email TEXT PRIMARY KEY,
-                            karma INTEGER DEFAULT 0
+                            karma INTEGER DEFAULT 0,
                             about TEXT
                             )'''
 

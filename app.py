@@ -12,17 +12,25 @@ app = Flask(__name__, static_folder='./static')
 @app.route('/')
 def home():
     contributions = Contribution.get_news(repository)
-    return render_template('home.html', contributions=contributions)\
+    return render_template('home.html', contributions=contributions)
+
 
 @app.route('/users', methods=['POST'])
 def users():
     username_id = request.form['id']
     print(username_id)
-    return ('', 204)
+    return '', 204
+
 
 @app.route('/submit')
 def submit():
     return render_template('submit.html')
+
+
+@app.route('/ask')
+def ask():
+    asks = Contribution.get_asks(repository)
+    return render_template('ask.html', asks=asks)
 
 
 @app.route('/new')
