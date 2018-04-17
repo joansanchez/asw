@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, logging, render_template
+from flask import Flask, logging, render_template, request
 
 from contribution import Contribution
 from persistence import Persistence
@@ -14,11 +14,11 @@ def home():
     contributions = Contribution.get_news(repository)
     return render_template('home.html', contributions=contributions)\
 
-@app.route('/login')
-def login():
-    return render_template('login.html')\
-
-
+@app.route('/users', methods=['POST'])
+def users():
+    username_id = request.form['id']
+    print(username_id)
+    return ('', 204)
 
 @app.route('/submit')
 def submit():

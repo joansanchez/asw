@@ -7,8 +7,9 @@ class User:
     @staticmethod
     def get_table_creation():
         return '''CREATE TABLE IF NOT EXISTS 'user'
-                            (username TEXT PRIMARY KEY,
-                            password TEXT
+                            (email TEXT PRIMARY KEY,
+                            karma INTEGER DEFAULT 0
+                            about TEXT
                             )'''
 
     def save(self, repository):
