@@ -1,13 +1,17 @@
 import os
 from logging import basicConfig, INFO
 
-from flask import Flask, logging, render_template, request
+from flask import Flask, logging, render_template, request, redirect, url_for
 from google.oauth2 import id_token
 from google.auth.transport import requests
+import requests
 
-from contribution import Contribution
+from contribution import Contribution, ContributionTypes
 from persistence import Persistence
 from user import User
+
+
+import datetime
 
 app = Flask(__name__, static_folder='./static')
 
@@ -50,6 +54,23 @@ def validate_token(username_token):
 @app.route('/submit')
 def submit():
     return render_template('submit.html')
+
+
+@app.route('/newpost', methods=['POST'])
+def newpost():
+    title = request.form["title"]
+    url = request.form["url"]
+    text = request.form["text"]
+    time = datetime.datetime.now()
+    username = 'Joan'
+    if url != '' and text == '':
+        contribution = Contribution(title, url, text, time, username, ContributionTypes.NEW.value)
+    elif text != '' and url == '':
+        contribution = Contribution(title, url, text, time, username, ContributionTypes.ASK.value)
+    else:
+        return redirect(url_for('submit'))
+    contribution.save(repository)
+    return redirect(url_for(''))
 
 
 @app.route('/ask')
