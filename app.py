@@ -2,6 +2,8 @@ import os
 from logging import basicConfig, INFO
 
 from flask import Flask, logging, render_template, request
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 from contribution import Contribution
 from persistence import Persistence
@@ -18,8 +20,26 @@ def home():
 
 @app.route('/users', methods=['POST'])
 def users():
-    username_id = request.form['id']
-    print(username_id)
+    username_token = request.form['token']
+    email = request.form['email']
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        CLIENT_ID = '443234130566-cba0cgt2np2alo9e3jhpb7au9hmeptoh.apps.googleusercontent.com'
+        idinfo = id_token.verify_oauth2_token(username_token, requests.Request(), CLIENT_ID)
+
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise ValueError('Wrong issuer.')
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+        userid = idinfo['sub']
+        print(email)
+        exists = User.exists(repository, email)
+        if not exists:
+            user = User(email)
+            user.save(repository)
+    except ValueError:
+        # Invalid token
+        return '', 403
     return '', 204
 
 
