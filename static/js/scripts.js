@@ -1,15 +1,16 @@
 function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
+    let email = googleUser.getBasicProfile().getEmail();
+    let token = googleUser.getAuthResponse().id_token;
     $.post('users',
-        {token: googleUser.getAuthResponse().id_token,
-        email: googleUser.getBasicProfile().getEmail()},
+        {token: token,
+        email: email},
         function (data, status) {
-            console.log(data);
+            localStorage.setItem('token', token)
+            $('#googleButton').hide()
+            $('#onLogin').show()
+            $('#currentUser').text(email)
+
+
         });
 }
 
