@@ -29,17 +29,20 @@
             <tr>
                 <td colspan="2"></td>
                 <td class="subtext">
-                    <span class="score" id="score_{{ i.id }}"> points</span>
+                    <span class="score" id="score_{{ i.id }}"> {{ i.n_votes }} points</span>
                     by
-                    <a href="user?id={{ i.username }}"> {{ i.username }}</a>
+                    <a href="user?id={{ i.username }}"> {{ i.username }} </a>
                     <span class="age">
-                                                <a href="item?id={{ i.id }}">{{ i.time }} ago</a>
-                                            </span>
-                    <span id="unv_{{ i.id }}"></span>
+                        <a href="item?id={{ i.id }}">{{ i.time }} ago</a>
+                    </span>
+                    <span id="unv_{{ i.id }}">
+                    |
+                    <a id="un_{{ i.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="">unvote</a>
+                    </span>
                     |
                     <a href="" onclick="return hidestory(event, this, {{ i.id }})">hide</a>
                     |
-                    <a href="item?id={{ i.id }}">0&nbsp;comment</a>
+                    <a href="item?id={{ i.id }}"> 0 &nbsp;comment</a>
                 </td>
             </tr>
             <tr class="spacer" style="height:5px"></tr>
