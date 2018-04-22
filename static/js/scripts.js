@@ -6,8 +6,11 @@ function onSignIn(googleUser) {
         email: email},
         function (data, status) {
             localStorage.setItem('token', token)
-            $('#googleButton').text(email)
-            $('#googleButton').off()
+            $('#googleButton').hide()
+            $('#onLogin').show()
+            $('#currentUser').text(email)
+
+
         });
 }
 

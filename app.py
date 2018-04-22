@@ -20,27 +20,31 @@ def home():
 
 @app.route('/users', methods=['POST'])
 def users():
-    username_token = request.form['token']
+    token = request.form['token']
     email = request.form['email']
     try:
-        # Specify the CLIENT_ID of the app that accesses the backend:
-        CLIENT_ID = '443234130566-cba0cgt2np2alo9e3jhpb7au9hmeptoh.apps.googleusercontent.com'
-        idinfo = id_token.verify_oauth2_token(username_token, requests.Request(), CLIENT_ID)
-
-        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-            raise ValueError('Wrong issuer.')
-
-        # ID token is valid. Get the user's Google Account ID from the decoded token.
-        userid = idinfo['sub']
-        print(email)
-        exists = User.exists(repository, email)
-        if not exists:
-            user = User(email)
-            user.save(repository)
+        validate_token(token)
     except ValueError:
-        # Invalid token
         return '', 403
+
+    exists = User.exists(repository, email)
+    if not exists:
+        user = User(email)
+        user.save(repository)
     return '', 204
+
+
+def validate_token(username_token):
+    # Specify the CLIENT_ID of the app that accesses the backend:
+    CLIENT_ID = '443234130566-cba0cgt2np2alo9e3jhpb7au9hmeptoh.apps.googleusercontent.com'
+    idinfo = id_token.verify_oauth2_token(username_token, requests.Request(), CLIENT_ID)
+
+    if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+        raise ValueError('Wrong issuer.')
+
+    # ID token is valid. Get the user's Google Account ID from the decoded token.
+    userid = idinfo['sub']
+    return userid
 
 
 @app.route('/submit')
