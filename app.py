@@ -55,7 +55,7 @@ def validate_token(username_token):
 def submit():
     return render_template('submit.html')
 
-#
+#a
 @app.route('/newpost', methods=['POST'])
 def newpost():
     title = request.form["title"]
