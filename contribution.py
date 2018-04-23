@@ -36,7 +36,7 @@ class Contribution:
                          'user' TEXT NOT NULL,
                          'kind' TEXT,
                          n_votes INTEGER,
-                         FOREIGN KEY('user') REFERENCES 'user' (username)
+                         FOREIGN KEY('user') REFERENCES 'user' (email)
                          )'''
 
     @staticmethod
@@ -49,9 +49,8 @@ class Contribution:
 
     @staticmethod
     def get_news_home(repository):
-        return repository.list('SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\' ORDER BY n_votes DESC')
-
-
+        return repository.list(
+            'SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\' ORDER BY n_votes DESC')
 
     @staticmethod
     def get_asks(repository):
