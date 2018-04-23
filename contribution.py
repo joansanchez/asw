@@ -19,8 +19,8 @@ class Contribution:
         self.n_votes = n_votes
 
     def save(self, repository):
-        sql_script = '''INSERT INTO contribution (title, url, \'text\', time, \'user\', kind, nvotes) 
-                        VALUES (:title, :url, :text, :time, :username, :kind, :nvotes)'''
+        sql_script = '''INSERT INTO contribution (title, url, \'text\', time, \'user\', kind, n_votes) 
+                        VALUES (:title, :url, :text, :time, :username, :kind, :n_votes)'''
         contribution = {'title': self.title, 'url': self.url, 'text': self.text, 'time': self.time,
                         'username': self.username, 'kind': self.kind.value, 'n_votes': self.n_votes}
         self.id = repository.insert(sql_script, contribution)

@@ -9,6 +9,7 @@ from google.oauth2 import id_token
 from contribution import Contribution, ContributionTypes
 from persistence import Persistence
 from user import User
+from usercontributionvoted import UserContributionVoted
 
 app = Flask(__name__, static_folder='./static')
 
@@ -84,7 +85,8 @@ def new():
 
 if __name__ == '__main__':
     repository = Persistence(os.environ['DB_PATH'], logging.getLogger(__name__))
-    repository.init_db([User.get_table_creation(), Contribution.get_table_creation()])
+    repository.init_db(
+        [User.get_table_creation(), Contribution.get_table_creation(), UserContributionVoted.get_table_creation()])
 
     basicConfig(filename=os.environ['LOG'], level=INFO)
 
