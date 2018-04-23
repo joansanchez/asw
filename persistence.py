@@ -80,3 +80,16 @@ class Persistence:
             if db_conn:
                 self.close_connection(db_conn)
             raise ex
+
+    def get(self, sql_script):
+        db_conn, db_client = self.create_connection()
+        try:
+            db_client.execute(sql_script)
+            row = db_client.fetchone()
+            self.close_connection(db_conn)
+            return row
+        except Exception as ex:
+            self.log.error('Error executing a query in the SQLite DB. Exception: ' + str(ex))
+            if db_conn:
+                self.close_connection(db_conn)
+            raise ex

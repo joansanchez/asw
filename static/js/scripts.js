@@ -4,14 +4,7 @@ function onSignIn(googleUser) {
     $.post('users',
         {token: token,
         email: email},
-        function (data, status) {
-            localStorage.setItem('token', token)
-            $('#googleButton').hide()
-            $('#onLogin').show()
-            $('#currentUser').text(email)
-
-
-        });
+        function (data, status) {});
 }
 
 function prepareGoogleSignIn() {

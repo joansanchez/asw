@@ -1,6 +1,6 @@
 class User:
 
-    def __init__(self, email, karma=None, about=None):
+    def __init__(self, email, karma=0, about=None):
         self.email = email
         self.karma = karma
         self.about = about
@@ -9,7 +9,7 @@ class User:
     def get_table_creation():
         return '''CREATE TABLE IF NOT EXISTS 'user'
                             (email TEXT PRIMARY KEY,
-                            karma INTEGER DEFAULT 0,
+                            karma INTEGER DEFAULT 0 NOT NULL,
                             about TEXT
                             )'''
 
@@ -22,3 +22,9 @@ class User:
     def exists(repository, email):
         sql_script = 'SELECT * FROM \'user\' WHERE email = \'' + email + '\''
         return repository.exists(sql_script)
+
+    @staticmethod
+    def get(repository, email):
+        sql_script = 'SELECT * FROM \'user\' WHERE email = \'' + email + '\''
+        user = repository.get(sql_script)
+        return User(user[0], user[1], user[2])

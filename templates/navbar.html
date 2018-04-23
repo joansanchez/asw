@@ -14,16 +14,19 @@
 </td>
 <td style="text-align:right;padding-right:4px;">
         <span class="pagetop">
+            {% if user is not defined %}
             <a id="googleButton" href="javascript:void(0)" data-onsuccess="onSignIn">
                 login
             </a>
-            <div id="onLogin" style="display: none">
+            {% else %}
+            <div>
                 <a id="currentUser" href="#">
-
+                    {{ user.email }} ({{ user.karma }})
                 </a>
                 <a id="logout" href="#">
                     | logout
                 </a>
             </div>
+            {% endif %}
         </span>
 </td>

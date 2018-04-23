@@ -24,7 +24,9 @@
 
                             </a>
                         </td>
-                        {% include './navbar.html' %}
+                        {% with user=user %}
+                            {% include './navbar.html' %}
+                        {% endwith %}
                     </tr>
                     </tbody>
                 </table>

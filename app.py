@@ -2,7 +2,7 @@ import datetime
 import os
 from logging import basicConfig, INFO
 
-from flask import Flask, logging, render_template, request, redirect, url_for
+from flask import Flask, logging, render_template, request, redirect, url_for, make_response
 from google.auth.transport import requests
 from google.oauth2 import id_token
 
@@ -17,7 +17,7 @@ app = Flask(__name__, static_folder='./static')
 @app.route('/')
 def home():
     contributions = Contribution.get_news_home(repository)
-    return render_template('home.html', contributions=contributions)
+    return render_template('home.html', contributions=contributions, user= User.get(repository, 'jsanchezgarcia13@gmail.com'))
 
 
 @app.route('/users', methods=['POST'])
@@ -33,7 +33,10 @@ def users():
     if not exists:
         user = User(email)
         user.save(repository)
-    return '', 204
+    user = User.get(repository, email)
+    resp = make_response(render_template('home.html', user=user))
+    resp.set_cookie('user', user.email)
+    return resp
 
 
 def validate_token(username_token):
