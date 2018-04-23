@@ -80,7 +80,7 @@ def ask():
 @app.route('/new')
 def new():
     contributions = Contribution.get_news(repository)
-    return render_template('new.html', contributions=contributions)
+    return render_template('home.html', contributions=contributions)
 
 
 if __name__ == '__main__':
