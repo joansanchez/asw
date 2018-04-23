@@ -60,11 +60,11 @@ def new_post():
     url = request.form["url"]
     text = request.form["text"]
     time = datetime.datetime.now()
-    username = 'Joan'
+    user = request.cookies.get('user')
     if url != '' and text == '':
-        contribution = Contribution(title, url, text, time, username, ContributionTypes.NEW.value, 0)
+        contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '':
-        contribution = Contribution(title, url, text, time, username, ContributionTypes.ASK.value, 0)
+        contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)
     else:
         return redirect(url_for('submit'))
     contribution.save(repository)
