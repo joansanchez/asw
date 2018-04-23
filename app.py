@@ -82,7 +82,7 @@ def ask():
 
 @app.route('/new')
 def new():
-    contributions = Contribution.get_news(repository)
+    contributions = Contribution.get_contributions_new(repository)
     return render_template('home.html', contributions=contributions)
 
 

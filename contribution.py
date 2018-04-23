@@ -53,5 +53,9 @@ class Contribution:
             'SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\' ORDER BY n_votes DESC')
 
     @staticmethod
+    def get_contributions_new(repository):
+        return repository.list('SELECT * FROM contribution ORDER BY time DESC')
+
+    @staticmethod
     def get_asks(repository):
         return repository.list('SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.ASK.value + '\'')
