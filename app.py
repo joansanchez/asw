@@ -1,6 +1,5 @@
 import datetime
 import os
-import time
 from logging import basicConfig, INFO
 
 from flask import Flask, logging, render_template, request, redirect, url_for, make_response
@@ -41,11 +40,13 @@ def login():
     resp.set_cookie('user', email)
     return resp
 
+
 @app.route('/user', methods=['GET'])
 def user():
     user_to_show = request.args.get('user', '')
     user = User.get(repository, user_to_show)
     return render_template('profile.html', user=user)
+
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -117,25 +118,30 @@ def update_profile():
     return redirect('')
 
 
-@app.template_filter('strftime')
-def _jinja2_filter_datetime(date):
-    return date
-    now_date = ((time.mktime(datetime.datetime.now().timetuple())) - date)
-    strftime = datetime.datetime.fromtimestamp(now_date).strftime('%M')
-    time_ago = int(strftime)
+@app.template_filter('time_ago')
+def _time_ago_filter(date):
+    date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+    now = datetime.datetime.now()
+    time_ago = now - date
+    time_ago = time_ago.seconds
+
     if time_ago < 60:
-        return str(time_ago) + " minutes"
+        return str(int(round(time_ago))) + " seconds"
 
-    elif time_ago/60 < 24:
-        time_ago /= 60
-        return str(time_ago) + " hours"
+    time_ago = time_ago / 60
+    if time_ago < 60:
+        return str(int(round(time_ago))) + " minutes"
 
-    elif time_ago/24 < 12:
-        time_ago /=24
-        return str(time_ago) + " months"
+    time_ago = time_ago / 60
+    if time_ago / 60 < 24:
+        return str(int(round(time_ago))) + " hours"
 
-    else:
-        return str(time_ago/12) + " years"
+    time_ago = time_ago / 24
+    if time_ago < 12:
+        return str(int(round(time_ago))) + " months"
+
+    time_ago = time_ago / 12
+    return str(int(round(time_ago))) + " years"
 
 
 if __name__ == '__main__':
