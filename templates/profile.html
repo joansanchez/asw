@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+        <table border="0">
+            <tr class='athing'>
+                <td valign="top">user:</td>
+                <td><a href="user?user={{user.email}}" class="hnuser">{{ user.email }}</a></td>
+            </tr>
+            <tr>
+                <td valign="top">karma:</td>
+                <td>
+                    {{ user.karma }}
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">about:</td>
+                <td>
+                    {{ user.about }}
+                </td>
+            </tr>
+        </table>
+        <br><br>
+
+{% endblock %}
