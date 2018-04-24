@@ -86,7 +86,7 @@ def ask():
     username = request.cookies.get('user')
     if username is not None and username:
         user = User.get(repository, username)
-        return render_template('home.html', contributions=asks, user=user)
+        return render_template('ask.html', contributions=asks, user=user)
     return render_template('ask.html', asks=asks)
 
 

@@ -7,7 +7,7 @@
 {% block content %}
     <table>
         <tbody>
-        {% for i in asks %}
+        {% for i in contributions %}
             <tr class="athing" id="{{ loop.index }}">
                 <td align="right" valign="top" class="title">
                     <span class="rank">{{ loop.index }}.</span>
@@ -21,7 +21,7 @@
                     </center>
                 </td>
                 <td class="title">
-                    <a href= {{ i.url }}> {{ i.title }}</a>
+                    <a href='#'> {{ i.title }}</a>
                 </td>
             </tr>
             <tr>
