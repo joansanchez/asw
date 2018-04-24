@@ -1,5 +1,6 @@
 import datetime
 import os
+import time
 from logging import basicConfig, INFO
 
 from flask import Flask, logging, render_template, request, redirect, url_for, make_response
@@ -10,6 +11,7 @@ from contribution import Contribution, ContributionTypes
 from persistence import Persistence
 from user import User
 from usercontributionvoted import UserContributionVoted
+import dateutil.parser
 
 app = Flask(__name__, static_folder='./static')
 
@@ -88,6 +90,16 @@ def ask():
 def new():
     contributions = Contribution.get_contributions_new(repository)
     return render_template('home.html', contributions=contributions)
+
+
+@app.template_filter('strftime')
+def _jinja2_filter_datetime(date):
+    now_date = (time.mktime(datetime.datetime.now().timetuple())) - date
+    strftime = datetime.datetime.fromtimestamp(now_date).strftime('%M')
+
+
+
+    return strftime
 
 
 if __name__ == '__main__':

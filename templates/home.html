@@ -34,9 +34,9 @@
                 <td class="subtext">
                     <span class="score" id="score_{{ i.id }}"> {{ i.n_votes }} points</span>
                     by
-                    <a href="user?id={{ i.user }}"> {{ i.user }} </a>
+                    <a href="user?user={{ i.user }}"> {{ i.user }} </a>
                     <span class="age">
-                        <a href="item?id={{ i.id }}">{{ i.time }} ago</a>
+                        <a href="item?id={{ i.id }}">{{ i.time|strftime }} ago</a>
                     </span>
                     <span id="unv_{{ i.id }}">
                     |
