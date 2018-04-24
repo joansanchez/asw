@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% if user %}
+    {% set user=user %}
+{% endif %}
+
 {% block content %}
     <table>
         <tbody>

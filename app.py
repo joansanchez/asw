@@ -4,10 +4,9 @@ import time
 from logging import basicConfig, INFO
 
 from flask import Flask, logging, render_template, request, redirect, url_for, make_response
-from google.auth.transport import requests
-from google.oauth2 import id_token
 
 from contribution import Contribution, ContributionTypes
+from google_login import validate_token
 from persistence import Persistence
 from user import User
 from usercontributionvoted import UserContributionVoted
@@ -19,14 +18,14 @@ app = Flask(__name__, static_folder='./static')
 def home():
     contributions = Contribution.get_news_home(repository)
     username = request.cookies.get('user')
-    if username is not None:
+    if username is not None and username:
         user = User.get(repository, username)
         return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
 
 
-@app.route('/users', methods=['POST'])
-def users():
+@app.route('/login', methods=['POST'])
+def login():
     token = request.form['token']
     email = request.form['email']
     try:
@@ -38,9 +37,8 @@ def users():
     if not exists:
         user = User(email)
         user.save(repository)
-    user = User.get(repository, email)
-    resp = make_response(render_template('home.html', user=user))
-    resp.set_cookie('user', user.email)
+    resp = make_response(redirect(''))
+    resp.set_cookie('user', email)
     return resp
 
 @app.route('/user', methods=['GET'])
@@ -49,21 +47,19 @@ def user():
     user = User.get(repository, user_to_show)
     return render_template('profile.html', user=user)
 
-def validate_token(username_token):
-    # Specify the CLIENT_ID of the app that accesses the backend:
-    client_id = '443234130566-cba0cgt2np2alo9e3jhpb7au9hmeptoh.apps.googleusercontent.com'
-    id_info = id_token.verify_oauth2_token(username_token, requests.Request(), client_id)
-
-    if id_info['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-        raise ValueError('Wrong issuer.')
-
-    # ID token is valid. Get the user's Google Account ID from the decoded token.
-    user_id = id_info['sub']
-    return user_id
+@app.route('/logout', methods=['POST'])
+def logout():
+    resp = make_response(redirect(''))
+    resp.set_cookie('user', '', expires=(datetime.datetime.now()))
+    return resp
 
 
 @app.route('/submit')
 def submit():
+    username = request.cookies.get('user')
+    if username is not None and username:
+        user = User.get(repository, username)
+        return render_template('submit.html', user=user)
     return render_template('submit.html')
 
 
@@ -87,12 +83,20 @@ def new_post():
 @app.route('/ask')
 def ask():
     asks = Contribution.get_asks(repository)
+    username = request.cookies.get('user')
+    if username is not None and username:
+        user = User.get(repository, username)
+        return render_template('home.html', contributions=asks, user=user)
     return render_template('ask.html', asks=asks)
 
 
 @app.route('/new')
 def new():
     contributions = Contribution.get_contributions_new(repository)
+    username = request.cookies.get('user')
+    if username is not None and username:
+        user = User.get(repository, username)
+        return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
 
 
@@ -128,4 +132,5 @@ if __name__ == '__main__':
 
     basicConfig(filename=os.environ['LOG'], level=INFO)
 
+    app.config.update(TEMPLATES_AUTO_RELOAD=True)
     app.run(host=str(os.environ['HOST']), port=int(os.environ['PORT']))

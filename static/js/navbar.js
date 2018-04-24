@@ -1,16 +1,25 @@
 function onSignIn(googleUser) {
     let email = googleUser.getBasicProfile().getEmail();
     let token = googleUser.getAuthResponse().id_token;
-    $.post('users',
-        {
-            token: token,
-            email: email
-        },
-        function (data, status) {
-        });
+
+    let $form = $('<form>', {
+        action: 'login',
+        method: 'post'
+    });
+    $('<input>').attr({
+        type: "hidden",
+        name: 'token',
+        value: token
+    }).appendTo($form);
+    $('<input>').attr({
+        type: "hidden",
+        name: 'email',
+        value: email
+    }).appendTo($form);
+    $form.appendTo('body').submit();
 }
 
-function prepareGoogleSignIn() {
+function prepareSignIn() {
     if (document.getElementById('googleButton')) {
         gapi.load('auth2', function () {
             gapi.auth2.init({
@@ -23,4 +32,4 @@ function prepareGoogleSignIn() {
     }
 }
 
-prepareGoogleSignIn();
+prepareSignIn();
