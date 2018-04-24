@@ -28,3 +28,9 @@ class User:
         sql_script = 'SELECT * FROM \'user\' WHERE email = \'' + email + '\''
         user = repository.get(sql_script)
         return User(user[0], user[1], user[2])
+
+    def update(self, repository, about):
+        sql_script = 'UPDATE \'user\' SET about = \'' + about + '\' WHERE email = \'' + self.email + '\''
+        user = {'email': self.email, 'karma': self.karma, 'about': about}
+        repository.insert(sql_script, user)
+        self.about = about

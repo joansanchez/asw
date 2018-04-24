@@ -99,6 +99,23 @@ def new():
         return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
 
+@app.route('/editProfile')
+def edit_profile():
+    username = request.cookies.get('user')
+    if username is not None and username:
+        user = User.get(repository, username)
+        return render_template('editProfile.html', user=user)
+    return redirect('')
+
+@app.route('/updateUser', methods=['POST'])
+def update_profile():
+    username = request.cookies.get('user')
+    if username is not None and username:
+        user = User.get(repository, username)
+        user.update(repository, request.form["about"])
+        return render_template('editProfile.html', user=user)
+    return redirect('')
+
 
 @app.template_filter('strftime')
 def _jinja2_filter_datetime(date):
