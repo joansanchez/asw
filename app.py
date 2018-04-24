@@ -11,7 +11,6 @@ from contribution import Contribution, ContributionTypes
 from persistence import Persistence
 from user import User
 from usercontributionvoted import UserContributionVoted
-import dateutil.parser
 
 app = Flask(__name__, static_folder='./static')
 
