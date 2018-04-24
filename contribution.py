@@ -22,7 +22,7 @@ class Contribution:
         sql_script = '''INSERT INTO contribution (title, url, \'text\', time, \'user\', kind, n_votes) 
                         VALUES (:title, :url, :text, :time, :username, :kind, :n_votes)'''
         contribution = {'title': self.title, 'url': self.url, 'text': self.text, 'time': self.time,
-                        'username': self.username, 'kind': self.kind.value, 'n_votes': self.n_votes}
+                        'username': self.username, 'kind': self.kind, 'n_votes': self.n_votes}
         self.id = repository.insert(sql_script, contribution)
 
     @staticmethod
