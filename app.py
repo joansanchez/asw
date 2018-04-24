@@ -17,7 +17,11 @@ app = Flask(__name__, static_folder='./static')
 @app.route('/')
 def home():
     contributions = Contribution.get_news_home(repository)
-    return render_template('home.html', contributions=contributions, user= User.get(repository, 'jsanchezgarcia13@gmail.com'))
+    username = request.cookies.get('user')
+    if username is not None:
+        user = User.get(repository, username)
+        return render_template('home.html', contributions=contributions, user=user)
+    return render_template('home.html', contributions=contributions)
 
 
 @app.route('/users', methods=['POST'])
