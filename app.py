@@ -99,12 +99,27 @@ def new():
 
 @app.template_filter('strftime')
 def _jinja2_filter_datetime(date):
-    now_date = (time.mktime(datetime.datetime.now().timetuple())) - date
+    now_date = ((time.mktime(datetime.datetime.now().timetuple())) - date)
+    print(date)
+    print(time.mktime(datetime.datetime.now().timetuple()))
+    print (now_date)
     strftime = datetime.datetime.fromtimestamp(now_date).strftime('%M')
+    time_ago = int(strftime)
+    print (strftime)
+    print(time_ago)
+    if time_ago < 60:
+        return str(time_ago) + " minutes"
 
+    elif time_ago/60 < 24:
+        time_ago /= 60
+        return str(time_ago) + " hours"
 
+    elif time_ago/24 < 12:
+        time_ago /=24
+        return str(time_ago) + " months"
 
-    return strftime
+    else:
+        return str(time_ago/12) + " years"
 
 
 if __name__ == '__main__':
