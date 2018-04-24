@@ -42,6 +42,11 @@ def users():
     resp.set_cookie('user', user.email)
     return resp
 
+@app.route('/user', methods=['GET'])
+def user():
+    user_to_show = request.args.get('user', '')
+    user = User.get(repository, user_to_show)
+    return render_template('profile.html', user=user)
 
 def validate_token(username_token):
     # Specify the CLIENT_ID of the app that accesses the backend:
