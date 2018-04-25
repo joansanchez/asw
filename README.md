@@ -19,7 +19,18 @@ DB_PATH -> path to sqlite file
 HOST -> host to listen
 PORT -> port to deploy
 LOG -> path to log file
+SECRET_KEY -> secret to generate tokens
 ```
+
+You can generate a key on a Python console with:
+
+```python
+>>> import os
+>>> os.urandom(24)
+b"\xf9'\xe4p(\xa9\x12\x1a!\x94\x8d\x1c\x99l\xc7\xb7e\xc7c\x86\x02MJ\xa0"
+```
+
+Use only the content inside double quotes.
 
 ## PyCharm Setup
 
