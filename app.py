@@ -65,6 +65,10 @@ def submit():
     return render_template('submit.html')
 
 
+@app.route('/contriburion_id')
+def comentaris():
+    return render_template('contribution.html')
+
 @app.route('/newpost', methods=['POST'])
 def new_post():
     title = request.form["title"]
