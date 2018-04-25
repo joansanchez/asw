@@ -4,12 +4,12 @@ from logging import basicConfig, INFO
 
 from flask import Flask, logging, render_template, request, redirect, url_for, make_response
 
+from comment import Comment
 from contribution import Contribution, ContributionTypes
 from google_login import validate_token
 from persistence import Persistence
 from user import User
 from usercontributionvoted import UserContributionVoted
-from comment import Comment
 
 app = Flask(__name__, static_folder='./static')
 
@@ -88,11 +88,12 @@ def new_comment():
     time = datetime.datetime.now()
     text = request.form["text"]
     if text != '':
-        comment = Comment(user,time,text)
+        comment = Comment(user, time, text)
     else:
         return redirect(url_for('comentar'))
     comment.save(repository)
     return redirect('')
+
 
 @app.route('/ask')
 def ask():
@@ -113,6 +114,7 @@ def new():
         return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
 
+
 @app.route('/editProfile')
 def edit_profile():
     username = request.cookies.get('user')
@@ -120,6 +122,7 @@ def edit_profile():
         user = User.get(repository, username)
         return render_template('editProfile.html', user=user)
     return redirect('')
+
 
 @app.route('/updateUser', methods=['POST'])
 def update_profile():
@@ -160,7 +163,8 @@ def _time_ago_filter(date):
 if __name__ == '__main__':
     repository = Persistence(os.environ['DB_PATH'], logging.getLogger(__name__))
     repository.init_db(
-        [User.get_table_creation(), Contribution.get_table_creation(), UserContributionVoted.get_table_creation()])
+        [User.get_table_creation(), Contribution.get_table_creation(), UserContributionVoted.get_table_creation(),
+         Comment.get_table_creation()])
 
     basicConfig(filename=os.environ['LOG'], level=INFO)
 
