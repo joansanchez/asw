@@ -9,6 +9,7 @@ from google_login import validate_token
 from persistence import Persistence
 from user import User
 from usercontributionvoted import UserContributionVoted
+from comment import Comment
 
 app = Flask(__name__, static_folder='./static')
 
@@ -80,6 +81,18 @@ def new_post():
     contribution.save(repository)
     return redirect('')
 
+
+@app.route('/doComment', methods=['POST'])
+def new_comment():
+    user = request.cookies.get('user')
+    time = datetime.datetime.now()
+    text = request.form["text"]
+    if text != '':
+        comment = Comment(user,time,text)
+    else:
+        return redirect(url_for('comentar'))
+    comment.save(repository)
+    return redirect('')
 
 @app.route('/ask')
 def ask():
