@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+     <table>
+        <tbody>
+            <tr style="height:10px"></tr>
+            <tr>
+                <td>
+                    <table class="fatitem" border="0">
+                        <tbody>
+                            <tr class="athing" id="{{ contribution.id }}">
+                                <td align="right" valign="top" class="title">
+                                    <span class="rank"></span>
+                                </td>
+                                <td valign="top" class="votelinks">
+                                    <center>
+                                        <a id="up_{{ contribution.id }}" onclick="return vote(event, this, &quot;up&quot;)" href="el mateix amb un vot mes sense triangle...">
+                                            <div class="votearrow" title="upvote"></div>
+                                        </a>
+                                    </center>
+                                </td>
+                                <td class="title">
+                                    <a href= {{ contribution.url }}> {{ contribution.title }}</a>
+                                    <span class="sitebit comhead"> (
+                                        <a href= {{ contribution.url }}>
+                                            <span class="sitestr">{{ contribution.url }}</span>
+                                        </a>)
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td class="subtext">
+                                    <span class="score" id="score_{{ contribution.id }}"> {{ contribution.n_votes }} points</span>
+                                    by
+                                    <a href="user?id={{ contribution.user }}"> {{ contribution.user }} </a>
+                                    <span class="age">
+                                        <a href="item?id={{ contribution.id }}">{{ contribution.time }} ago</a>
+                                    </span>
+                                    <span id="unv_{{ contribution.id }}">
+                                    |
+                                    <a id="un_{{ contribution.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="">unvote</a>
+                                    </span>
+                                    |
+                                    <a href="item?id={{ contribution.id }}"> 0 comment</a>
+                                </td>
+                            </tr>
+                            <tr style="height:10px"></tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td>
+                                    <form method="post" action="comment">
+                                        <input type="hidden" name="parent" value="16915293">
+                                        <input type="hidden" name="goto" value="item?id=16915293">
+                                        <input type="hidden" name="hmac" value="447506e019c8c38b43ce2418f4bedf427013bc7f">
+                                        <textarea name="text" rows="6" cols="60"></textarea>
+                                        <input type="submit" value="add comment">
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <br>
+                    <table border="0" class="comment-tree">
+                        <tbody>
+                        {% for i in comentaris %}
+                            <tr class="athing comtr " id="{{ i.id }}">
+                                <td>
+                                    <table border="0">
+                                        <tbody>
+                                            <tr>
+                                                <td class="ind"> </td>
+                                                <td valign="top" class="votelinks">
+                                                    <center>
+                                                        <a id="up_{{ i.id }}" onclick="return vote(event, this, &quot;up&quot;)"
+                                                           href="{{ i.url }}">
+                                                            <div class="votearrow" title="upvote"></div>
+                                                        </a>
+                                                    </center>
+                                                </td>
+                                                <td class="default">
+                                                    <div style="margin-top:2px; margin-bottom:-10px;">
+                                                        <span class="comhead">
+                                                            <a href="{{ i.user }}" class="hnuser">{{ i.user }}</a>
+                                                            <span class="age">
+                                                            <a href="item?id=16915359">{{ i.temps }}</a>
+                                                            </span>
+                                                            <span id="unv_{{ i.id }}"></span>
+                                                            <span class="par"></span>
+                                                            <a class="togg" n="{{ i.n_replies }}" href="javascript:void(0)" onclick="return toggle(event, 16915359)">[-]</a>
+                                                            <span class="storyon"></span>
+                                                        </span>
+                                                    </div>
+                                                    <br>
+                                                    <div class="comment">
+                                                        <span class="c00">
+                                                            {{ i.text }}
+                                                            <div class="reply">
+                                                                <p>
+                                                                    <font size="1">
+                                                                        <u>
+                                                                            <a href="reply?id=16915359&amp;goto=item%3Fid%3D16915293%2316915359">reply</a>
+                                                                        </u>
+                                                                    </font>
+                                                                </p>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+
+{% endblock %}

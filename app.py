@@ -8,6 +8,7 @@ from comment import Comment
 from contribution import Contribution, ContributionTypes
 from google_login import validate_token
 from persistence import Persistence
+from token_generator import encode_auth_token, decode_auth_token
 from user import User
 from usercontributionvoted import UserContributionVoted
 
@@ -17,8 +18,8 @@ app = Flask(__name__, static_folder='./static')
 @app.route('/')
 def home():
     contributions = Contribution.get_news_home(repository)
-    username = request.cookies.get('user')
-    if username is not None and username:
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
         user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository,username)
         for c in contributions:
@@ -41,7 +42,7 @@ def login():
         user = User(email)
         user.save(repository)
     resp = make_response(redirect(''))
-    resp.set_cookie('user', email)
+    resp.set_cookie('token', encode_auth_token(email))
     return resp
 
 
@@ -55,18 +56,22 @@ def user():
 @app.route('/logout', methods=['POST'])
 def logout():
     resp = make_response(redirect(''))
-    resp.set_cookie('user', '', expires=(datetime.datetime.now()))
+    resp.set_cookie('token', '', expires=(datetime.datetime.now()))
     return resp
 
 
 @app.route('/submit')
 def submit():
-    username = request.cookies.get('user')
-    if username is not None and username:
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
         user = User.get(repository, username)
         return render_template('submit.html', user=user)
     return render_template('submit.html')
 
+
+@app.route('/contriburion_id')
+def comentaris():
+    return render_template('contribution.html')
 
 @app.route('/newpost', methods=['POST'])
 def new_post():
@@ -74,7 +79,7 @@ def new_post():
     url = request.form["url"]
     text = request.form["text"]
     time = datetime.datetime.now()
-    user = request.cookies.get('user')
+    user = decode_auth_token(request.cookies.get('token'))
     if url != '' and text == '':
         contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '':
@@ -87,7 +92,7 @@ def new_post():
 
 @app.route('/doComment', methods=['POST'])
 def new_comment():
-    user = request.cookies.get('user')
+    user = decode_auth_token(request.cookies.get('token'))
     time = datetime.datetime.now()
     text = request.form["text"]
     if text != '':
@@ -101,8 +106,8 @@ def new_comment():
 @app.route('/ask')
 def ask():
     asks = Contribution.get_asks(repository)
-    username = request.cookies.get('user')
-    if username is not None and username:
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
         user = User.get(repository, username)
         return render_template('ask.html', contributions=asks, user=user)
     return render_template('ask.html', asks=asks)
@@ -111,8 +116,8 @@ def ask():
 @app.route('/new')
 def new():
     contributions = Contribution.get_contributions_new(repository)
-    username = request.cookies.get('user')
-    if username is not None and username:
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
         user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository, username)
         for c in contributions:
@@ -123,8 +128,8 @@ def new():
 
 @app.route('/editProfile')
 def edit_profile():
-    username = request.cookies.get('user')
-    if username is not None and username:
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
         user = User.get(repository, username)
         return render_template('editProfile.html', user=user)
     return redirect('')
@@ -132,8 +137,8 @@ def edit_profile():
 
 @app.route('/updateUser', methods=['POST'])
 def update_profile():
-    username = request.cookies.get('user')
-    if username is not None and username:
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
         user = User.get(repository, username)
         user.update(repository, request.form["about"])
         return render_template('editProfile.html', user=user)
