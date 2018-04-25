@@ -8,7 +8,7 @@ class ContributionTypes(Enum):
 
 class Contribution:
 
-    def __init__(self, title, url, text, time, username, kind, n_votes, contribution_id=None):
+    def __init__(self, title, url, text, time, username, kind, contribution_id=None):
         self.id = contribution_id
         self.title = title
         self.url = url
@@ -16,13 +16,12 @@ class Contribution:
         self.time = time
         self.username = username
         self.kind = kind
-        self.n_votes = n_votes
 
     def save(self, repository):
-        sql_script = '''INSERT INTO contribution (title, url, \'text\', time, \'user\', kind, n_votes) 
-                        VALUES (:title, :url, :text, :time, :username, :kind, :n_votes)'''
+        sql_script = '''INSERT INTO contribution (title, url, \'text\', time, \'user\', kind) 
+                        VALUES (:title, :url, :text, :time, :username, :kind)'''
         contribution = {'title': self.title, 'url': self.url, 'text': self.text, 'time': self.time,
-                        'username': self.username, 'kind': self.kind, 'n_votes': self.n_votes}
+                        'username': self.username, 'kind': self.kind}
         self.id = repository.insert(sql_script, contribution)
 
     @staticmethod
@@ -35,7 +34,6 @@ class Contribution:
                          time TIMESTAMP,
                          'user' TEXT NOT NULL,
                          'kind' TEXT,
-                         n_votes INTEGER,
                          FOREIGN KEY('user') REFERENCES 'user' (email)
                          )'''
 
@@ -50,7 +48,7 @@ class Contribution:
     @staticmethod
     def get_news_home(repository):
         return repository.list(
-            'SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\' ORDER BY n_votes DESC')
+            'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(*) AS n_votes FROM contribution c INNER JOIN user_contribution_voted u ON c.id = u.contribution WHERE c.kind = \'' + ContributionTypes.NEW.value + '\' GROUP BY c.id ORDER BY n_votes DESC;')
 
     @staticmethod
     def get_contributions_new(repository):
