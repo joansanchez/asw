@@ -14,10 +14,12 @@
                 </td>
                 <td valign="top" class="votelinks">
                     <center>
-                        <a id="up_{{ i.id }}" onclick="return vote(event, this, &quot;up&quot;)"
-                           href="">
-                            <div class="votearrow" title="upvote"></div>
-                        </a>
+                        {% if i.voted == True %}
+                            <a id="up_{{ i.id }}" onclick="return vote(event, this, &quot;up&quot;)"
+                               href="">
+                                <div class="votearrow" title="upvote"></div>
+                            </a>
+                        {% endif %}
                     </center>
                 </td>
                 <td class="title">

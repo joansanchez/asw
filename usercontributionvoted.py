@@ -18,3 +18,7 @@ class UserContributionVoted:
                              FOREIGN KEY('user') REFERENCES 'user' (email),
                              FOREIGN KEY('contribution') REFERENCES 'contribution' (id)
                              )'''
+
+    @staticmethod
+    def get_voted(repository, username):
+        return repository.list('SELECT contribution FROM user_contribution_voted where \'user\' = \'' + username + '\'')
