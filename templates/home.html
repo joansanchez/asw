@@ -10,7 +10,7 @@
         {% for i in contributions %}
             <tr class="athing" id="{{ i.id }}">
                 <td align="right" valign="top" class="title">
-                    <span class="rank">{{ i.id }}.</span>
+                    <span class="rank">{{ loop.index }}.</span>
                 </td>
                 <td valign="top" class="votelinks">
                     <center>
