@@ -1,4 +1,5 @@
 class Comment:
+
     def __init__(self, username, time, text, contribution_id, parent_id, comment_id=None):
         self.id = comment_id
         self.username = username
@@ -22,6 +23,12 @@ class Comment:
                             'user' TEXT NOT NULL,
                             time TIMESTAMP,
                             'text' TEXT,
+                            contribution_id INTEGER NOT NULL,
+                            parent_id INTEGER,
                             FOREIGN KEY('parent_id') REFERENCES 'id' (comment),
                             FOREIGN KEY('contribution_id') REFERENCES 'id' (contribution)
                             )'''
+
+    @staticmethod
+    def get_comments_byId(repository, id):
+        return repository.list('SELECT * FROM comment WHERE contribution_id = \'' + id + '\'')

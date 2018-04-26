@@ -57,3 +57,7 @@ class Contribution:
     @staticmethod
     def get_asks(repository):
         return repository.list('SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.ASK.value + '\'')
+
+    @staticmethod
+    def get_contribution(repository, id):
+        return repository.list('SELECT * FROM contribution WHERE id = \'' + id + '\'')
