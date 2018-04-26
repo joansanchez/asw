@@ -1,4 +1,5 @@
 class Comment:
+
     def __init__(self, username, time, text, contribution_id, parent_id, comment_id=None):
         self.id = comment_id
         self.username = username
@@ -11,8 +12,7 @@ class Comment:
         sql_script = '''INSERT INTO comment (\'user\', time, \'text\', contribution_id, parent_id) 
                         VALUES (:username, :time, :text, :contribution_id, :parent_id)'''
         comment = {'username': self.username, 'time': self.time, 'text': self.text,
-                   'contribution_id': self.contribution_id,
-                   'parent_id': self.parent_id}
+                   'contribution_id': self.contribution_id,'parent_id': self.parent_id}
         self.id = repository.insert(sql_script, comment)
 
     @staticmethod
@@ -22,6 +22,12 @@ class Comment:
                             'user' TEXT NOT NULL,
                             time TIMESTAMP,
                             'text' TEXT,
+                            contribution_id INTEGER NOT NULL,
+                            parent_id INTEGER, 
                             FOREIGN KEY('parent_id') REFERENCES 'id' (comment),
                             FOREIGN KEY('contribution_id') REFERENCES 'id' (contribution)
                             )'''
+
+    @staticmethod
+    def get_comments_byId(repository, id):
+        return repository.list('SELECT * FROM comments WHERE contribution_id = \'' + id + '\'')
