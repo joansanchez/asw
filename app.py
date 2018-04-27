@@ -25,7 +25,7 @@ def home():
         for c in contributions:
             c.voted = c['id'] in contributions_voted
         return render_template('home.html', contributions=contributions, user=user)
-        return render_template('home.html', contributions=contributions)
+    return render_template('home.html', contributions=contributions)
 
 
 @app.route('/login', methods=['POST'])
