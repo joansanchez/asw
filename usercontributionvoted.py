@@ -21,4 +21,4 @@ class UserContributionVoted:
 
     @staticmethod
     def get_voted(repository, username):
-        return repository.list('SELECT contribution FROM user_contribution_voted where \'user\' = \'' + username + '\'')
+        return repository.list('SELECT contribution AS contribution_id FROM user_contribution_voted where user = \'' + username + '\'')
