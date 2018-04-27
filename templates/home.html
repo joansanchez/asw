@@ -23,12 +23,16 @@
                     </center>
                 </td>
                 <td class="title">
-                    <a href= {{ i.url }}> {{ i.title }}</a>
-                    <span class="sitebit comhead"> (
-                                                <a href= {{ i.url }}>
-                                                    <span class="sitestr">{{ i.url }}</span>
-                                                </a>)
-                                            </span>
+                    {% if i.kind == 'new' %}
+                        <a href= {{ i.url }}> {{ i.title }}</a>
+                        <span class="sitebit comhead"> (
+                            <a href= {{ i.url }}>
+                                <span class="sitestr">{{ i.url }}</span>
+                            </a>)
+                        </span>
+                    {% else %}
+                        <a href='#'> {{ i.title }}</a>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -40,10 +44,12 @@
                     <span class="age">
                         <a href="item?id={{ i.id }}">{{ i.time|time_ago }} ago</a>
                     </span>
-                    <span id="unv_{{ i.id }}">
-                    |
-                    <a id="un_{{ i.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="">unvote</a>
-                    </span>
+                    {% if i.voted == True %}
+                        <span id="unv_{{ i.id }}">
+                        |
+                        <a id="un_{{ i.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="">unvote</a>
+                        </span>
+                    {% endif %}
                     |
                     <a href="item?id={{ i.id }}"> 0 comment</a>
                 </td>
