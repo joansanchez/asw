@@ -23,6 +23,7 @@ def home():
         user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository,username)
         for c in contributions:
+            print(c['n_votes'])
             c.voted = c['id'] in contributions_voted
         return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
@@ -119,11 +120,11 @@ def new():
     username = decode_auth_token(request.cookies.get('token'))
     if username is not None:
         user = User.get(repository, username)
-        contributions_voted = UserContributionVoted.get_voted(repository, username)
+        contributions_voted = UserContributionVoted.get_voted(repository,username)
         for c in contributions:
             c.voted = c['id'] in contributions_voted
         return render_template('home.html', contributions=contributions, user=user)
-        return render_template('home.html', contributions=contributions)
+    return render_template('home.html', contributions=contributions)
 
 
 @app.route('/editProfile')
