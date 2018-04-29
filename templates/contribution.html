@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+<script src="../static/js/contrView.js"></script>
+
+{% if user %}
+    {% set user=user %}
+{% endif %}
+
 {% block content %}
      <table>
         <tbody>
@@ -50,9 +56,6 @@
                                 <td colspan="2"></td>
                                 <td>
                                     <form method="post" action="comment">
-                                        <input type="hidden" name="parent" value="16915293">
-                                        <input type="hidden" name="goto" value="item?id=16915293">
-                                        <input type="hidden" name="hmac" value="447506e019c8c38b43ce2418f4bedf427013bc7f">
                                         <textarea name="text" rows="6" cols="60"></textarea>
                                         <input type="submit" value="add comment">
                                     </form>
@@ -64,17 +67,18 @@
                     <br>
                     <table border="0" class="comment-tree">
                         <tbody>
-                        {% for i in comentaris %}
-                            <tr class="athing comtr " id="{{ i.id }}">
+                        {% for c in comentaris %}
+                            <tr class="athing comtr " id="{{ c.id }}">
                                 <td>
                                     <table border="0">
                                         <tbody>
                                             <tr>
                                                 <td class="ind"> </td>
+                                                <img src="s.gif" height="1" width="0">
                                                 <td valign="top" class="votelinks">
                                                     <center>
-                                                        <a id="up_{{ i.id }}" onclick="return vote(event, this, &quot;up&quot;)"
-                                                           href="{{ i.url }}">
+                                                        <a id="up_{{ c.id }}" onclick="return vote(event, this, &quot;up&quot;)"
+                                                           href="">
                                                             <div class="votearrow" title="upvote"></div>
                                                         </a>
                                                     </center>
@@ -82,25 +86,26 @@
                                                 <td class="default">
                                                     <div style="margin-top:2px; margin-bottom:-10px;">
                                                         <span class="comhead">
-                                                            <a href="{{ i.user }}" class="hnuser">{{ i.user }}</a>
+                                                            <a href="user?user={{ c.user }}"
+                                                               class="hnuser">{{ c.user }}</a>
                                                             <span class="age">
-                                                            <a href="item?id=16915359">{{ i.temps }}</a>
+                                                            <a href="">{{ c.temps }}</a>
                                                             </span>
-                                                            <span id="unv_{{ i.id }}"></span>
+                                                            <span id="unv_{{ c.id }}"></span>
                                                             <span class="par"></span>
-                                                            <a class="togg" n="{{ i.n_replies }}" href="javascript:void(0)" onclick="return toggle(event, 16915359)">[-]</a>
+                                                            <a class="togg" n="{{ c.parent_id }}" href="javascript:void(0)" onclick="return toggle(event, 16915359)">[-]</a>
                                                             <span class="storyon"></span>
                                                         </span>
                                                     </div>
                                                     <br>
                                                     <div class="comment">
                                                         <span class="c00">
-                                                            {{ i.text }}
+                                                            {{ c.text }}
                                                             <div class="reply">
                                                                 <p>
                                                                     <font size="1">
                                                                         <u>
-                                                                            <a href="reply?id=16915359&amp;goto=item%3Fid%3D16915293%2316915359">reply</a>
+                                                                            <a href="">reply</a>
                                                                         </u>
                                                                     </font>
                                                                 </p>
@@ -113,10 +118,11 @@
                                     </table>
                                 </td>
                             </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </td>
             </tr>
-
-
+        </tbody>
+     </table>
 {% endblock %}
