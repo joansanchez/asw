@@ -48,11 +48,12 @@ class Contribution:
     @staticmethod
     def get_news_home(repository):
         return repository.list(
-            'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(*) AS n_votes FROM contribution c INNER JOIN user_contribution_voted u ON c.id = u.contribution WHERE c.kind = \'' + ContributionTypes.NEW.value + '\' GROUP BY c.id ORDER BY n_votes DESC;')
+            'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(u.\'user\') AS n_votes FROM contribution c LEFT JOIN user_contribution_voted u ON c.id = u.contribution WHERE c.kind = \'' + ContributionTypes.NEW.value + '\' GROUP BY c.id ORDER BY n_votes DESC;')
 
     @staticmethod
     def get_contributions_new(repository):
-        return repository.list('SELECT * FROM contribution ORDER BY time DESC')
+        return repository.list(
+            'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(u.\'user\') AS n_votes FROM contribution c LEFT JOIN user_contribution_voted u ON c.id = u.contribution GROUP BY c.id ORDER BY time DESC;')
 
     @staticmethod
     def get_asks(repository):
@@ -60,4 +61,5 @@ class Contribution:
 
     @staticmethod
     def get_contribution(repository, id):
-        return repository.list('SELECT * FROM contribution WHERE id = \'' + id + '\'')
+        return repository.list(
+            'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(u.\'user\') AS n_votes FROM contribution c LEFT JOIN user_contribution_voted u ON c.id = u.contribution WHERE c.kind = \'' + ContributionTypes.ASK.value + '\' GROUP BY c.id ORDER BY time DESC;')
