@@ -70,15 +70,15 @@ def submit():
 
 
 @app.route('/contribution', methods=['GET'])
-def contribution():
-    contribution_to_show_id = request.args.get('id', '')
-    contribution = Contribution.get_contribution(repository, contribution_to_show_id)
-    comentaris = Comment.get_comments_byIdOfContribution(repository, contribution_to_show_id)
+def get_contribution():
+    contribution_id = request.args.get('id', '')
+    contribution = Contribution.get_contribution(repository, contribution_id)
+    comments = Comment.get_comments_byIdOfContribution(repository, contribution_id)
     user = decode_auth_token(request.cookies.get('token'))
     if user is not None:
         user = User.get(repository, user)
-        return render_template('contribution.html', contribution=contribution, comentaris=comentaris, user=user)
-    return render_template('contribution.html', contribution=contribution, comentaris=comentaris)
+        return render_template('contribution.html', contribution=contribution, comments=comments, user=user)
+    return render_template('contribution.html', contribution=contribution, comments=comments)
 
 
 @app.route('/newpost', methods=['POST'])
@@ -106,7 +106,7 @@ def new_comment():
     if text != '':
         comment = Comment(user, time, text, 1, 0)
     else:
-        return redirect(url_for('contribution'))
+        return redirect(url_for('get_contribution'))
     comment.save(repository)
     return redirect('')
 
@@ -185,7 +185,8 @@ def _time_ago_filter(date):
 if __name__ == '__main__':
     repository = Persistence(os.environ['DB_PATH'], logging.getLogger(__name__))
     repository.init_db(
-        [User.get_table_creation(), Contribution.get_table_creation(), UserContributionVoted.get_table_creation(), Comment.get_table_creation()])
+        [User.get_table_creation(), Contribution.get_table_creation(), UserContributionVoted.get_table_creation(),
+         Comment.get_table_creation()])
 
     basicConfig(filename=os.environ['LOG'], level=INFO)
 
