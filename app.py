@@ -104,9 +104,9 @@ def new_comment():
     time = datetime.datetime.now()
     text = request.form["text"]
     if text != '':
-        comment = Comment(user, time, text)
+        comment = Comment(user, time, text, 1, 0)
     else:
-        return redirect(url_for('comentar'))
+        return redirect(url_for('contribution'))
     comment.save(repository)
     return redirect('')
 
