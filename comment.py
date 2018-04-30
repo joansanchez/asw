@@ -30,12 +30,12 @@ class Comment:
 
     @staticmethod
     def get_comments_byIdOfContribution(repository, idContribution):
-        return repository.list('SELECT * FROM comments WHERE contribution_id = \'' + idContribution + '\' ORDER BY time DESC')
+        return repository.list('SELECT * FROM comment WHERE contribution_id = \'' + idContribution + '\' ORDER BY time DESC')
 
     @staticmethod
     def get_replies_byIdOfComment(repository, idComment):
-        return repository.list('SELECT * FROM comments WHERE parent_id = \'' + idComment + '\' ORDER BY time DESC')
+        return repository.list('SELECT * FROM comment WHERE parent_id = \'' + idComment + '\' ORDER BY time DESC')
 
     @staticmethod
     def get_comments(repository):
-        return repository.list('SELECT * FROM comments ORDER BY time DESC')
+        return repository.list('SELECT * FROM comment ORDER BY time DESC')

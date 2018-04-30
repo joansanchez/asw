@@ -73,7 +73,7 @@ def submit():
 def contribution():
     contribution_to_show_id = request.args.get('id', '')
     contribution = Contribution.get_contribution(repository, contribution_to_show_id)
-    comentaris = Comment.get_comments_byId(repository, contribution_to_show_id)
+    comentaris = Comment.get_comments_byIdOfContribution(repository, contribution_to_show_id)
     user = decode_auth_token(request.cookies.get('token'))
     if user is not None:
         user = User.get(repository, user)
