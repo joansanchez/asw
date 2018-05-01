@@ -1,6 +1,6 @@
 class User:
 
-    def __init__(self, email, karma=0, about=None):
+    def __init__(self, email, karma=0, about=''):
         self.email = email
         self.karma = karma
         self.about = about
