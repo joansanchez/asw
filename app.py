@@ -102,7 +102,7 @@ def submit():
     if username is not None:
         user = User.get(repository, username)
         return render_template('submit.html', user=user)
-    return render_template('submit.html')
+    return redirect('')
 
 
 @app.route('/contribution', methods=['GET'])
