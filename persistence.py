@@ -93,3 +93,15 @@ class Persistence:
             if db_conn:
                 self.close_connection(db_conn)
             raise ex
+
+    def delete(self, sql_script):
+        db_conn, db_client = self.create_connection()
+        try:
+            db_client.execute(sql_script)
+            db_conn.commit()
+            self.close_connection(db_conn)
+        except Exception as ex:
+            self.log.error('Error executing a query in the SQLite DB. Exception: ' + str(ex))
+            if db_conn:
+                self.close_connection(db_conn)
+            raise ex
