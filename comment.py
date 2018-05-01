@@ -41,7 +41,7 @@ class Comment:
     @staticmethod
     def get_comments_by_user(repository, username):
         result = repository.list(
-            'SELECT *, c.text as \'text\' FROM comment c LEFT JOIN contribution co ON c.contribution_id = co.id WHERE c.user = \'' + username + '\' ORDER BY c.time DESC')
+            'SELECT *, c.text as \'text\', c.user as \'user\' FROM comment c LEFT JOIN contribution co ON c.contribution_id = co.id WHERE c.user = \'' + username + '\' ORDER BY c.time DESC')
         comments = []
         for r in result:
             comment = Comment(r['user'], r['time'], r['text'], r['contribution_id'], r['parent_id'], r['id'])
