@@ -33,9 +33,10 @@ def home():
 @app.route('/threads')
 def threads():
     username = decode_auth_token(request.cookies.get('token'))
+    email = request.args.get('id', default=username)
     if username is not None:
         user = User.get(repository, username)
-        comments = Comment.get_comments_by_user(repository, username)
+        comments = Comment.get_comments_by_user(repository, email)
         return render_template('threads.html', comments=comments, user=user)
     return redirect('')
 
