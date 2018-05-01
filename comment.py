@@ -64,3 +64,21 @@ class Comment:
         comment = Comment(result[1], result[2], result[3], result[4], result[5], comment_id=result[0])
         comment.contribution_title = result[7]
         return comment
+
+    @staticmethod
+    def get_comments_by_parent(repository, parent_id):
+        sql_script = 'SELECT *, c.id AS id, c.text AS \'text\' FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.parent_id = ' + str(
+            parent_id)
+        results = repository.list(sql_script)
+        if results:
+            comments = []
+            for result in results:
+                comment = Comment(result['user'], result['time'], result['text'], result['contribution_id'],
+                                  result['parent_id'], comment_id=result['id'])
+                comment.contribution_title = result['title']
+                children = Comment.get_comments_by_parent(repository, comment.id)
+                comment.children = children
+                comments.append(comment)
+            return comments
+        else:
+            return []
