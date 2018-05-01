@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% if user %}
+    {% set user=user %}
+{% endif %}
+
+{% block content %}
+    <table>
+        <tbody>
+        <tr>
+            <td class="default">
+                <div class="comhead">
+                    by
+                    <a href="user?user={{ comment.username }}"> {{ comment.username }} </a>
+                    <span class="age">
+                        <a href="item?id={{ comment.id }}">{{ comment.time|time_ago }} ago</a>
+                    </span>
+                    | on:
+                    <a href="contribution?id={{ comment.contribution_id }}"> {{ comment.contribution_title }}</a>
+                </div>
+                <br>
+                <div class="comment">
+                    <span class="c00">{{ comment.text }}</span>
+                </div>
+            </td>
+        </tr>
+        <tr style="height:10px"></tr>
+        <tr>
+            <td>
+                <form method="post" action="newReply">
+                    <textarea name="text" rows="6" cols="60"></textarea>
+                    <input type="hidden" name="parent" value="{{ comment.id }}">
+                    <input type="hidden" name="contribution" value="{{ comment.contribution_id }}">
+                    <br><br>
+                    <input type="submit" value="reply">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

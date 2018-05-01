@@ -56,3 +56,11 @@ class Comment:
     @staticmethod
     def get_comments(repository):
         return repository.list('SELECT * FROM comment ORDER BY time DESC')
+
+    @staticmethod
+    def get_comment(repository, comment_id):
+        sql_script = 'SELECT * FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.id = \'' + comment_id + '\''
+        result = repository.get(sql_script)
+        comment = Comment(result[1], result[2], result[3], result[4], result[5], comment_id=result[0])
+        comment.contribution_title = result[7]
+        return comment

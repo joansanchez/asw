@@ -203,6 +203,30 @@ def update_profile():
     return redirect('')
 
 
+@app.route('/reply')
+def reply():
+    username = decode_auth_token(request.cookies.get('token'))
+    comment_id = request.args.get('id')
+    if username is not None:
+        user = User.get(repository, username)
+        comment = Comment.get_comment(repository, comment_id)
+        return render_template('reply.html', user=user, comment=comment)
+    return redirect('')
+
+
+@app.route('/newReply', methods=['POST'])
+def new_reply():
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
+        contribution = request.form["contribution"]
+        parent = request.form["parent"]
+        text = request.form["text"]
+        comment = Comment(username, datetime.datetime.now(), text, contribution, parent)
+        comment.save(repository)
+        return redirect('contribution?id=' + contribution)
+    return redirect('')
+
+
 @app.template_filter('time_ago')
 def _time_ago_filter(date):
     date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
