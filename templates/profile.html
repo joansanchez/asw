@@ -1,27 +1,31 @@
 {% extends "base.html" %}
 
+{% if user %}
+    {% set user=user %}
+{% endif %}
+
 {% block content %}
 
         <table border="0">
             <tr class='athing'>
                 <td valign="top">user:</td>
-                <td><a href="user?user={{user.email}}" class="hnuser">{{ user.email }}</a></td>
+                <td><a href="user?user={{ user_to_show.email }}" class="hnuser">{{ user_to_show.email }}</a></td>
             </tr>
             <tr>
                 <td valign="top">karma:</td>
                 <td>
-                    {{ user.karma }}
+                    {{ user_to_show.karma }}
                 </td>
             </tr>
             <tr>
                 <td valign="top">about:</td>
                 <td>
-                    {{ user.about }}
+                    {{ user_to_show.about }}
                 </td>
             </tr>
             <tr>
                 <td></td>
-                <td><a href="threads?id={{ user.email }}"><u>comments</u></a></td>
+                <td><a href="threads?id={{ user_to_show.email }}"><u>comments</u></a></td>
             </tr>
         </table>
         <br><br>

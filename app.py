@@ -61,9 +61,12 @@ def login():
 
 @app.route('/user', methods=['GET'])
 def user():
-    user_to_show = request.args.get('user', '')
-    user = User.get(repository, user_to_show)
-    return render_template('profile.html', user=user)
+    username = decode_auth_token(request.cookies.get('token'))
+    user_to_show = User.get(repository, request.args.get('user'))
+    if username is not None:
+        user = User.get(repository, username)
+        return render_template('profile.html', user_to_show=user_to_show, user=user)
+    return render_template('profile.html', user_to_show=user_to_show)
 
 
 @app.route('/logout', methods=['POST'])
