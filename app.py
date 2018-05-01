@@ -106,11 +106,12 @@ def new_comment():
     time = datetime.datetime.now()
     text = request.form["text"]
     contribution = request.form["contribution"]
-    if text != '':
-        comment = Comment(user, time, text, contribution, 0)
-    else:
-        return redirect(url_for('get_contribution'))
-    comment.save(repository)
+    if user is not None:
+        if text != '':
+            comment = Comment(user, time, text, contribution, 0)
+        else:
+            return redirect(url_for('get_contribution'))
+        comment.save(repository)
     return redirect('contribution?id=' + contribution)
 
 
