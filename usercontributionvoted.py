@@ -23,7 +23,5 @@ class UserContributionVoted:
     def get_voted(repository, username):
         return repository.list('SELECT contribution AS contribution_id FROM user_contribution_voted WHERE user = \'' + username + '\'')
 
-    @staticmethod
-    def delete_vote(repository, username, contribution_id):
-        return repository.list(
-            'DELETE FROM user_contribution_voted WHERE user = \'' + username + '\' AND  contribution = \'' + contribution_id + '\'')
+    def delete(self, repository):
+        repository.delete('DELETE FROM user_contribution_voted WHERE user = \'' + self.user + '\' AND  contribution = \'' + self.contribution + '\'')

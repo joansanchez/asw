@@ -65,8 +65,12 @@ def vote():
     username = decode_auth_token(request.cookies.get('token'))
     if username is not None:
         contribution_id = request.form['contribution']
+        action = request.form['action']
         contribution_voted = UserContributionVoted(username, contribution_id)
-        contribution_voted.save(repository)
+        if action == 'vote':
+            contribution_voted.save(repository)
+        elif action == 'unvote':
+            contribution_voted.delete(repository)
     resp = make_response(redirect(''))
     return resp
 
