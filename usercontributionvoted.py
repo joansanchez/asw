@@ -5,7 +5,7 @@ class UserContributionVoted:
         self.contribution = contribution
 
     def save(self, repository):
-        sql_script = '''INSERT INTO user_contribution_voted (\'user\', contribution) VALUES (:email, :contribution)'''
+        sql_script = '''INSERT INTO user_contribution_voted (\'user\', contribution) VALUES (:user, :contribution)'''
         user_contribution_voted = {'user': self.user, 'contribution': self.contribution}
         repository.insert(sql_script, user_contribution_voted)
 
@@ -22,11 +22,6 @@ class UserContributionVoted:
     @staticmethod
     def get_voted(repository, username):
         return repository.list('SELECT contribution AS contribution_id FROM user_contribution_voted WHERE user = \'' + username + '\'')
-
-    @staticmethod
-    def insert_vote(repository, username, contribution_id):
-        return repository.list(
-            'INSERT INTO user_contribution_voted VALUES (\'' + username + '\' , \'' + contribution_id + '\')')
 
     @staticmethod
     def delete_vote(repository, username, contribution_id):

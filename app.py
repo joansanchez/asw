@@ -22,8 +22,6 @@ def home():
     if username is not None:
         user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository, username)
-        # contribution_id = 1
-        # UserContributionVoted.delete_vote(repository, username, str(contribution_id))
         for c in contributions:
             c.voted = c['id'] in [cv['contribution_id'] for cv in contributions_voted]
         return render_template('home.html', contributions=contributions, user=user)
@@ -59,6 +57,17 @@ def user():
 def logout():
     resp = make_response(redirect(''))
     resp.set_cookie('token', '', expires=(datetime.datetime.now()))
+    return resp
+
+
+@app.route('/vote', methods=['POST'])
+def vote():
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
+        contribution_id = request.form['contribution']
+        contribution_voted = UserContributionVoted(username, contribution_id)
+        contribution_voted.save(repository)
+    resp = make_response(redirect(''))
     return resp
 
 
