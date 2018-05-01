@@ -57,6 +57,7 @@
                                 <td>
                                     <form method="post" action="./doComment">
                                         <textarea name="text" rows="6" cols="60"></textarea>
+                                        <input type="hidden" name="contribution" value="{{ contribution.id }}">
                                         <input type="submit" value="add comment">
                                     </form>
                                 </td>
