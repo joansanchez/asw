@@ -105,11 +105,12 @@ def new_comment():
     user = decode_auth_token(request.cookies.get('token'))
     time = datetime.datetime.now()
     text = request.form["text"]
-    if text != '':
-        comment = Comment(user, time, text, 1, 0)
-    else:
-        return redirect(url_for('get_contribution'))
-    comment.save(repository)
+    if user is not None:
+        if text != '':
+            comment = Comment(user, time, text, 1, 0)
+        else:
+            return redirect(url_for('get_contribution'))
+        comment.save(repository)
     return redirect('')
 
 
