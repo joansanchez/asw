@@ -26,14 +26,24 @@
                                     </center>
                                 </td>
                                 <td class="title">
-                                    <a href= {{ contribution.url }}> {{ contribution.title }}</a>
-                                    <span class="sitebit comhead"> (
-                                        <a href= {{ contribution.url }}>
-                                            <span class="sitestr">{{ contribution.url }}</span>
-                                        </a>)
-                                    </span>
+                                    {% if contribution.kind == 'new' %}
+                                        <a href= {{ contribution.url }}> {{ contribution.title }}</a>
+                                        <span class="sitebit comhead"> (
+                                            <a href= {{ contribution.url }}>
+                                                <span class="sitestr">{{ contribution.url }}</span>
+                                            </a>)
+                                        </span>
+                                    {% else %}
+                                        <a href='#'> {{ contribution.title }}</a>
+                                    {% endif %}
                                 </td>
                             </tr>
+                            {% if contribution.kind == 'ask' %}
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td> {{ contribution.text }}</td>
+                                </tr>
+                            {% endif %}
                             <tr>
                                 <td colspan="2"></td>
                                 <td class="subtext">
