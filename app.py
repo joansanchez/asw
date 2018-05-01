@@ -19,13 +19,13 @@ app = Flask(__name__, static_folder='./static')
 def home():
     contributions = Contribution.get_news_home(repository)
     username = decode_auth_token(request.cookies.get('token'))
+    contributions_voted = UserContributionVoted.get_voted(repository, username)
+    for c in contributions:
+        c.voted = c['id'] in [cv['contribution_id'] for cv in contributions_voted]
+        aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
+        c.n_comments = aux[0]['n_comments']
     if username is not None:
         user = User.get(repository, username)
-        contributions_voted = UserContributionVoted.get_voted(repository, username)
-        for c in contributions:
-            c.voted = c['id'] in [cv['contribution_id'] for cv in contributions_voted]
-            aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
-            c.n_comments = aux[0]['n_comments']
         return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
 
