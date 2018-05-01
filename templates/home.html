@@ -60,7 +60,11 @@
                         </span>
                     {% endif %}
                     |
-                    <a href="contribution?id={{ i.id }}"> 0 comment</a>
+                    {% if i.n_comments > 0 %}
+                        <a href="contribution?id={{ i.id }}"> {{ i.n_comments }} comment</a>
+                    {% else %}
+                        <a href="contribution?id={{ i.id }}"> discuss</a>
+                    {% endif %}
                 </td>
             </tr>
             <tr class="spacer" style="height:5px"></tr>

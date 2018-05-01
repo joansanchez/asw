@@ -34,6 +34,11 @@ class Comment:
             'SELECT * FROM comment WHERE contribution_id = \'' + contribution_id + '\' ORDER BY time DESC')
 
     @staticmethod
+    def get_number_comments_by_contribution(repository, contribution_id):
+        return repository.list(
+            'SELECT count(*) AS n_comments FROM comment WHERE contribution_id = \'' + contribution_id + '\' ORDER BY time DESC')
+
+    @staticmethod
     def get_replies_by_comment(repository, comment_id):
         return repository.list('SELECT * FROM comment WHERE parent_id = \'' + comment_id + '\' ORDER BY time DESC')
 
