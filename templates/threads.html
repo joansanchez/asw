@@ -19,10 +19,30 @@
                         | on:
                         <a href="contribution?id={{ c.contribution_id }}"> {{ c.contribution_title }}</a>
                     </div>
-                    <br>
                     <div class="comment">
                         <span class="c00">{{ c.text }}</span>
                     </div>
+
+                    {% for child in c.children recursive %}
+                        <div style="padding-left: 15px; margin-top: 20px">
+                            <div class="comhead">
+                                by
+                                <a href="user?user={{ child.username }}"> {{ child.username }} </a>
+                                <span class="age">
+                                        <a href="item?id={{ child.id }}">{{ child.time|time_ago }} ago</a>
+                                    </span>
+                                | on:
+                                <a href="contribution?id={{ child.contribution_id }}"> {{ child.contribution_title }}</a>
+                            </div>
+                            <div class="comment">
+                                <span class="c00">{{ child.text }}</span>
+                            </div>
+                            {% if child.children %}
+                                <div style="margin-top: 20px">{{ loop(child.children) }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
                 </td>
             </tr>
             <tr class="spacer" style="height:5px"></tr>

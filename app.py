@@ -42,7 +42,16 @@ def threads():
     if username is not None:
         user = User.get(repository, username)
         comments = Comment.get_comments_by_user(repository, email)
-        return render_template('threads.html', comments=comments, user=user)
+        all_children = []
+        for comment in comments:
+            children = Comment.get_comments_by_parent(repository, comment.id)
+            all_children.extend(children)
+            comment.children = children
+        first_level_comments = []
+        for comment in comments:
+            if not comment.id in [c.id for c in all_children]:
+                first_level_comments.append(comment)
+        return render_template('threads.html', comments=first_level_comments, user=user)
     return redirect('')
 
 
