@@ -12,7 +12,7 @@ class Comment:
         sql_script = '''INSERT INTO comment (\'user\', time, \'text\', contribution_id, parent_id) 
                         VALUES (:username, :time, :text, :contribution_id, :parent_id)'''
         comment = {'username': self.username, 'time': self.time, 'text': self.text,
-                   'contribution_id': self.contribution_id,'parent_id': self.parent_id}
+                   'contribution_id': self.contribution_id, 'parent_id': self.parent_id}
         self.id = repository.insert(sql_script, comment)
 
     @staticmethod

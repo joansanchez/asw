@@ -20,13 +20,13 @@ def home():
     contributions = Contribution.get_news_home(repository)
     username = decode_auth_token(request.cookies.get('token'))
     if username is not None:
-        user1: User = User.get(repository, username)
+        user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository, username)
-        #contribution_id = 1
-        #UserContributionVoted.delete_vote(repository, username, str(contribution_id))
+        # contribution_id = 1
+        # UserContributionVoted.delete_vote(repository, username, str(contribution_id))
         for c in contributions:
             c.voted = c['id'] in [cv['contribution_id'] for cv in contributions_voted]
-        return render_template('home.html', contributions=contributions, user=user1)
+        return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
 
 
@@ -83,7 +83,7 @@ def get_contribution():
     return render_template('contribution.html', contribution=contribution, comments=comments)
 
 
-@app.route('/newpost', methods=['POST'])
+@app.route('/newPost', methods=['POST'])
 def new_post():
     title = request.form["title"]
     url = request.form["url"]
