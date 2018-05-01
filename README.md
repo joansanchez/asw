@@ -6,6 +6,10 @@
 * Sergio Paredes
 * Joan Sanchez
 
+# Live demo
+
+Live demo with latest code can be found on [http://myhackernews.tk/](http://myhackernews.tk/)
+
 # Basic setup
 
 Download and install _Python 3.6_
