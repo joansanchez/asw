@@ -16,7 +16,7 @@
                     <center>
                         {% if i.voted == false %}
                             <a id="up_{{ i.id }}" onclick="return vote(event, this, &quot;up&quot;)"
-                               href="">
+                               href="#">
                                 <div class="votearrow" title="upvote"></div>
                             </a>
                         {% endif %}
@@ -47,7 +47,7 @@
                     {% if i.voted == True %}
                         <span id="unv_{{ i.id }}">
                         |
-                        <a id="un_{{ i.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="">unvote</a>
+                        <a id="un_{{ i.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="#">unvote</a>
                         </span>
                     {% endif %}
                     |

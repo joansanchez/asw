@@ -21,4 +21,14 @@ class UserContributionVoted:
 
     @staticmethod
     def get_voted(repository, username):
-        return repository.list('SELECT contribution AS contribution_id FROM user_contribution_voted where user = \'' + username + '\'')
+        return repository.list('SELECT contribution AS contribution_id FROM user_contribution_voted WHERE user = \'' + username + '\'')
+
+    @staticmethod
+    def insert_vote(repository, username, contribution_id):
+        return repository.list(
+            'INSERT INTO user_contribution_voted VALUES (\'' + username + '\' , \'' + contribution_id + '\')')
+
+    @staticmethod
+    def delete_vote(repository, username, contribution_id):
+        return repository.list(
+            'DELETE FROM user_contribution_voted WHERE user = \'' + username + '\' AND  contribution = \'' + contribution_id + '\'')
