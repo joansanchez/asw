@@ -39,6 +39,17 @@ class Comment:
             'SELECT count(*) AS n_comments FROM comment WHERE contribution_id = \'' + contribution_id + '\' ORDER BY time DESC')
 
     @staticmethod
+    def get_comments_by_user(repository, username):
+        result = repository.list(
+            'SELECT *, c.text as \'text\' FROM comment c LEFT JOIN contribution co ON c.contribution_id = co.id WHERE c.user = \'' + username + '\' ORDER BY c.time DESC')
+        comments = []
+        for r in result:
+            comment = Comment(r['user'], r['time'], r['text'], r['contribution_id'], r['parent_id'], r['id'])
+            comment.contribution_title = r['title']
+            comments.append(comment)
+        return comments
+
+    @staticmethod
     def get_replies_by_comment(repository, comment_id):
         return repository.list('SELECT * FROM comment WHERE parent_id = \'' + comment_id + '\' ORDER BY time DESC')
 

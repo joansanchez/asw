@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% if user %}
+    {% set user=user %}
+{% endif %}
+
+{% block content %}
+    <table>
+        <tbody>
+        {% for c in comments %}
+            <tr>
+                <td class="default">
+                    <div class="comhead">
+                        by
+                        <a href="user?user={{ c.username }}"> {{ c.username }} </a>
+                        <span class="age">
+                        <a href="item?id={{ c.id }}">{{ c.time|time_ago }} ago</a>
+                    </span>
+                        | on:
+                        <a href="contribution?id={{ c.contribution_id }}"> {{ c.contribution_title }}</a>
+                    </div>
+                    <br>
+                    <div class="comment">
+                        <span class="c00">{{ c.text }}</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="spacer" style="height:5px"></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

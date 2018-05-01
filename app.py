@@ -30,6 +30,16 @@ def home():
     return render_template('home.html', contributions=contributions)
 
 
+@app.route('/threads')
+def threads():
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
+        user = User.get(repository, username)
+        comments = Comment.get_comments_by_user(repository, username)
+        return render_template('threads.html', comments=comments, user=user)
+    return redirect('')
+
+
 @app.route('/login', methods=['POST'])
 def login():
     token = request.form['token']
