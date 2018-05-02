@@ -56,7 +56,11 @@
                                     <a id="un_{{ contribution.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="">unvote</a>
                                     </span>
                                     |
-                                    <a href=""> 0 comment</a>
+                                    {% if contribution.n_comments > 0 %}
+                                        <a href="contribution?id={{ contribution.id }}"> {{ contribution.n_comments }} comment</a>
+                                    {% else %}
+                                        <a href="contribution?id={{ contribution.id }}"> discuss</a>
+                                    {% endif %}
                                 </td>
                             </tr>
                             <tr style="height:10px"></tr>
