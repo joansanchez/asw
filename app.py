@@ -29,7 +29,6 @@ def home():
         return render_template('home.html', contributions=contributions, user=user)
     else:
         for c in contributions:
-            c.voted = False
             aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
             c.n_comments = aux[0]['n_comments']
         return render_template('home.html', contributions=contributions)
@@ -184,7 +183,6 @@ def ask():
         return render_template('home.html', contributions=contributions, user=user)
     else:
         for c in contributions:
-            c.voted = False
             aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
             c.n_comments = aux[0]['n_comments']
         return render_template('home.html', contributions=contributions)
