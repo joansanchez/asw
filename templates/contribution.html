@@ -104,10 +104,10 @@
                                                 <td class="default">
                                                     <div style="margin-top:2px; margin-bottom:-10px;">
                                                         <span class="comhead">
-                                                            <a href="user?user={{ c.user }}"
-                                                               class="hnuser">{{ c.user }}</a>
+                                                            <a href="user?user={{ c.username }}"
+                                                               class="hnuser"> {{ c.username }} </a>
                                                             <span class="age">
-                                                            <a href="item?id={{ c.id }}">{{ c.time|time_ago }} ago</a>
+                                                            <a href="">{{ c.time|time_ago }} ago</a>
                                                             </span>
                                                         </span>
                                                     </div>
@@ -130,8 +130,8 @@
                                                 {% for child in c.children recursive %}
                                                     <div style="padding-left: 20px; margin-top: 20px">
                                                         <span class="comhead">
-                                                            <a href="user?user={{ child.user }}"
-                                                               class="hnuser">{{ child.user }}</a>
+                                                            <a href="user?user={{ child.username }}"
+                                                               class="hnuser">{{ child.username }}</a>
                                                             <span class="age">
                                                             <a href="item?id={{ child.id }}">{{ child.time|time_ago }} ago</a>
                                                             </span>
