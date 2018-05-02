@@ -182,13 +182,14 @@ def ask():
 def new():
     contributions = Contribution.get_contributions_new(repository)
     username = decode_auth_token(request.cookies.get('token'))
+    for c in contributions:
+        aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
+        c.n_comments = aux[0]['n_comments']
     if username is not None:
         user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository, username)
         for c in contributions:
             c.voted = c['id'] in [cv['contribution_id'] for cv in contributions_voted]
-            aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
-            c.n_comments = aux[0]['n_comments']
         return render_template('home.html', contributions=contributions, user=user)
     return render_template('home.html', contributions=contributions)
 

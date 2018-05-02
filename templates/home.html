@@ -34,7 +34,7 @@
                             </a>)
                         </span>
                     {% else %}
-                        <a href='#'> {{ i.title }}</a>
+                        <a href='contribution?id={{ i.id }}'> {{ i.title }}</a>
                     {% endif %}
                 </td>
             </tr>
@@ -45,7 +45,7 @@
                     by
                     <a href="user?user={{ i.user }}"> {{ i.user }} </a>
                     <span class="age">
-                        <a href="item?id={{ i.id }}">{{ i.time|time_ago }} ago</a>
+                        <a href="contribution?id={{ i.id }}">{{ i.time|time_ago }} ago</a>
                     </span>
                     {% if i.voted == True %}
                         <span id="unv_{{ i.id }}">
