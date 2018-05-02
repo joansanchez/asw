@@ -114,9 +114,9 @@ def submit():
     return redirect('')
 
 
-@app.route('/contribution', methods=['GET'])
+@app.route('/contribution')
 def get_contribution():
-    contribution_id = request.args.get('id', '')
+    contribution_id = request.args.get('id')
     contribution = Contribution.get_contribution(repository, contribution_id)
     comments0 = Comment.get_comments_by_contribution(repository, contribution_id)
     contribution.n_comments = len(comments0)
@@ -159,15 +159,15 @@ def new_post():
 def new_comment():
     user = decode_auth_token(request.cookies.get('token'))
     time = datetime.datetime.now()
-    text = request.form["text"]
     contribution = request.form["contribution"]
-    if user is not None:
+    text = request.form["text"]
+    if user is not None and text:
         if text != '':
             comment = Comment(user, time, text, contribution, 0)
         else:
-            return redirect(url_for('get_contribution'))
+            return redirect(url_for('get_contribution', id=contribution))
         comment.save(repository)
-    return redirect('contribution?id=' + contribution)
+    return redirect(url_for('get_contribution', id=contribution))
 
 
 @app.route('/ask')
