@@ -239,14 +239,13 @@ def reply():
 @app.route('/newReply', methods=['POST'])
 def new_reply():
     username = decode_auth_token(request.cookies.get('token'))
-    if username is not None:
-        contribution = request.form["contribution"]
+    text = request.form["text"]
+    contribution = request.form["contribution"]
+    if username is not None and text:
         parent = request.form["parent"]
-        text = request.form["text"]
         comment = Comment(username, datetime.datetime.now(), text, contribution, parent)
         comment.save(repository)
-        return redirect('contribution?id=' + contribution)
-    return redirect('')
+    return redirect('contribution?id=' + contribution)
 
 
 @app.template_filter('time_ago')
