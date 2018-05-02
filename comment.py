@@ -76,7 +76,7 @@ class Comment:
 
     @staticmethod
     def get_comments_by_parent(repository, parent_id):
-        sql_script = 'SELECT *, c.id AS id, c.text AS \'text\' FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.parent_id = ' + str(
+        sql_script = 'SELECT *, c.id AS id, c.text AS \'text\', c.time AS \'time\' FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.parent_id = ' + str(
             parent_id)
         results = repository.list(sql_script)
         if results:
