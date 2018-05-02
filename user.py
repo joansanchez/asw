@@ -27,7 +27,9 @@ class User:
     def get(repository, email):
         sql_script = 'SELECT * FROM \'user\' WHERE email = \'' + email + '\''
         user = repository.get(sql_script)
-        return User(user[0], user[1], user[2])
+        if user is not None:
+            return User(user[0], user[1], user[2])
+        return None
 
     def update(self, repository, about):
         sql_script = 'UPDATE \'user\' SET about = \'' + about + '\' WHERE email = \'' + self.email + '\''
