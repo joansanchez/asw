@@ -94,10 +94,6 @@
                                                             <span class="age">
                                                             <a href="item?id={{ c.id }}">{{ c.time|time_ago }} ago</a>
                                                             </span>
-                                                            <span id="unv_{{ c.id }}"></span>
-                                                            <span class="par"></span>
-                                                            <a class="togg" n="{{ c.parent_id }}" href="javascript:void(0)" onclick="return toggle(event, 16915359)">[-]</a>
-                                                            <span class="storyon"></span>
                                                         </span>
                                                     </div>
                                                     <br>
@@ -115,6 +111,36 @@
                                                             </div>
                                                         </span>
                                                     </div>
+
+                                                {% for child in c.children recursive %}
+                                                    <div style="padding-left: 20px; margin-top: 20px">
+                                                        <span class="comhead">
+                                                            <a href="user?user={{ child.user }}"
+                                                               class="hnuser">{{ child.user }}</a>
+                                                            <span class="age">
+                                                            <a href="item?id={{ child.id }}">{{ child.time|time_ago }} ago</a>
+                                                            </span>
+                                                        </span>
+                                                    <br>
+                                                    <div class="comment">
+                                                        <span class="c00">
+                                                            {{ child.text }}
+                                                            <div class="reply">
+                                                                <p>
+                                                                    <font size="1">
+                                                                        <u>
+                                                                            <a href="reply?id={{ child.id }}">reply</a>
+                                                                        </u>
+                                                                    </font>
+                                                                </p>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                    {% if child.children %}
+                                                        <div style="margin-top: 20px">{{ loop(child.children) }}</div>
+                                                    {% endif %}
+                                                    </div>
+                                                {% endfor %}
                                                 </td>
                                             </tr>
                                         </tbody>

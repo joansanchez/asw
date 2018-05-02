@@ -30,8 +30,13 @@ class Comment:
 
     @staticmethod
     def get_comments_by_contribution(repository, contribution_id):
-        return repository.list(
-            'SELECT * FROM comment WHERE contribution_id = \'' + contribution_id + '\' ORDER BY time DESC')
+        result = repository.list(
+            'SELECT *, c.text AS \'text\', c.user AS \'user\', c.id AS id FROM comment c WHERE c.contribution_id = \'' + contribution_id + '\' ORDER BY c.time DESC')
+        comments = []
+        for r in result:
+            comment = Comment(r['user'], r['time'], r['text'], r['contribution_id'], r['parent_id'], r['id'])
+            comments.append(comment)
+        return comments
 
     @staticmethod
     def get_number_comments_by_contribution(repository, contribution_id):

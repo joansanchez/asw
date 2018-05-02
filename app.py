@@ -118,9 +118,18 @@ def submit():
 def get_contribution():
     contribution_id = request.args.get('id', '')
     contribution = Contribution.get_contribution(repository, contribution_id)
-    comments = Comment.get_comments_by_contribution(repository, contribution_id)
-    contribution.n_comments = len(comments)
+    comments0 = Comment.get_comments_by_contribution(repository, contribution_id)
+    contribution.n_comments = len(comments0)
     user = decode_auth_token(request.cookies.get('token'))
+    all_children = []
+    for comment in comments0:
+        children = Comment.get_comments_by_parent(repository, comment.id)
+        all_children.extend(children)
+        comment.children = children
+    comments = []
+    for comment in comments0:
+        if not comment.id in [c.id for c in all_children]:
+            comments.append(comment)
     if user is not None:
         user = User.get(repository, user)
         return render_template('contribution.html', contribution=contribution, comments=comments, user=user)
