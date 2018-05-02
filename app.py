@@ -120,7 +120,7 @@ def get_contribution():
     contribution = Contribution.get_contribution(repository, contribution_id)
     comments0 = Comment.get_comments_by_contribution(repository, contribution_id)
     contribution.n_comments = len(comments0)
-    user = decode_auth_token(request.cookies.get('token'))
+    username = decode_auth_token(request.cookies.get('token'))
     all_children = []
     for comment in comments0:
         children = Comment.get_comments_by_parent(repository, comment.id)
@@ -130,9 +130,11 @@ def get_contribution():
     for comment in comments0:
         if not comment.id in [c.id for c in all_children]:
             comments.append(comment)
-    if user is not None:
-        user = User.get(repository, user)
-        return render_template('contribution.html', contribution=contribution, comments=comments, user=user)
+    if username is not None:
+        user = User.get(repository, username)
+        contributions_voted = UserContributionVoted.get_voted(repository, username)
+        voted = contribution.id in [cv['contribution_id'] for cv in contributions_voted]
+        return render_template('contribution.html', contribution=contribution, comments=comments, user=user, voted = voted)
     return render_template('contribution.html', contribution=contribution, comments=comments)
 
 

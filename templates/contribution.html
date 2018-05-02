@@ -18,8 +18,15 @@
                                 </td>
                                 <td valign="top" class="votelinks">
                                     <center>
-                                        <a id="up_{{ contribution.id }}" onclick="return vote(event, this, &quot;up&quot;)" href="el mateix amb un vot mes sense triangle...">
-                                            <div class="votearrow" title="upvote"></div>
+                                       {% if voted == false %}
+                                            <a id="up_{{ contribution.id }}" href="javascript:void(0)" onclick="$('#vote{{ contribution.id }}').submit()">
+                                            <form id="vote{{ contribution.id }}" action="vote" method="post" style="display: none">
+                                                <input type="hidden" name="contribution" value="{{ contribution.id }}">
+                                                <input type="hidden" name="action" value="vote">
+                                            </form>
+                                                <div class="votearrow" title="upvote"></div>
+                                            </a>
+                                        {% endif %}
                                         </a>
                                     </center>
                                 </td>
@@ -51,10 +58,18 @@
                                     <span class="age">
                                         <a href="item?id={{ contribution.id }}">{{ contribution.time|time_ago }} ago</a>
                                     </span>
-                                    <span id="unv_{{ contribution.id }}">
-                                    |
-                                    <a id="un_{{ contribution.id }}" onclick="return vote(event, this,&quot;un&quot;)" href="">unvote</a>
-                                    </span>
+                                    {% if voted == True %}
+                                        <span id="unv_{{ contribution.id }}">
+                                        |
+                                        <a id="up_{{ contribution.id }}" href="javascript:void(0)" onclick="$('#vote{{ contribution.id }}').submit()">
+                                                <form id="vote{{ contribution.id }}" action="vote" method="post" style="display: none">
+                                                    <input type="hidden" name="contribution" value="{{ contribution.id }}">
+                                                    <input type="hidden" name="action" value="unvote">
+                                                </form>
+                                                unvote
+                                            </a>
+                                        </span>
+                                    {% endif %}
                                     |
                                     {% if contribution.n_comments > 0 %}
                                         <a href="contribution?id={{ contribution.id }}"> {{ contribution.n_comments }} comment</a>
