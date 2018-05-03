@@ -5,12 +5,12 @@
 
 
     <form class="profileform" method="post" action="/updateUser"><input type="hidden" name="id"
-                                                                   value="joansanchez"><input
+                                                                        value="joansanchez"><input
             type="hidden" name="hmac" value="b97b83fee6fb552b7ac2e0c61e1a7ad70ae15868">
         <table border="0">
             <tr class='athing'>
                 <td valign="top">user:</td>
-                <td timestamp="1523260324"><a href="user?user={{user.email}}" class="hnuser">{{ user.email }}</a>
+                <td timestamp="1523260324"><a href="user?user={{ user.email }}" class="hnuser">{{ user.email }}</a>
                 </td>
             </tr>
             <tr>
@@ -22,8 +22,9 @@
             <tr>
                 <td valign="top">about:</td>
                 <td>
-              <textarea cols="60" rows="5" wrap="virtual" name="about"> {{user.about}}
-</textarea> <font size="-2"><a href="formatdoc" tabindex="-1"><font color="#afafaf">help</font></a></font></td>
+                    <textarea cols="60" rows="5" wrap="virtual" name="about"> {{ user.about }}
+                    </textarea>
+                </td>
             </tr>
             <tr>
                 <td></td>
