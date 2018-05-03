@@ -55,18 +55,6 @@ class Comment:
         return comments
 
     @staticmethod
-    def get_replies_by_comment(repository, comment_id):
-        return repository.list('SELECT * FROM comment WHERE parent_id = \'' + comment_id + '\' ORDER BY time DESC')
-
-    @staticmethod
-    def get_comments(repository):
-        return repository.list('SELECT * FROM comment ORDER BY time DESC')
-
-    @staticmethod
-    def delete_comment_by_id(repository, comment_id):
-        return repository.list('DELETE FROM comment WHERE id = \'' + comment_id + '\'')
-
-    @staticmethod
     def get_comment(repository, comment_id):
         sql_script = 'SELECT * FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.id = \'' + comment_id + '\''
         result = repository.get(sql_script)
