@@ -148,6 +148,8 @@ def new_post():
         contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '':
         contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)
+    elif text != '' and url != '':
+        return redirect(url_for('submit'))
     else:
         return redirect(url_for('submit'))
     contribution.save(repository)
