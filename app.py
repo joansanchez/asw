@@ -209,9 +209,10 @@ def new():
 @app.route('/editProfile')
 def edit_profile():
     username = decode_auth_token(request.cookies.get('token'))
+    token_user = request.cookies.get('token')
     if username is not None:
         user = User.get(repository, username)
-        return render_template('editProfile.html', user=user)
+        return render_template('editProfile.html', user=user, token=token_user)
     return redirect('')
 
 
