@@ -10,6 +10,7 @@ from google_login import validate_token
 from persistence import Persistence
 from token_generator import encode_auth_token, decode_auth_token
 from user import User
+from usercommentvoted import UserCommentVoted
 from usercontributionvoted import UserContributionVoted
 
 app = Flask(__name__, static_folder='./static')
@@ -89,8 +90,8 @@ def logout():
     return resp
 
 
-@app.route('/vote', methods=['POST'])
-def vote():
+@app.route('/voteContribution', methods=['POST'])
+def voteContribution():
     username = decode_auth_token(request.cookies.get('token'))
     if username is not None:
         contribution_id = request.form['contribution']
@@ -100,6 +101,20 @@ def vote():
             contribution_voted.save(repository)
         elif action == 'unvote':
             contribution_voted.delete(repository)
+    resp = make_response(redirect(''))
+    return resp
+
+@app.route('/voteComment', methods=['POST'])
+def voteComment():
+    username = decode_auth_token(request.cookies.get('token'))
+    if username is not None:
+        comment_id = request.form['comment']
+        action = request.form['action']
+        comment_voted = UserCommentVoted(username, comment_id)
+        if action == 'vote':
+            comment_voted.save(repository)
+        elif action == 'unvote':
+            comment_voted.delete(repository)
     resp = make_response(redirect(''))
     return resp
 
@@ -117,24 +132,29 @@ def submit():
 def get_contribution():
     contribution_id = request.args.get('id')
     contribution = Contribution.get_contribution(repository, contribution_id)
-    comments0 = Comment.get_comments_by_contribution(repository, contribution_id)
-    contribution.n_comments = len(comments0)
+    comments = Comment.get_comments_by_contribution(repository, contribution_id)
+    contribution.n_comments = len(comments)
     username = decode_auth_token(request.cookies.get('token'))
     all_children = []
-    for comment in comments0:
+    comments_voted = UserCommentVoted.get_voted(repository, username)
+    for comment in comments:
+        comment.voted = comment.id in [cv['comment_id'] for cv in comments_voted]
         children = Comment.get_comments_by_parent(repository, comment.id)
         all_children.extend(children)
         comment.children = children
-    comments = []
-    for comment in comments0:
+    for child in all_children:
+        child.voted = child.id in [cv['comment_id'] for cv in comments_voted]
+        # TODO: Falta votar ultim child
+    parents_comments = []
+    for comment in comments:
         if not comment.id in [c.id for c in all_children]:
-            comments.append(comment)
+            parents_comments.append(comment)
     if username is not None:
         user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository, username)
         voted = contribution.id in [cv['contribution_id'] for cv in contributions_voted]
-        return render_template('contribution.html', contribution=contribution, comments=comments, user=user, voted = voted)
-    return render_template('contribution.html', contribution=contribution, comments=comments)
+        return render_template('contribution.html', contribution=contribution, comments=parents_comments, user=user, voted = voted)
+    return render_template('contribution.html', contribution=contribution, comments=parents_comments)
 
 
 @app.route('/newPost', methods=['POST'])
@@ -279,7 +299,7 @@ if __name__ == '__main__':
     repository = Persistence(os.environ['DB_PATH'], logging.getLogger(__name__))
     repository.init_db(
         [User.get_table_creation(), Contribution.get_table_creation(), UserContributionVoted.get_table_creation(),
-         Comment.get_table_creation()])
+         Comment.get_table_creation(), UserCommentVoted.get_table_creation()])
 
     basicConfig(filename=os.environ['LOG'], level=INFO)
 

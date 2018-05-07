@@ -15,8 +15,8 @@
                 <td valign="top" class="votelinks">
                     <center>
                         {% if i.voted == false and user.email != i.user %}
-                            <a id="up_{{ i.id }}" href="javascript:void(0)" onclick="$('#vote{{ i.id }}').submit()">
-                                <form id="vote{{ i.id }}" action="vote" method="post" style="display: none">
+                            <a id="up_{{ i.id }}" href="javascript:void(0)" onclick="$('#voteContribution{{ i.id }}').submit()">
+                                <form id="voteContribution{{ i.id }}" action="voteContribution" method="post" style="display: none">
                                     <input type="hidden" name="contribution" value="{{ i.id }}">
                                     <input type="hidden" name="action" value="vote">
                                 </form>
@@ -50,8 +50,8 @@
                     {% if i.voted == True and user.email != i.user %}
                         <span id="unv_{{ i.id }}">
                         |
-                        <a id="up_{{ i.id }}" href="javascript:void(0)" onclick="$('#vote{{ i.id }}').submit()">
-                                <form id="vote{{ i.id }}" action="vote" method="post" style="display: none">
+                        <a id="up_{{ i.id }}" href="javascript:void(0)" onclick="$('#voteContribution{{ i.id }}').submit()">
+                                <form id="voteContribution{{ i.id }}" action="voteContribution" method="post" style="display: none">
                                     <input type="hidden" name="contribution" value="{{ i.id }}">
                                     <input type="hidden" name="action" value="unvote">
                                 </form>
