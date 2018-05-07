@@ -63,3 +63,9 @@ Before closing this window add required variables, similar to next image.
 Now you can run Pycharm configuration by pressing the button on the toolbar.
 
 ![Capture 6](./img/Capture6.PNG)
+
+### Swagger documentation
+
+In order to work with Swagger documentation you should install _Swagger Plugin_ [https://plugins.jetbrains.com/plugin/8347-swagger-plugin](https://plugins.jetbrains.com/plugin/8347-swagger-plugin).
+
+You can install it going to _File > Settings > Plugins > Swagger Plugin_ and click on install button. Restart PyCharm and it will work.
