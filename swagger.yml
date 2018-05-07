@@ -40,6 +40,30 @@ paths:
               $ref: "#/definitions/Contribution"
       security:
       - api_key: []
+  /users:
+    post:
+      tags:
+        - "user"
+      summary: ""
+      description: ""
+      operationId: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "contribution"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+            description: "Successful operation. Returns created user"
+            schema:
+              $ref: "#/definitions/User"
+
 securityDefinitions:
   api_key:
     type: "apiKey"
@@ -50,7 +74,7 @@ definitions:
     type: "object"
     required:
       - "title"
-      - "username"
+      - "email"
     properties:
       id:
         type: "integer"
@@ -71,3 +95,16 @@ definitions:
       time:
         type: "string"
         format: "date-time"
+
+  User:
+    type: "object"
+    required:
+      - "email"
+    properties:
+      email:
+        type: "string"
+      karma:
+        type: "integer"
+        format: "int64"
+      about:
+        type: "string"
