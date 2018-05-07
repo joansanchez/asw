@@ -1,0 +1,73 @@
+swagger: "2.0"
+info:
+  description: "My Hacker News documentation"
+  version: "1.0.0"
+  title: "My Hacker News"
+host: "myhackernews.tk"
+basePath: "/api"
+tags:
+- name: "user"
+  description: "Everything about users"
+- name: "contribution"
+  description: "Contributions like news and asks"
+- name: "comment"
+  description: "Comments and replies for contributions"
+schemes:
+- "http"
+paths:
+  /contributions:
+    post:
+      tags:
+        - "contribution"
+      summary: ""
+      description: ""
+      operationId: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "contribution"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/Contribution"
+      responses:
+        201:
+            description: "Successful operation. Returns created contribution"
+            schema:
+              $ref: "#/definitions/Contribution"
+      security:
+      - api_key: []
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  Contribution:
+    type: "object"
+    required:
+      - "title"
+      - "username"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+      url:
+        type: "string"
+      text:
+        type: "string"
+      username:
+        type: "string"
+      kind:
+        type: "string"
+        enum:
+        - "ask"
+        - "new"
+      time:
+        type: "string"
+        format: "date-time"
