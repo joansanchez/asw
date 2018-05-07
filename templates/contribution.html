@@ -58,7 +58,7 @@
                                     <span class="age">
                                         <a href="item?id={{ contribution.id }}">{{ contribution.time|time_ago }} ago</a>
                                     </span>
-                                    {% if voted == True and user.email != i.user %}
+                                    {% if voted == True and user.email != contribution.user %}
                                         <span id="unv_{{ contribution.id }}">
                                         |
                                         <a id="up_{{ contribution.id }}" href="javascript:void(0)" onclick="$('#vote{{ contribution.id }}').submit()">
