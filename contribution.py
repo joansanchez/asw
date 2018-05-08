@@ -74,3 +74,18 @@ class Contribution:
                                     contribution_id=result[0])
         contribution.n_votes = result[7]
         return contribution
+
+    def toJSON(self):
+        json = {
+            "id": self.id,
+            "title": self.title,
+            "time": self.time,
+            "username": self.username,
+        }
+
+        if self.kind == ContributionTypes.ASK.value:
+            json['text'] = self.text
+        elif self.kind == ContributionTypes.NEW.value:
+            json['url'] = self.url
+
+        return json

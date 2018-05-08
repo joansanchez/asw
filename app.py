@@ -283,15 +283,7 @@ def create_new_ask():
                        username=username, kind=ContributionTypes.ASK.value)
     ask.save(repository)
 
-    # TODO: extract json serialization
-    response = {
-        "id": ask.id,
-        "title": ask.title,
-        "text": ask.text,
-        "time": ask.time,
-        "username": ask.username,
-    }
-    return jsonify(response)
+    return jsonify(ask.toJSON())
 
 
 @app.template_filter('time_ago')
