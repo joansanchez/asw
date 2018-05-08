@@ -273,7 +273,11 @@ def new_reply():
 
 @app.route('/api/asks', methods=['POST'])
 def create_new_ask():
+    if 'Authorization' not in request.headers:
+        return '', 401
     username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
     json = request.get_json()
     ask = Contribution(title=json['title'], url=None, text=json['text'], time=datetime.datetime.now(),
                        username=username, kind=ContributionTypes.ASK.value)
