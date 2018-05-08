@@ -53,7 +53,7 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "contribution"
+        name: "user"
         description: ""
         required: true
         schema:
@@ -63,6 +63,30 @@ paths:
             description: "Successful operation. Returns created user"
             schema:
               $ref: "#/definitions/User"
+    get:
+      tags:
+        - "user"
+      summary: ""
+      description: ""
+      operationId: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "contribution"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+            description: "Successful operation. Returns created contribution"
+            schema:
+              $ref: "#/definitions/User"
+      security:
+      - api_key: []
 
 securityDefinitions:
   api_key:
