@@ -2,7 +2,7 @@ import datetime
 import os
 from logging import basicConfig, INFO
 
-from flask import Flask, logging, render_template, request, redirect, url_for, make_response
+from flask import Flask, logging, render_template, request, redirect, url_for, make_response, jsonify
 
 from comment import Comment
 from contribution import Contribution, ContributionTypes
@@ -104,6 +104,7 @@ def voteContribution():
     resp = make_response(redirect(''))
     return resp
 
+
 @app.route('/voteComment', methods=['POST'])
 def voteComment():
     username = decode_auth_token(request.cookies.get('token'))
@@ -153,7 +154,8 @@ def get_contribution():
         user = User.get(repository, username)
         contributions_voted = UserContributionVoted.get_voted(repository, username)
         voted = contribution.id in [cv['contribution_id'] for cv in contributions_voted]
-        return render_template('contribution.html', contribution=contribution, comments=parents_comments, user=user, voted = voted)
+        return render_template('contribution.html', contribution=contribution, comments=parents_comments, user=user,
+                               voted=voted)
     return render_template('contribution.html', contribution=contribution, comments=parents_comments)
 
 
@@ -267,6 +269,25 @@ def new_reply():
         comment = Comment(username, datetime.datetime.now(), text, contribution, parent)
         comment.save(repository)
     return redirect('contribution?id=' + contribution)
+
+
+@app.route('/api/asks', methods=['POST'])
+def create_new_ask():
+    username = decode_auth_token(request.headers['Authorization'])
+    json = request.get_json()
+    ask = Contribution(title=json['title'], url=None, text=json['text'], time=datetime.datetime.now(),
+                       username=username, kind=ContributionTypes.ASK.value)
+    ask.save(repository)
+
+    # TODO: extract json serialization
+    response = {
+        "id": ask.id,
+        "title": ask.title,
+        "text": ask.text,
+        "time": ask.time,
+        "username": ask.username,
+    }
+    return jsonify(response)
 
 
 @app.template_filter('time_ago')

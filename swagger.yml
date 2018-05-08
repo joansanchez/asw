@@ -15,13 +15,12 @@ tags:
 schemes:
 - "http"
 paths:
-  /contributions:
+  /asks:
     post:
       tags:
         - "contribution"
-      summary: ""
+      summary: "Endpoint to create new contributions"
       description: ""
-      operationId: ""
       consumes:
       - "application/json"
       produces:
@@ -32,12 +31,16 @@ paths:
         description: ""
         required: true
         schema:
-          $ref: "#/definitions/Contribution"
+          $ref: "#/definitions/Ask"
       responses:
         201:
             description: "Successful operation. Returns created contribution"
             schema:
-              $ref: "#/definitions/Contribution"
+              $ref: "#/definitions/Ask"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
       security:
       - api_key: []
   /users:
@@ -98,28 +101,22 @@ securityDefinitions:
     name: "Authorization"
     in: "header"
 definitions:
-  Contribution:
+  Ask:
     type: "object"
     required:
       - "title"
-      - "email"
+      - "text"
+      - "username"
     properties:
       id:
         type: "integer"
         format: "int64"
       title:
         type: "string"
-      url:
-        type: "string"
       text:
         type: "string"
       username:
         type: "string"
-      kind:
-        type: "string"
-        enum:
-        - "ask"
-        - "new"
       time:
         type: "string"
         format: "date-time"
