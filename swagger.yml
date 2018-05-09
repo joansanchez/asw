@@ -90,6 +90,39 @@ paths:
               $ref: "#/definitions/User"
         400:
             description: "Bad request, there are missing parameters or they do not have valid format"
+    put:
+      tags:
+        - "user"
+      summary: "Endpoint to update an existing user"
+      description: "Returns the updated user"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "userID"
+        description: "ID of user to return"
+        required: true
+        type: "String"
+      - in: "body"
+        name: "user"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+            description: "Successful operation. Returns updated user"
+            schema:
+              $ref: "#/definitions/User"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+      security:
+      - api_key: []
+
   /news:
     get:
       tags:

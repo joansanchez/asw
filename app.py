@@ -291,6 +291,19 @@ def return_asked_user(user):
     user_to_show = User.get(repository, user)
     return jsonify(user_to_show.toJSON())
 
+@app.route('/api/users/<userput>', methods=['PUT'])
+def return_updated_user(userput):
+    if 'Authorization' not in request.headers:
+        return '', 401
+    username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
+    if username != userput:
+        return '', 400
+    json = request.get_json()
+    user_to_return = User.get(repository, username)
+    user_to_return.update(repository, json['about'])
+    return jsonify(user_to_return.toJSON())
 
 @app.template_filter('time_ago')
 def _time_ago_filter(date):
