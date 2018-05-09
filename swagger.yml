@@ -43,30 +43,6 @@ paths:
             description: "Forbidden, missing authentication"
       security:
       - api_key: []
-  /users:
-    post:
-      tags:
-        - "user"
-      summary: "Endpoint to create new users"
-      description: ""
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "user"
-        description: ""
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        201:
-            description: "Successful operation. Returns created user"
-            schema:
-              $ref: "#/definitions/User"
-        400:
-            description: "Bad request, there are missing parameters or they do not have valid format"
   /users/{userId}:
     get:
       tags:
@@ -84,12 +60,14 @@ paths:
         required: true
         type: "String"
       responses:
-        201:
+        200:
             description: "Successful operation. Returns asked user"
             schema:
               $ref: "#/definitions/User"
         400:
             description: "Bad request, there are missing parameters or they do not have valid format"
+        404:
+            description: "User not found"
     put:
       tags:
         - "user"
@@ -112,7 +90,7 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
-        201:
+        200:
             description: "Successful operation. Returns updated user"
             schema:
               $ref: "#/definitions/User"
@@ -120,6 +98,8 @@ paths:
             description: "Bad request, there are missing parameters or they do not have valid format"
         401:
             description: "Forbidden, missing authentication"
+        403:
+            description: "Unauthorized. Missing permissions to update the resources"
       security:
       - api_key: []
 
