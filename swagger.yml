@@ -47,9 +47,8 @@ paths:
     post:
       tags:
         - "user"
-      summary: ""
+      summary: "Endpoint to create new users"
       description: ""
-      operationId: ""
       consumes:
       - "application/json"
       produces:
@@ -66,30 +65,31 @@ paths:
             description: "Successful operation. Returns created user"
             schema:
               $ref: "#/definitions/User"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+  /users/{userId}:
     get:
       tags:
         - "user"
-      summary: ""
-      description: ""
-      operationId: ""
+      summary: "Endpoint to get an specific users"
+      description: "Returns a single user"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "contribution"
-        description: ""
+      - in: "path"
+        name: "userID"
+        description: "ID of user to return"
         required: true
-        schema:
-          $ref: "#/definitions/User"
+        type: "String"
       responses:
         201:
-            description: "Successful operation. Returns created contribution"
+            description: "Successful operation. Returns asked user"
             schema:
               $ref: "#/definitions/User"
-      security:
-      - api_key: []
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
   /news:
     get:
       tags:

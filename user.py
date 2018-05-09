@@ -36,3 +36,11 @@ class User:
         user = {'email': self.email, 'karma': self.karma, 'about': about}
         repository.insert(sql_script, user)
         self.about = about
+
+    def toJSON(self):
+        json = {
+            "email": self.email,
+            "karma": self.karma,
+            "about": self.about,
+        }
+        return json

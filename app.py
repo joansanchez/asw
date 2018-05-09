@@ -286,6 +286,12 @@ def create_new_ask():
     return jsonify(ask.toJSON())
 
 
+@app.route('/api/users/<user>', methods=['GET'])
+def return_asked_user(user):
+    user_to_show = User.get(repository, user)
+    return jsonify(user_to_show.toJSON())
+
+
 @app.template_filter('time_ago')
 def _time_ago_filter(date):
     date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
