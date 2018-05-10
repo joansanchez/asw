@@ -42,6 +42,10 @@ class Contribution:
         return repository.list('SELECT * FROM contribution')
 
     @staticmethod
+    def get_contributions_urls(repository):
+        return repository.list('SELECT url FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\'')
+
+    @staticmethod
     def get_news(repository):
         return repository.list('SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\'')
 
