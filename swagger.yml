@@ -68,12 +68,21 @@ paths:
       - "application/json"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+        - in: "path"
+          name: "contributionID"
+          description: "ID of contribution to return"
+          required: true
+          type: "String"
       responses:
         200:
-            description: "Successful operation. Returns news"
+            description: "Successful operation. Returns asked contribution"
             schema:
-              $ref: "#/definitions/New"
+              $ref: "#/definitions/Contribution"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        404:
+            description: "Contribution not found"
   /users/{userId}:
     get:
       tags:
@@ -192,3 +201,32 @@ definitions:
       time:
         type: "string"
         format: "date-time"
+
+  Contribution:
+    type: "object"
+    required:
+      - "title"
+      - "text"
+      - "username"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+      url:
+        type: "string"
+      text:
+        type: "string"
+      time:
+        type: "string"
+        format: "date-time"
+      username:
+        type: "string"
+      kind:
+        type: "string"
+      n_votes:
+        type: "integer"
+        format: "int64"
+
+
