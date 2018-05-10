@@ -28,7 +28,7 @@ paths:
       parameters: []
       responses:
         200:
-            description: "Successful operation. Returns asks"
+            description: "Successful operation. Returns the asks"
             schema:
               $ref: "#/definitions/Ask"
     post:
@@ -64,6 +64,22 @@ paths:
         - "contribution"
       summary: "Endpoint to view the news"
       description: "Returns all the contributions with type new"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+            description: "Successful operation. Returns the news"
+            schema:
+              $ref: "#/definitions/New"
+  /contributions/{contributionId}:
+    get:
+      tags:
+        - "contribution"
+      summary: "Endpoint to get an specific contribution"
+      description: "Returns a single contribution"
       consumes:
       - "application/json"
       produces:
