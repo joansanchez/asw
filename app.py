@@ -294,6 +294,14 @@ def return_asked_user(user):
     return jsonify(user_to_show.toJSON())
 
 
+@app.route('/api/contributions/<contribution>', methods=['GET'])
+def return_asked_contribution(contribution):
+    contribution_to_show = Contribution.get_contribution(repository, contribution)
+    if contribution_to_show is None:
+        return '', 404
+    return jsonify(contribution_to_show.toJSON())
+
+
 @app.route('/api/users/<userput>', methods=['PUT'])
 def return_updated_user(userput):
     if 'Authorization' not in request.headers:
