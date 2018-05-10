@@ -20,9 +20,8 @@ paths:
       tags:
         - "contribution"
       summary: "Endpoint to view the asks"
-      description: "Returns all the contributions with type ask"
-      consumes:
-      - "application/json"
+      description: "Returns all the ask contributions"
+      operationId: "getNews"
       produces:
       - "application/json"
       parameters: []
@@ -30,7 +29,9 @@ paths:
         200:
             description: "Successful operation. Returns the asks"
             schema:
-              $ref: "#/definitions/Ask"
+              type: "array"
+              items:
+                $ref: "#/definitions/Asks"
     post:
       tags:
         - "contribution"
@@ -63,7 +64,7 @@ paths:
       tags:
         - "contribution"
       summary: "Endpoint to view the news"
-      description: "Returns all the contributions with type new"
+      description: "Returns all the news contributions"
       consumes:
       - "application/json"
       produces:
@@ -73,7 +74,9 @@ paths:
         200:
             description: "Successful operation. Returns the news"
             schema:
-              $ref: "#/definitions/New"
+              type: "array"
+              items:
+                $ref: "#/definitions/News"
   /contributions/{contributionId}:
     get:
       tags:
@@ -226,26 +229,6 @@ definitions:
       about:
         type: "string"
 
-  New:
-    type: "object"
-    required:
-      - "title"
-      - "url"
-      - "username"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      title:
-        type: "string"
-      url:
-        type: "string"
-      username:
-        type: "string"
-      time:
-        type: "string"
-        format: "date-time"
-
   Contribution:
     type: "object"
     required:
@@ -259,6 +242,52 @@ definitions:
       title:
         type: "string"
       url:
+        type: "string"
+      text:
+        type: "string"
+      time:
+        type: "string"
+        format: "date-time"
+      username:
+        type: "string"
+      kind:
+        type: "string"
+      n_votes:
+        type: "integer"
+        format: "int64"
+      n_comments:
+        type: "integer"
+        format: "int 64"
+
+  News:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+      url:
+        type: "string"
+      time:
+        type: "string"
+        format: "date-time"
+      username:
+        type: "string"
+      n_votes:
+        type: "integer"
+        format: "int64"
+      n_comments:
+        type: "integer"
+        format: "int64"
+
+  Asks:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
         type: "string"
       text:
         type: "string"
@@ -293,5 +322,8 @@ definitions:
         type: "integer"
         format: "int64"
       parent_id:
+        type: "integer"
+        format: "int64"
+      n_comments:
         type: "integer"
         format: "int64"
