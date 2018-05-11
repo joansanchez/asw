@@ -378,6 +378,14 @@ def vote_contribution_api(contribution_id):
     return return_asked_contribution(contribution_id)
 
 
+@app.route('/api/comments/<comment_id>', methods=['GET'])
+def return_asked_comment(comment_id):
+    comment_to_show = Comment.get_comment(repository, comment_id)
+    if comment_to_show is None:
+        return '', 404
+    return jsonify(comment_to_show.toJSON())
+
+
 @app.route('/api/comments/<comment_id>/vote', methods=['POST', 'DELETE'])
 def vote_comment_api(comment_id):
     if 'Authorization' not in request.headers:
@@ -399,7 +407,7 @@ def vote_comment_api(comment_id):
         if not UserCommentVoted.exists(repository, comment_id, username):
             return '', 404
         comment_voted.delete(repository)
-    return '', 200
+    return return_asked_comment(comment_id)
 
 
 @app.route('/api/users/<userput>', methods=['PUT'])
