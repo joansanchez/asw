@@ -168,9 +168,8 @@ def new_post():
     text = request.form["text"]
     time = datetime.datetime.now()
     user = decode_auth_token(request.cookies.get('token'))
-    if Contribution.exists(repository, url):
-        return redirect(url_for('submit'))
-    if url != '' and text == '':
+
+    if url != '' and text == '' and not Contribution.exists(repository, url):
         contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '':
         contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)
