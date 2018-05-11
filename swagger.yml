@@ -42,11 +42,11 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "contribution"
+        name: "Ask"
         description: ""
         required: true
         schema:
-          $ref: "#/definitions/Ask"
+          $ref: "#/definitions/New_Ask"
       responses:
         201:
             description: "Successful operation. Returns created contribution"
@@ -427,7 +427,13 @@ definitions:
       n_votes:
         type: "integer"
         format: "int64"
-
+  New_Ask:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      text:
+        type: "string"
   Comment:
     type: "object"
     required:
