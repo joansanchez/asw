@@ -44,6 +44,11 @@ class Comment:
             'SELECT count(*) AS n_comments FROM comment WHERE contribution_id = \'' + contribution_id + '\' ORDER BY time DESC')
 
     @staticmethod
+    def delete_comment(repository, comment_id):
+        repository.delete(
+            'DELETE FROM comment WHERE id = \'' + comment_id + '\'')
+
+    @staticmethod
     def get_comments_by_user(repository, username):
         result = repository.list(
             'SELECT *, c.text AS \'text\', c.user AS \'user\', c.id AS id, c.time AS \'time\' FROM comment c LEFT JOIN contribution co ON c.contribution_id = co.id WHERE c.user = \'' + username + '\' ORDER BY c.time DESC')

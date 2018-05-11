@@ -62,6 +62,11 @@ class Contribution:
         return contributions
 
     @staticmethod
+    def get_contribution_id_by_URL(repository, url):
+        result = repository.get('SELECT id FROM contribution WHERE url = \'' + url + '\'')
+        return result[0]
+
+    @staticmethod
     def get_contributions_new(repository):
         return repository.list(
             'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(u.\'user\') AS n_votes FROM contribution c LEFT JOIN user_contribution_voted u ON c.id = u.contribution GROUP BY c.id ORDER BY time DESC;')

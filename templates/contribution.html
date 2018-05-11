@@ -121,6 +121,9 @@
                                                             <span class="age">
                                                                 <a href="">{{ c.time|time_ago }} ago</a>
                                                             </span>
+                                                            {% if user is defined and c.username == user.email %}
+                                                            <a href="delete?com_id={{ c.id }}&con_id={{ c.contribution_id }}"> delete </a>
+                                                            {% endif %}
                                                             {% if c.voted == True and user.email != c.username %}
                                                                 <span id="unv_{{ c.id }}">
                                                                 |
@@ -168,6 +171,9 @@
                                                             <span class="age">
                                                             <a href="item?id={{ child.id }}">{{ child.time|time_ago }} ago</a>
                                                             </span>
+                                                            {% if user is defined and child.username == user.email %}
+                                                            <a href="delete?com_id={{ child.id }}&con_id={{ child.contribution_id }}"> delete </a>
+                                                            {% endif %}
                                                             {% if child.voted == True and user is defined and user.email != child.username %}
                                                                 <span id="unv_{{ c.id }}">
                                                                 |
