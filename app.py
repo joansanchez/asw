@@ -137,9 +137,7 @@ def get_contribution():
     contribution.n_comments = len(comments)
     username = decode_auth_token(request.cookies.get('token'))
     all_children = []
-    comments_voted = []
-    if username is not None:
-        comments_voted = UserCommentVoted.get_voted(repository, username)
+    comments_voted = UserCommentVoted.get_voted(repository, username)
     for comment in comments:
         comment.voted = comment.id in [cv['comment_id'] for cv in comments_voted]
         children = Comment.get_comments_by_parent(repository, comment.id)
@@ -161,6 +159,14 @@ def get_contribution():
     return render_template('contribution.html', contribution=contribution, comments=parents_comments)
 
 
+@app.route('/delete')
+def delete_comment():
+    comment_id = request.args.get('com_id')
+    contribution_id = request.args.get('con_id')
+    Comment.delete_comment(repository, comment_id)
+    return redirect("contribution?id={0}".format(contribution_id))
+
+
 @app.route('/newPost', methods=['POST'])
 def new_post():
     title = request.form["title"]
@@ -168,13 +174,15 @@ def new_post():
     text = request.form["text"]
     time = datetime.datetime.now()
     user = decode_auth_token(request.cookies.get('token'))
-
     if url != '' and text == '' and not Contribution.exists(repository, url):
         contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '':
         contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)
     elif text != '' and url != '':
         return redirect(url_for('submit'))
+    elif url != '' and text == '' and Contribution.exists(repository, url):
+        contribution_id = Contribution.get_contribution_id_by_URL(repository, url)
+        return redirect("contribution?id={0}".format(contribution_id))
     else:
         return redirect(url_for('submit'))
     contribution.save(repository)

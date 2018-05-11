@@ -29,7 +29,7 @@ class Contribution:
         return '''CREATE TABLE IF NOT EXISTS contribution
                          (id INTEGER PRIMARY KEY AUTOINCREMENT,
                          title TEXT,
-                         url TEXT UNIQUE,
+                         url TEXT,
                          'text' TEXT,
                          time TIMESTAMP,
                          'user' TEXT NOT NULL,
@@ -82,6 +82,12 @@ class Contribution:
     @staticmethod
     def exists(repository, url):
         return repository.exists('SELECT * FROM contribution WHERE url = \'' + url + '\'')
+
+    @staticmethod
+    def get_contribution_id_by_URL(repository, url):
+        result = repository.get(
+            'SELECT id FROM contribution WHERE url = \'' + url + '\'')
+        return result[0]
 
     def toJSON(self):
         json = {
