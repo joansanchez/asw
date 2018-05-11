@@ -42,11 +42,11 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "contribution"
+        name: "Ask"
         description: ""
         required: true
         schema:
-          $ref: "#/definitions/Ask"
+          $ref: "#/definitions/New_Ask"
       responses:
         201:
             description: "Successful operation. Returns created contribution"
@@ -94,7 +94,7 @@ paths:
               type: "array"
               items:
                 $ref: "#/definitions/Contribution"
-  /contributions/{contributionId}:
+  /contributions/{contributionID}:
     get:
       tags:
         - "contribution"
@@ -119,7 +119,7 @@ paths:
             description: "Bad request, there are missing parameters or they do not have valid format"
         404:
             description: "Contribution not found"
-  /contributions/{contributionId}/vote:
+  /contributions/{contributionID}/vote:
     post:
       tags:
         - "contribution"
@@ -184,7 +184,7 @@ paths:
             description: "Conflict. You have already vote for this contribution"
       security:
       - api_key: []
-  /comments/{commentId}:
+  /comments/{commentID}:
     get:
       tags:
         - "comment"
@@ -210,8 +210,73 @@ paths:
         404:
             description: "Comment not found"
 
+  /comments/{commentsID}/vote:
+    post:
+      tags:
+        - "comment"
+      summary: "Endpoint to vote an specific comment"
+      description: "Returns a single comment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "commentID"
+          description: "ID of a comment to return"
+          required: true
+          type: "String"
+      responses:
+        200:
+            description: "Successful operation. Returns voted comment"
+            schema:
+              $ref: "#/definitions/Comment"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+        403:
+            description: "Unauthorized. Missing permissions to update the resources"
+        404:
+            description: "Comment not found"
+        409:
+            description: "Conflict. You have already vote for this comment"
+      security:
+      - api_key: []
+    delete:
+      tags:
+        - "comment"
+      summary: "Endpoint to unvote an specific comment"
+      description: "Returns a single comment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "commentID"
+          description: "ID of comment to return"
+          required: true
+          type: "String"
+      responses:
+        200:
+            description: "Successful operation. Returns unvoted comment"
+            schema:
+              $ref: "#/definitions/Comment"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+        403:
+            description: "Unauthorized. Missing permissions to update the resources"
+        404:
+            description: "Comment not found"
+        409:
+            description: "Conflict. You have already vote for this comment"
+      security:
+      - api_key: []
 
-  /users/{userId}:
+  /users/{userID}:
     get:
       tags:
         - "user"
@@ -362,7 +427,13 @@ definitions:
       n_votes:
         type: "integer"
         format: "int64"
-
+  New_Ask:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      text:
+        type: "string"
   Comment:
     type: "object"
     required:
@@ -385,6 +456,6 @@ definitions:
       parent_id:
         type: "integer"
         format: "int64"
-      n_comments:
+      n_votes:
         type: "integer"
         format: "int64"

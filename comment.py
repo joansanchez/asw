@@ -90,7 +90,8 @@ class Comment:
             "id": self.id,
             "time": self.time,
             "username": self.username,
-            "text": self.text
+            "text": self.text,
+            "contribution_id": self.contribution_id,
+            "parent_id": self.parent_id
         }
-
         return json
