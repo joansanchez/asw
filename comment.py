@@ -63,10 +63,6 @@ class Comment:
         return comment
 
     @staticmethod
-    def delete_comment(repository, comment_id):
-        repository.delete('DELETE FROM comment WHERE id = \'' + comment_id + '\'')
-
-    @staticmethod
     def get_comments_by_parent(repository, parent_id):
         sql_script = 'SELECT *, c.id AS id, c.text AS \'text\', c.time AS \'time\', c.user AS \'user\' FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.parent_id = ' + str(
             parent_id)
