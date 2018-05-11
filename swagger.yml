@@ -31,7 +31,7 @@ paths:
             schema:
               type: "array"
               items:
-                $ref: "#/definitions/Contribution"
+                $ref: "#/definitions/Ask"
     post:
       tags:
         - "contribution"
@@ -76,7 +76,7 @@ paths:
             schema:
               type: "array"
               items:
-                $ref: "#/definitions/Contribution"
+                $ref: "#/definitions/Ask"
   /contributions/{contributionId}:
     get:
       tags:
@@ -168,26 +168,6 @@ securityDefinitions:
     name: "Authorization"
     in: "header"
 definitions:
-  Ask:
-    type: "object"
-    required:
-      - "title"
-      - "text"
-      - "username"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      title:
-        type: "string"
-      text:
-        type: "string"
-      username:
-        type: "string"
-      time:
-        type: "string"
-        format: "date-time"
-
   User:
     type: "object"
     required:
@@ -231,7 +211,7 @@ definitions:
       user:
         type: "string"
 
-  News:
+  New:
     type: "object"
     properties:
       id:
@@ -253,7 +233,7 @@ definitions:
         type: "integer"
         format: "int64"
 
-  Asks:
+  Ask:
     type: "object"
     properties:
       id:

@@ -274,10 +274,21 @@ def new_reply():
 @app.route('/api/asks')
 def return_asks():
     contributions = Contribution.get_asks(repository)
+    news_to_show = []
     for c in contributions:
         aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
         c['n_comments'] = aux[0]['n_comments']
-    return Response(json.dumps(contributions), mimetype='application/json')
+        new_attributes = {
+            "id": c['id'],
+            "title": c['title'],
+            "text": c['text'],
+            "time": c['time'],
+            "user": c['user'],
+            "n_votes": c['n_votes'],
+            "n_comments": c['n_comments']
+        }
+        news_to_show.append(new_attributes)
+    return Response(json.dumps(news_to_show), mimetype='application/json')
 
 @app.route('/api/asks', methods=['POST'])
 def create_new_ask():
@@ -296,11 +307,22 @@ def create_new_ask():
 
 @app.route('/api/news')
 def return_news():
-    contributions = Contribution.get_contributions_new(repository)
+    contributions = Contribution.get_news_home(repository)
+    news_to_show = []
     for c in contributions:
         aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
         c['n_comments'] = aux[0]['n_comments']
-    return Response(json.dumps(contributions), mimetype='application/json')
+        new_attributes = {
+            "id": c['id'],
+            "title": c['title'],
+            "url": c['url'],
+            "time": c['time'],
+            "user": c['user'],
+            "n_votes": c['n_votes'],
+            "n_comments": c['n_comments']
+        }
+        news_to_show.append(new_attributes)
+    return Response(json.dumps(news_to_show), mimetype='application/json')
 
 
 @app.route('/api/users/<user>', methods=['GET'])
