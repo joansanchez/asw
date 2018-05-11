@@ -123,9 +123,13 @@ def voteComment():
 @app.route('/submit')
 def submit():
     username = decode_auth_token(request.cookies.get('token'))
+    error = request.args.get('error')
     if username is not None:
         user = User.get(repository, username)
-        return render_template('submit.html', user=user)
+        if error is not None:
+            return render_template('submit.html', user=user, error=error)
+        elif error is None:
+             return render_template('submit.html', user=user)
     return redirect('')
 
 
@@ -161,6 +165,14 @@ def get_contribution():
     return render_template('contribution.html', contribution=contribution, comments=parents_comments)
 
 
+@app.route('/delete')
+def delete_comment():
+    comment_id = request.args.get('com_id')
+    contribution_id = request.args.get('con_id')
+    Comment.delete_comment(repository, comment_id)
+    return redirect("contribution?id={0}".format(contribution_id))
+
+
 @app.route('/newPost', methods=['POST'])
 def new_post():
     title = request.form["title"]
@@ -168,15 +180,22 @@ def new_post():
     text = request.form["text"]
     time = datetime.datetime.now()
     user = decode_auth_token(request.cookies.get('token'))
-
-    if url != '' and text == '' and not Contribution.exists(repository, url):
+    if url != '' and text == '' and title != '' and not Contribution.exists(repository, url):
         contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
-    elif text != '' and url == '':
+    elif text != '' and url == '' and title != '':
         contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)
     elif text != '' and url != '':
-        return redirect(url_for('submit'))
+        error = "ERROR: You can only fill URL or Text but not both"
+        return redirect("submit?error={0}".format(error))
+    elif url != '' and text == '' and Contribution.exists(repository, url):
+        contribution_id = Contribution.get_contribution_id_by_URL(repository, url)
+        return redirect("contribution?id={0}".format(contribution_id))
+    elif text == '' and url == '' and title != '':
+        error = "ERROR: You have to fill either URL or Text"
+        return redirect("submit?error={0}".format(error))
     else:
-        return redirect(url_for('submit'))
+        error = "ERROR: You must fill title"
+        return redirect("submit?error={0}".format(error))
     contribution.save(repository)
     return redirect('')
 

@@ -4,9 +4,15 @@
     {% set user=user %}
 {% endif %}
 
+
 {% block content %}
     <tr>
         <td>
+            {% if error  %}
+                {{ error }}
+                <br>
+                <br>
+            {% endif %}
             <form method="post" action="./newPost">
                 <table border="0">
                     <tbody>
