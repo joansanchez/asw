@@ -34,7 +34,7 @@ paths:
     post:
       tags:
         - "contribution"
-      summary: "Endpoint to create new contributions"
+      summary: "Endpoint to create new ask contributions"
       description: ""
       consumes:
       - "application/json"
@@ -76,6 +76,33 @@ paths:
               type: "array"
               items:
                 $ref: "#/definitions/New"
+    post:
+      tags:
+        - "contribution"
+      summary: "Endpoint to create new new contributions"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "New"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/New_New"
+      responses:
+        201:
+            description: "Successful operation. Returns created contribution"
+            schema:
+              $ref: "#/definitions/New"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+      security:
+      - api_key: []
   /newest:
     get:
       tags:
@@ -433,6 +460,13 @@ definitions:
       title:
         type: "string"
       text:
+        type: "string"
+  New_New:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      url:
         type: "string"
   Comment:
     type: "object"
