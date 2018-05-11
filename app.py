@@ -137,7 +137,9 @@ def get_contribution():
     contribution.n_comments = len(comments)
     username = decode_auth_token(request.cookies.get('token'))
     all_children = []
-    comments_voted = UserCommentVoted.get_voted(repository, username)
+    comments_voted = []
+    if username is not None:
+        comments_voted = UserCommentVoted.get_voted(repository, username)
     for comment in comments:
         comment.voted = comment.id in [cv['comment_id'] for cv in comments_voted]
         children = Comment.get_comments_by_parent(repository, comment.id)
@@ -166,7 +168,8 @@ def new_post():
     text = request.form["text"]
     time = datetime.datetime.now()
     user = decode_auth_token(request.cookies.get('token'))
-    if url != '' and text == '':
+
+    if url != '' and text == '' and not Contribution.exists(repository, url):
         contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '':
         contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)

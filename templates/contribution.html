@@ -103,7 +103,7 @@
                                             <tr>
                                                 <td class="ind"> </td>
                                                 <td valign="top" class="votelinks">
-                                                    {% if c.voted == false and user.email != c.username %}
+                                                    {% if c.voted == false and user is defined and user.email != c.username %}
                                                         <a id="up_{{ c.id }}" href="javascript:void(0)" onclick="$('#voteComment{{ c.id }}').submit()">
                                                         <form id="voteComment{{ c.id }}" action="voteComment" method="post" style="display: none">
                                                             <input type="hidden" name="comment" value="{{ c.id }}">
@@ -154,7 +154,7 @@
                                                 {% for child in c.children recursive %}
                                                     <div style="padding-left: 20px; margin-top: 20px">
                                                         <span class="comhead">
-                                                            {% if child.voted == false and user.email != child.username %}
+                                                            {% if child.voted == false and user is defined and user.email != child.username %}
                                                                 <a id="up_{{ child.id }}" href="javascript:void(0)" onclick="$('#voteComment{{ child.id }}').submit()">
                                                                 <form id="voteComment{{ child.id }}" action="voteComment" method="post" style="display: none">
                                                                     <input type="hidden" name="comment" value="{{ child.id }}">
@@ -168,7 +168,7 @@
                                                             <span class="age">
                                                             <a href="item?id={{ child.id }}">{{ child.time|time_ago }} ago</a>
                                                             </span>
-                                                            {% if child.voted == True and user.email != child.username %}
+                                                            {% if child.voted == True and user is defined and user.email != child.username %}
                                                                 <span id="unv_{{ c.id }}">
                                                                 |
                                                                 <a id="up_{{ child.id }}" href="javascript:void(0)" onclick="$('#voteComment{{ child.id }}').submit()">
