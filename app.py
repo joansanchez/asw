@@ -352,7 +352,7 @@ def return_asked_contribution(contribution):
 
 
 @app.route('/api/contributions/<contributionId>/vote', methods=['POST', 'DELETE'])
-def vote_contribution_API(contributionId):
+def vote_contribution_api(contributionId):
     if 'Authorization' not in request.headers:
         return '', 401
     username = decode_auth_token(request.headers['Authorization'])
@@ -367,7 +367,33 @@ def vote_contribution_API(contributionId):
         contribution_voted.save(repository)
     elif request.method == 'DELETE':
         contribution_voted.delete(repository)
+        # TODO comprovar no poder votar la teva contribution
+        # TODO validar contributionId valida
     return return_asked_contribution(contributionId)
+
+
+
+
+@app.route('/api/comments/<commentId>/vote', methods=['POST', 'DELETE'])
+def vote_comment_api(commentId):
+    if 'Authorization' not in request.headers:
+        return '', 401
+    username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
+    comment_id = commentId
+
+    comment_voted = UserCommentVoted(username, comment_id)
+    if comment_voted.user != username:
+        return '', 403
+    if request.method == 'POST':
+        comment_voted.save(repository)
+    elif request.method == 'DELETE':
+        comment_voted.delete(repository)
+    # TODO retornar el comentari
+    # TODO comprovar no poder el teu comment
+    # TODO comprovar commentId valid
+    return '', 200
 
 
 @app.route('/api/users/<userput>', methods=['PUT'])
