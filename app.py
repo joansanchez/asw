@@ -378,27 +378,27 @@ def vote_contribution_api(contribution_id):
     return return_asked_contribution(contribution_id)
 
 
-
-
-@app.route('/api/comments/<commentId>/vote', methods=['POST', 'DELETE'])
-def vote_comment_api(commentId):
+@app.route('/api/comments/<comment_id>/vote', methods=['POST', 'DELETE'])
+def vote_comment_api(comment_id):
     if 'Authorization' not in request.headers:
         return '', 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
         return '', 401
-    comment_id = commentId
-
-    comment_voted = UserCommentVoted(username, comment_id)
-    if comment_voted.user != username:
+    comment = Comment.get_comment(repository, comment_id)
+    if comment is None:
+        return '', 404
+    if comment.username == username:
         return '', 403
+    comment_voted = UserCommentVoted(username, comment_id)
     if request.method == 'POST':
+        if UserCommentVoted.exists(repository, comment_id, username):
+            return '', 409
         comment_voted.save(repository)
     elif request.method == 'DELETE':
+        if not UserCommentVoted.exists(repository, comment_id, username):
+            return '', 404
         comment_voted.delete(repository)
-    # TODO retornar el comentari
-    # TODO comprovar no poder el teu comment
-    # TODO comprovar commentId valid
     return '', 200
 
 
