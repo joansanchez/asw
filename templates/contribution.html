@@ -103,7 +103,7 @@
                                             <tr>
                                                 <td class="ind"> </td>
                                                 <td valign="top" class="votelinks">
-                                                    {% if c.voted == false and user.email != c.username %}
+                                                    {% if c.voted == false and user is defined and user.email != c.username %}
                                                         <a id="up_{{ c.id }}" href="javascript:void(0)" onclick="$('#voteComment{{ c.id }}').submit()">
                                                         <form id="voteComment{{ c.id }}" action="voteComment" method="post" style="display: none">
                                                             <input type="hidden" name="comment" value="{{ c.id }}">

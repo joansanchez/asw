@@ -137,7 +137,9 @@ def get_contribution():
     contribution.n_comments = len(comments)
     username = decode_auth_token(request.cookies.get('token'))
     all_children = []
-    comments_voted = UserCommentVoted.get_voted(repository, username)
+    comments_voted = []
+    if username is not None:
+        comments_voted = UserCommentVoted.get_voted(repository, username)
     for comment in comments:
         comment.voted = comment.id in [cv['comment_id'] for cv in comments_voted]
         children = Comment.get_comments_by_parent(repository, comment.id)
