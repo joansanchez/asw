@@ -21,7 +21,7 @@ paths:
         - "contribution"
       summary: "Endpoint to view the asks"
       description: "Returns all the ask contributions"
-      operationId: "getNews"
+      operationId: "getAsks"
       produces:
       - "application/json"
       parameters: []
@@ -31,7 +31,7 @@ paths:
             schema:
               type: "array"
               items:
-                $ref: "#/definitions/Asks"
+                $ref: "#/definitions/Contribution"
     post:
       tags:
         - "contribution"
@@ -76,7 +76,7 @@ paths:
             schema:
               type: "array"
               items:
-                $ref: "#/definitions/News"
+                $ref: "#/definitions/Contribution"
   /contributions/{contributionId}:
     get:
       tags:
@@ -211,17 +211,6 @@ definitions:
       id:
         type: "integer"
         format: "int64"
-      title:
-        type: "string"
-      url:
-        type: "string"
-      text:
-        type: "string"
-      time:
-        type: "string"
-        format: "date-time"
-      username:
-        type: "string"
       kind:
         type: "string"
       n_votes:
@@ -230,6 +219,17 @@ definitions:
       n_comments:
         type: "integer"
         format: "int 64"
+      time:
+        type: "string"
+        format: "date-time"
+      title:
+        type: "string"
+      text:
+        type: "string"
+      url:
+        type: "string"
+      user:
+        type: "string"
 
   News:
     type: "object"

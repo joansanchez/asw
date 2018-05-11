@@ -2,7 +2,7 @@ import datetime
 import os
 from logging import basicConfig, INFO
 
-from flask import Flask, logging, render_template, request, redirect, url_for, make_response, jsonify
+from flask import Flask, logging, render_template, request, redirect, url_for, make_response, jsonify, json, Response
 
 from comment import Comment
 from contribution import Contribution, ContributionTypes
@@ -212,7 +212,7 @@ def ask():
         return render_template('home.html', contributions=contributions)
 
 
-@app.route('/new')
+@app.route('/newest')
 def new():
     contributions = Contribution.get_contributions_new(repository)
     username = decode_auth_token(request.cookies.get('token'))
@@ -271,6 +271,14 @@ def new_reply():
     return redirect('contribution?id=' + contribution)
 
 
+@app.route('/api/asks')
+def return_asks():
+    contributions = Contribution.get_asks(repository)
+    for c in contributions:
+        aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
+        c.n_comments = aux[0]['n_comments']
+    return Response(json.dumps(contributions), mimetype='application/json')
+
 @app.route('/api/asks', methods=['POST'])
 def create_new_ask():
     if 'Authorization' not in request.headers:
@@ -284,6 +292,15 @@ def create_new_ask():
     ask.save(repository)
 
     return jsonify(ask.toJSON())
+
+
+@app.route('/api/news')
+def return_news():
+    contributions = Contribution.get_contributions_new(repository)
+    for c in contributions:
+        aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
+        c.n_comments = aux[0]['n_comments']
+    return Response(json.dumps(contributions), mimetype='application/json')
 
 
 @app.route('/api/users/<user>', methods=['GET'])
