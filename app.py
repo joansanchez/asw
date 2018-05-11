@@ -364,7 +364,7 @@ def vote_contribution_api(contribution_id):
     contribution = Contribution.get_contribution(repository, contribution_id)
     if contribution is None:
         return '', 404
-    if contribution.username == user:
+    if contribution.username == username:
         return '', 403
     contribution_voted = UserContributionVoted(username, contribution_id)
     if request.method == 'POST':
@@ -372,6 +372,8 @@ def vote_contribution_api(contribution_id):
             return '', 409
         contribution_voted.save(repository)
     elif request.method == 'DELETE':
+        if not UserContributionVoted.exists(repository, contribution_id, username):
+            return '', 404
         contribution_voted.delete(repository)
     return return_asked_contribution(contribution_id)
 
