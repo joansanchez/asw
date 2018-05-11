@@ -354,25 +354,26 @@ def return_asked_contribution(contribution):
     return jsonify(contribution_to_show.toJSON())
 
 
-@app.route('/api/contributions/<contributionId>/vote', methods=['POST', 'DELETE'])
-def vote_contribution_api(contributionId):
+@app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
+def vote_contribution_api(contribution_id):
     if 'Authorization' not in request.headers:
         return '', 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
         return '', 401
-    contribution_id = contributionId
-
-    contribution_voted = UserContributionVoted(username, contribution_id)
-    if contribution_voted.user != username:
+    contribution = Contribution.get_contribution(repository, contribution_id)
+    if contribution is None:
+        return '', 404
+    if contribution.username == user:
         return '', 403
+    contribution_voted = UserContributionVoted(username, contribution_id)
     if request.method == 'POST':
+        if UserContributionVoted.exists(repository, contribution_id, username):
+            return '', 409
         contribution_voted.save(repository)
     elif request.method == 'DELETE':
         contribution_voted.delete(repository)
-        # TODO comprovar no poder votar la teva contribution
-        # TODO validar contributionId valida
-    return return_asked_contribution(contributionId)
+    return return_asked_contribution(contribution_id)
 
 
 
