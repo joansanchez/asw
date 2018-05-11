@@ -325,6 +325,15 @@ def return_news():
     return Response(json.dumps(news_to_show), mimetype='application/json')
 
 
+@app.route('/api/newest')
+def return_newest_contributions():
+    contributions = Contribution.get_contributions_new(repository)
+    for c in contributions:
+        aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
+        c['n_comments'] = aux[0]['n_comments']
+    return Response(json.dumps(contributions), mimetype='application/json')
+
+
 @app.route('/api/users/<user>', methods=['GET'])
 def return_asked_user(user):
     user_to_show = User.get(repository, user)

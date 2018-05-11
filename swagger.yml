@@ -20,14 +20,13 @@ paths:
       tags:
         - "contribution"
       summary: "Endpoint to view the asks"
-      description: "Returns all the ask contributions"
-      operationId: "getAsks"
+      description: "Returns all the ask contributions sorted by n_votes"
       produces:
       - "application/json"
       parameters: []
       responses:
         200:
-            description: "Successful operation. Returns the asks"
+            description: "Successful operation. Returns the array of asks"
             schema:
               type: "array"
               items:
@@ -64,7 +63,7 @@ paths:
       tags:
         - "contribution"
       summary: "Endpoint to view the news"
-      description: "Returns all the news contributions"
+      description: "Returns all the news contributions sorted by n_votes"
       consumes:
       - "application/json"
       produces:
@@ -72,11 +71,29 @@ paths:
       parameters: []
       responses:
         200:
-            description: "Successful operation. Returns the news"
+            description: "Successful operation. Returns the array of news"
             schema:
               type: "array"
               items:
                 $ref: "#/definitions/Ask"
+  /newest:
+    get:
+      tags:
+        - "contribution"
+      summary: "Endpoint to view the contributions"
+      description: "Returns all the newest contributions sorted by more recent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+            description: "Successful operation. Returns the array of Contributions"
+            schema:
+              type: "array"
+              items:
+                $ref: "#/definitions/Contribution"
   /contributions/{contributionId}:
     get:
       tags:
