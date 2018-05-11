@@ -290,6 +290,7 @@ def return_asks():
         news_to_show.append(new_attributes)
     return Response(json.dumps(news_to_show), mimetype='application/json')
 
+
 @app.route('/api/asks', methods=['POST'])
 def create_new_ask():
     if 'Authorization' not in request.headers:
@@ -348,6 +349,25 @@ def return_asked_contribution(contribution):
     if contribution_to_show is None:
         return '', 404
     return jsonify(contribution_to_show.toJSON())
+
+
+@app.route('/api/contributions/<contributionId>/vote', methods=['POST', 'DELETE'])
+def vote_contribution_API(contributionId):
+    if 'Authorization' not in request.headers:
+        return '', 401
+    username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
+    contribution_id = contributionId
+
+    contribution_voted = UserContributionVoted(username, contribution_id)
+    if contribution_voted.user != username:
+        return '', 403
+    if request.method == 'POST':
+        contribution_voted.save(repository)
+    elif request.method == 'DELETE':
+        contribution_voted.delete(repository)
+    return return_asked_contribution(contributionId)
 
 
 @app.route('/api/users/<userput>', methods=['PUT'])
