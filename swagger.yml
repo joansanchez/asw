@@ -75,7 +75,7 @@ paths:
             schema:
               type: "array"
               items:
-                $ref: "#/definitions/Ask"
+                $ref: "#/definitions/New"
   /newest:
     get:
       tags:
@@ -119,7 +119,71 @@ paths:
             description: "Bad request, there are missing parameters or they do not have valid format"
         404:
             description: "Contribution not found"
-
+  /contributions/{contributionId}/vote:
+    post:
+      tags:
+        - "contribution"
+      summary: "Endpoint to vote an specific contribution"
+      description: "Returns a single contribution"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "contributionID"
+          description: "ID of contribution to return"
+          required: true
+          type: "String"
+      responses:
+        200:
+            description: "Successful operation. Returns voted contribution"
+            schema:
+              $ref: "#/definitions/Contribution"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+        403:
+            description: "Unauthorized. Missing permissions to update the resources"
+        404:
+            description: "Contribution not found"
+        409:
+            description: "Conflict. You have already vote for this contribution"
+      security:
+      - api_key: []
+    delete:
+      tags:
+        - "contribution"
+      summary: "Endpoint to unvote an specific contribution"
+      description: "Returns a single contribution"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "contributionID"
+          description: "ID of contribution to return"
+          required: true
+          type: "String"
+      responses:
+        200:
+            description: "Successful operation. Returns unvoted contribution"
+            schema:
+              $ref: "#/definitions/Contribution"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+        403:
+            description: "Unauthorized. Missing permissions to update the resources"
+        404:
+            description: "Contribution not found"
+        409:
+            description: "Conflict. You have already vote for this contribution"
+      security:
+      - api_key: []
   /comments/{commentId}:
     get:
       tags:
