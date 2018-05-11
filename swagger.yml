@@ -94,7 +94,7 @@ paths:
               type: "array"
               items:
                 $ref: "#/definitions/Contribution"
-  /contributions/{contributionId}:
+  /contributions/{contributionID}:
     get:
       tags:
         - "contribution"
