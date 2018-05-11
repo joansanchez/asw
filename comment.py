@@ -79,3 +79,13 @@ class Comment:
             return comments
         else:
             return []
+
+    def toJSON(self):
+        json = {
+            "id": self.id,
+            "time": self.time,
+            "username": self.username,
+            "text": self.text
+        }
+
+        return json
