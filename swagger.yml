@@ -276,7 +276,7 @@ paths:
       security:
       - api_key: []
 
-  /users/{userId}:
+  /users/{userID}:
     get:
       tags:
         - "user"
