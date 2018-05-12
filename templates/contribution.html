@@ -76,6 +76,14 @@
                                     {% else %}
                                         <a href="contribution?id={{ contribution.id }}"> discuss</a>
                                     {% endif %}
+                                    {% if user.email == contribution.username %}
+                                        <a href="javascript:void(0)" onclick="$('#deleteCon{{ contribution.id }}').submit()">
+                                            <form id="deleteCon{{ contribution.id }}" action="deleteCon" method="post" style="display: none">
+                                                <input type="hidden" name="con_id" value="{{ contribution.id }}">
+                                            </form>
+                                            delete
+                                        </a>
+                                    {% endif %}
                                 </td>
                             </tr>
                             <tr style="height:10px"></tr>
@@ -122,7 +130,13 @@
                                                                 <a href="">{{ c.time|time_ago }} ago</a>
                                                             </span>
                                                             {% if user is defined and c.username == user.email %}
-                                                            <a href="delete?com_id={{ c.id }}&con_id={{ c.contribution_id }}"> delete </a>
+                                                                <a href="javascript:void(0)" onclick="$('#deleteCom{{ c.id }}').submit()">
+                                                                    <form id="deleteCom{{ c.id }}" action="deleteCom" method="post" style="display: none">
+                                                                        <input type="hidden" name="com_id" value="{{ c.id }}">
+                                                                        <input type="hidden" name="con_id" value="{{ c.contribution_id }}">
+                                                                    </form>
+                                                                    delete
+                                                                </a>
                                                             {% endif %}
                                                             {% if c.voted == True and user.email != c.username %}
                                                                 <span id="unv_{{ c.id }}">
@@ -172,7 +186,13 @@
                                                             <a href="item?id={{ child.id }}">{{ child.time|time_ago }} ago</a>
                                                             </span>
                                                             {% if user is defined and child.username == user.email %}
-                                                            <a href="delete?com_id={{ child.id }}&con_id={{ child.contribution_id }}"> delete </a>
+                                                                <a href="javascript:void(0)" onclick="$('#deleteCom{{ child.id }}').submit()">
+                                                                    <form id="deleteCom{{ child.id }}" action="deleteCom" method="post" style="display: none">
+                                                                        <input type="hidden" name="com_id" value="{{ child.id }}">
+                                                                        <input type="hidden" name="con_id" value="{{ child.contribution_id }}">
+                                                                    </form>
+                                                                    delete
+                                                                </a>
                                                             {% endif %}
                                                             {% if child.voted == True and user is defined and user.email != child.username %}
                                                                 <span id="unv_{{ c.id }}">

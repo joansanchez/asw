@@ -165,12 +165,20 @@ def get_contribution():
     return render_template('contribution.html', contribution=contribution, comments=parents_comments)
 
 
-@app.route('/delete')
+@app.route('/deleteCom', methods=['POST'])
 def delete_comment():
-    comment_id = request.args.get('com_id')
-    contribution_id = request.args.get('con_id')
+    comment_id = request.form['com_id']
+    contribution_id = request.form['con_id']
     Comment.delete_comment(repository, comment_id)
     return redirect("contribution?id={0}".format(contribution_id))
+
+
+@app.route('/deleteCon', methods=['POST'])
+def delete_contribution():
+    contribution_id = request.form['con_id']
+    Comment.delete_comments_from_contribution(repository, contribution_id)
+    Contribution.delete_contribution(repository, contribution_id)
+    return redirect('')
 
 
 @app.route('/newPost', methods=['POST'])

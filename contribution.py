@@ -46,6 +46,11 @@ class Contribution:
         return repository.list('SELECT url FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\'')
 
     @staticmethod
+    def delete_contribution(repository, contribution_id):
+        repository.delete(
+            'DELETE FROM contribution WHERE id = \'' + contribution_id + '\'')
+
+    @staticmethod
     def get_news(repository):
         return repository.list('SELECT * FROM contribution WHERE kind = \'' + ContributionTypes.NEW.value + '\'')
 
