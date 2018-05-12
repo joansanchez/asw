@@ -24,8 +24,8 @@ class Comment:
                             'text' TEXT,
                             contribution_id INTEGER NOT NULL,
                             parent_id INTEGER,
-                            FOREIGN KEY('parent_id') REFERENCES 'id' (comment),
-                            FOREIGN KEY('contribution_id') REFERENCES 'id' (contribution)
+                            FOREIGN KEY('parent_id') REFERENCES comment ('id') ON DELETE CASCADE,
+                            FOREIGN KEY('contribution_id') REFERENCES contribution ('id')
                             )'''
 
     @staticmethod
@@ -46,7 +46,7 @@ class Comment:
     @staticmethod
     def delete_comment(repository, comment_id):
         repository.delete(
-            'DELETE FROM comment WHERE id = \'' + comment_id + '\'')
+            'DELETE FROM comment WHERE id = ' + comment_id)
 
     @staticmethod
     def delete_comments_from_contribution(repository, contribution_id):

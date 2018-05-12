@@ -10,7 +10,6 @@ class Persistence:
     def init_db(self, tables):
         db_conn, db_client = self.create_connection()
         try:
-            db_client.execute('PRAGMA foreign_keys = ON;')
             for table in tables:
                 db_client.execute(table)
             db_conn.commit()
@@ -23,6 +22,7 @@ class Persistence:
         try:
             db_conn = sqlite3.connect(self.path)
             db_client = db_conn.cursor()
+            db_client.execute('PRAGMA foreign_keys = ON;')
             return db_conn, db_client
         except Exception as ex:
             self.log.error('Error connecting with the SQLite DB. Exception: ' + str(ex))

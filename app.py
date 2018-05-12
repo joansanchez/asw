@@ -218,7 +218,7 @@ def new_comment():
     text = request.form["text"]
     if user is not None and text:
         if text != '':
-            comment = Comment(user, time, text, contribution, 0)
+            comment = Comment(user, time, text, contribution, None)
         else:
             return redirect(url_for('get_contribution', id=contribution))
         comment.save(repository)
