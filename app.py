@@ -348,6 +348,23 @@ def return_news():
     return Response(json.dumps(news_to_show), mimetype='application/json')
 
 
+@app.route('/api/news', methods=['POST'])
+def create_new_new():
+    if 'Authorization' not in request.headers:
+        return '', 401
+    username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
+    json = request.get_json()
+    new = Contribution(title=json['title'], url=json['url'], text=None, time=datetime.datetime.now(),
+                       username=username, kind=ContributionTypes.NEW.value)
+    if Contribution.exists(repository, new.url):
+        new = Contribution.get_contribution_by_url(repository, new.url)
+        return jsonify(new.toJSON())
+    new.save(repository)
+    return jsonify(new.toJSON())
+
+
 @app.route('/api/newest')
 def return_newest_contributions():
     contributions = Contribution.get_contributions_new(repository)

@@ -89,6 +89,15 @@ class Contribution:
     def exists(repository, url):
         return repository.exists('SELECT * FROM contribution WHERE url = \'' + url + '\'')
 
+    @staticmethod
+    def get_contribution_by_url(repository, url):
+        result = repository.get(
+            'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(u.\'user\') AS n_votes FROM contribution c LEFT JOIN user_contribution_voted u ON c.id = u.contribution WHERE c.url = \'' + url + '\' GROUP BY c.id ORDER BY time DESC;')
+        contribution = Contribution(result[1], result[2], result[3], result[4], result[5], result[6],
+                                    contribution_id=result[0])
+        contribution.n_votes = result[7]
+        return contribution
+
     def toJSON(self):
         json = {
             "id": self.id,
