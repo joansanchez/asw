@@ -506,4 +506,4 @@ if __name__ == '__main__':
     basicConfig(filename=os.environ['LOG'], level=INFO)
 
     app.config.update(TEMPLATES_AUTO_RELOAD=True)
-    app.run(host=str(os.environ['HOST']), port=int(os.environ['PORT']))
+    app.run(host=str(os.environ['HOST']), port=int(os.environ['PORT']), threaded=True)
