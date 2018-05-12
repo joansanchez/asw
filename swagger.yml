@@ -125,6 +125,33 @@ paths:
               type: "array"
               items:
                 $ref: "#/definitions/Contribution"
+
+  /threads:
+    get:
+      tags:
+        - "comment"
+      summary: "Endpoint to get the comments of an specific user"
+      description: "Returns all the comments of the user"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "userID"
+        description: "ID of the user the comments of which we want to show"
+        required: true
+        type: "String"
+      responses:
+        200:
+            description: "Successful operation. Returns the array of comments"
+            schema:
+              type: "array"
+              items:
+                $ref: "#/definitions/Comment"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+
   /contributions/{contributionID}:
     get:
       tags:
@@ -215,6 +242,7 @@ paths:
             description: "Conflict. You have already vote for this contribution"
       security:
       - api_key: []
+
   /comments/{commentID}:
     get:
       tags:
@@ -366,6 +394,7 @@ paths:
             description: "Unauthorized. Missing permissions to update the resources"
       security:
       - api_key: []
+
 
 securityDefinitions:
   api_key:
