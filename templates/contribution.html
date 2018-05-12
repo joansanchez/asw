@@ -76,7 +76,7 @@
                                     {% else %}
                                         <a href="contribution?id={{ contribution.id }}"> discuss</a>
                                     {% endif %}
-                                    {% if user.email == contribution.username %}
+                                    {% if user is defined and user.email == contribution.username %}
                                         <a href="javascript:void(0)" onclick="$('#deleteCon{{ contribution.id }}').submit()">
                                             <form id="deleteCon{{ contribution.id }}" action="deleteCon" method="post" style="display: none">
                                                 <input type="hidden" name="con_id" value="{{ contribution.id }}">

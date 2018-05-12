@@ -358,6 +358,39 @@ def return_news():
     return Response(json.dumps(news_to_show), mimetype='application/json')
 
 
+@app.route('/api/threads')
+def return_threads():
+    if 'Authorization' not in request.headers:
+        return '', 401
+    username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
+    threads_to_show = []
+    if username is not None:
+        comments = Comment.get_comments_by_user(repository, username)
+        all_children = []
+        for comment in comments:
+            children = Comment.get_comments_by_parent(repository, comment.id)
+            all_children.extend(children)
+            comment.children = children
+        first_level_comments = []
+        for comment in comments:
+            if not comment.id in [c.id for c in all_children]:
+                first_level_comments.append(comment)
+        for c in first_level_comments:
+            new_attributes = {
+                "id": c['id'],
+                "username": c['username'],
+                "time": c['time'],
+                "text": c['text'],
+                "contribution_id": c['contribution_id'],
+                "parent_id": c['parent_id'],
+                "title": c['title']
+            }
+            threads_to_show.append(new_attributes)
+    return Response(json.dumps(threads_to_show), mimetype='application/json')
+
+
 @app.route('/api/news', methods=['POST'])
 def create_new_new():
     if 'Authorization' not in request.headers:

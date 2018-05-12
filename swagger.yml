@@ -149,8 +149,7 @@ paths:
               type: "array"
               items:
                 $ref: "#/definitions/Comment"
-        400:
-            description: "Bad request, there are missing parameters or they do not have valid format"
+
 
   /contributions/{contributionID}:
     get:
