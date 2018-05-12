@@ -425,12 +425,57 @@ def return_asked_user(user):
     return jsonify(user_to_show.toJSON())
 
 
-@app.route('/api/contributions/<contribution>', methods=['GET'])
-def return_asked_contribution(contribution):
-    contribution_to_show = Contribution.get_contribution(repository, contribution)
-    if contribution_to_show is None:
+@app.route('/api/contributions/<contribution_id>', methods=['GET'])
+def return_asked_contribution(contribution_id):
+    if not Contribution.exists_contribution(repository, contribution_id):
         return '', 404
-    return jsonify(contribution_to_show.toJSON())
+    contribution_to_show = Contribution.get_contribution(repository, contribution_id)
+    json = {
+        "id": contribution_to_show.id,
+        "title": contribution_to_show.title,
+        "url": contribution_to_show.time,
+        "text": contribution_to_show.username,
+        "time": contribution_to_show.time,
+        "user": contribution_to_show.username,
+        "kind": contribution_to_show.kind,
+        "comment": return_comments_of_contribution(contribution_id)
+    }
+    return json
+
+
+def return_comments_of_contribution(contribution):
+    comments = Comment.get_comments_by_contribution(repository, contribution)
+    comments_to_show = []
+    for c in comments:
+        new_attributes = {
+            "id": c.id,
+            "username": c.username,
+            "time": c.time,
+            "text": c.text,
+            "contribution_id": c.contribution_id,
+            "parent_id": c.parent_id,
+        }
+        comments_to_show.append(new_attributes)
+    return Response(json.dumps(comments_to_show), mimetype='application/json')
+
+
+@app.route('/api/getComments/<comment>', methods=['GET'])
+def return_comments(comment):
+    childs = Comment.get_comments_by_parent(repository, comment)
+    if len(childs) != 0:
+        info_to_show = []
+        for c in childs:
+            new_attributes = {
+                "id": c.id,
+                "username": c.username,
+                "time": c.time,
+                "text": c.text,
+                "contribution_id": c.contribution_id,
+                "parent_id": c.parent_id
+            }
+            children = return_comments(c.id)
+            info_to_show.append(new_attributes)
+        return Response(json.dumps(info_to_show), mimetype='application/json')
 
 
 @app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
@@ -455,14 +500,6 @@ def vote_contribution_api(contribution_id):
             return '', 404
         contribution_voted.delete(repository)
     return return_asked_contribution(contribution_id)
-
-
-@app.route('/api/comments/<comment_id>', methods=['GET'])
-def return_asked_comment(comment_id):
-    comment_to_show = Comment.get_comment(repository, comment_id)
-    if comment_to_show is None:
-        return '', 404
-    return jsonify(comment_to_show.toJSON())
 
 
 @app.route('/api/comments/<comment_id>/vote', methods=['POST', 'DELETE'])
