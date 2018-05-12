@@ -3,6 +3,7 @@ import os
 from logging import basicConfig, INFO
 
 from flask import Flask, logging, render_template, request, redirect, url_for, make_response, jsonify, json, Response
+from flask_cors import CORS
 
 from comment import Comment
 from contribution import Contribution, ContributionTypes
@@ -14,6 +15,7 @@ from usercommentvoted import UserCommentVoted
 from usercontributionvoted import UserContributionVoted
 
 app = Flask(__name__, static_folder='./static')
+CORS(app)
 
 
 @app.route('/')
