@@ -141,7 +141,7 @@ paths:
         name: "userID"
         description: "ID of the user the comments of which we want to show"
         required: true
-        type: "String"
+        type: "string"
       responses:
         200:
             description: "Successful operation. Returns the array of comments"
@@ -167,7 +167,7 @@ paths:
           name: "contributionID"
           description: "ID of contribution to return"
           required: true
-          type: "String"
+          type: "string"
       responses:
         200:
             description: "Successful operation. Returns asked contribution"
@@ -192,7 +192,7 @@ paths:
           name: "contributionID"
           description: "ID of contribution to return"
           required: true
-          type: "String"
+          type: "string"
       responses:
         200:
             description: "Successful operation. Returns voted contribution"
@@ -224,7 +224,7 @@ paths:
           name: "contributionID"
           description: "ID of contribution to return"
           required: true
-          type: "String"
+          type: "string"
       responses:
         200:
             description: "Successful operation. Returns unvoted contribution"
@@ -258,7 +258,7 @@ paths:
           name: "commentID"
           description: "ID of comment to return"
           required: true
-          type: "String"
+          type: "string"
       responses:
         200:
             description: "Successful operation. Returns asked comment"
@@ -269,7 +269,7 @@ paths:
         404:
             description: "Comment not found"
 
-  /comments/{commentsID}/vote:
+  /comments/{commentID}/vote:
     post:
       tags:
         - "comment"
@@ -284,7 +284,7 @@ paths:
           name: "commentID"
           description: "ID of a comment to return"
           required: true
-          type: "String"
+          type: "string"
       responses:
         200:
             description: "Successful operation. Returns voted comment"
@@ -316,7 +316,7 @@ paths:
           name: "commentID"
           description: "ID of comment to return"
           required: true
-          type: "String"
+          type: "string"
       responses:
         200:
             description: "Successful operation. Returns unvoted comment"
@@ -350,7 +350,7 @@ paths:
         name: "userID"
         description: "ID of user to return"
         required: true
-        type: "String"
+        type: "string"
       responses:
         200:
             description: "Successful operation. Returns asked user"
@@ -374,7 +374,7 @@ paths:
         name: "userID"
         description: "ID of user to return"
         required: true
-        type: "String"
+        type: "string"
       - in: "body"
         name: "user"
         description: ""
