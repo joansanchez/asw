@@ -101,6 +101,10 @@ paths:
             description: "Bad request, there are missing parameters or they do not have valid format"
         401:
             description: "Forbidden, missing authentication"
+        409:
+            description: "Conflict, specified URL already posted"
+            schema:
+              $ref: "#/definitions/New"
       security:
       - api_key: []
   /newest:

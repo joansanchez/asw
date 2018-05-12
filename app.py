@@ -360,7 +360,7 @@ def create_new_new():
                        username=username, kind=ContributionTypes.NEW.value)
     if Contribution.exists(repository, new.url):
         new = Contribution.get_contribution_by_url(repository, new.url)
-        return jsonify(new.toJSON())
+        return jsonify(new.toJSON()), 409
     new.save(repository)
     return jsonify(new.toJSON())
 
