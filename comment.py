@@ -31,11 +31,11 @@ class Comment:
     @staticmethod
     def get_comments_by_contribution(repository, contribution_id):
         result = repository.list(
-            'SELECT *, c.text AS \'text\', c.user AS \'user\', c.id AS id, COUNT(v.user) AS n_votes FROM comment c LEFT JOIN user_comment_voted v ON c.id = v.comment WHERE c.contribution_id = \'' + contribution_id + '\' GROUP BY v.comment ORDER BY c.time DESC')
+            'SELECT *, c.text AS \'text\', c.user AS \'user\', c.id AS id FROM comment c WHERE c.contribution_id = \'' + contribution_id + '\' ORDER BY c.time DESC')
         comments = []
         for r in result:
             comment = Comment(r['user'], r['time'], r['text'], r['contribution_id'], r['parent_id'], r['id'])
-            comment.n_votes = r['n_votes']
+            comment.n_votes = Comment.get_number_votes_of_a_comment(comment.id, repository)
             comments.append(comment)
         return comments
 
@@ -84,17 +84,21 @@ class Comment:
                 comment = Comment(result['user'], result['time'], result['text'], result['contribution_id'],
                                   result['parent_id'], comment_id=result['id'])
                 comment.contribution_title = result['title']
-                votes = repository.get('SELECT COUNT(*) AS n_votes FROM user_comment_voted WHERE comment = \'' + str(
-                    parent_id) + '\' GROUP BY comment')
-                comment.n_votes = 0
-                if votes is not None:
-                    comment.n_votes = votes[0]
+                comment.n_votes = Comment.get_number_votes_of_a_comment(parent_id, repository)
                 children = Comment.get_comments_by_parent(repository, comment.id)
                 comment.children = children
                 comments.append(comment)
             return comments
         else:
             return []
+
+    @staticmethod
+    def get_number_votes_of_a_comment(parent_id, repository):
+        votes = repository.get('SELECT COUNT(*) AS n_votes FROM user_comment_voted WHERE comment = \'' + str(
+            parent_id) + '\' GROUP BY comment')
+        if votes is not None:
+            return votes[0]
+        return 0
 
     def toJSON(self):
         json = {
