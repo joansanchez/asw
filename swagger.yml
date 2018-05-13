@@ -136,12 +136,7 @@ paths:
       - "application/json"
       produces:
       - "application/json"
-      parameters:
-      - in: "path"
-        name: "userID"
-        description: "ID of the user the comments of which we want to show"
-        required: true
-        type: "string"
+      parameters: []
       responses:
         200:
             description: "Successful operation. Returns the array of comments"
@@ -149,7 +144,8 @@ paths:
               type: "array"
               items:
                 $ref: "#/definitions/Comment"
-
+        401:
+          description: "Forbidden, missing authentication"
 
   /contributions/{contributionID}:
     get:

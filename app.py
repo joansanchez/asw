@@ -379,16 +379,50 @@ def return_threads():
                 first_level_comments.append(comment)
         for c in first_level_comments:
             new_attributes = {
-                "id": c['id'],
-                "username": c['username'],
-                "time": c['time'],
-                "text": c['text'],
-                "contribution_id": c['contribution_id'],
-                "parent_id": c['parent_id'],
-                "title": c['title']
+                "id": c.id,
+                "username": c.username,
+                "time": c.time,
+                "text": c.text,
+                "contribution_id": c.contribution_id,
+                "parent_id": c.parent_id,
+                "title": c.contribution_title,
             }
+            if len(c.children) > 0:
+                new_attributes['replies'] = print_childs_recursive(c, 0)
             threads_to_show.append(new_attributes)
     return Response(json.dumps(threads_to_show), mimetype='application/json')
+
+
+def print_childs_recursive(com, k):
+    if len(com.children) == 0:
+        new_attributes = {
+            "id": com.id,
+            "username": com.username,
+            "time": com.time,
+            "text": com.text,
+            "contribution_id": com.contribution_id,
+            "parent_id": com.parent_id,
+            "title": com.contribution_title,
+        }
+        return new_attributes
+    c = com.children[k]
+    new_attributes = {
+        "id": c.id,
+        "username": c.username,
+        "time": c.time,
+        "text": c.text,
+        "contribution_id": c.contribution_id,
+        "parent_id": c.parent_id,
+        "title": c.contribution_title,
+    }
+    if len(c.children) > 0:
+        new_attributes['replies'] = print_childs_recursive(c.children[k], 0)
+        if len(c.children) > k+1:
+            new_attributes['replies'] += print_childs_recursive(c.children[k+1], 0)
+        else:
+            return new_attributes
+    else:
+        return new_attributes
 
 
 @app.route('/api/news', methods=['POST'])

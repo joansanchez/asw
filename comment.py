@@ -24,7 +24,7 @@ class Comment:
                             'text' TEXT,
                             contribution_id INTEGER NOT NULL,
                             parent_id INTEGER,
-                            FOREIGN KEY('parent_id') REFERENCES 'id' (comment),
+                            FOREIGN KEY('parent_id') REFERENCES 'id' (comment) ON DELETE CASCADE,
                             FOREIGN KEY('contribution_id') REFERENCES 'id' (contribution)
                             )'''
 
