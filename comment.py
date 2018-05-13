@@ -101,10 +101,16 @@ class Comment:
                 comment = Comment(result['user'], result['time'], result['text'], result['contribution_id'],
                                   result['parent_id'], comment_id=result['id'])
                 comment.contribution_title = result['title']
-                json = comment.toJSON()
-                children = Comment.get_comments_by_parent(repository, comment.id)
-                comment.children = children
-                comments.append(comment)
+                json = {
+                    "id": comment.id,
+                    "time": comment.time,
+                    "username": comment.username,
+                    "text": comment.text,
+                    "contribution_id": comment.contribution_id,
+                    "parent_id": comment.parent_id,
+                    "children": Comment.get_comments_by_parent(repository, comment.id)
+                }
+                comments.append(json)
 
             return comments
         else:
@@ -121,3 +127,5 @@ class Comment:
             "parent_id": self.parent_id
         }
         return json
+
+

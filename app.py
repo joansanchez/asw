@@ -131,7 +131,7 @@ def submit():
         if error is not None:
             return render_template('submit.html', user=user, error=error)
         elif error is None:
-             return render_template('submit.html', user=user)
+            return render_template('submit.html', user=user)
     return redirect('')
 
 
@@ -438,9 +438,9 @@ def return_asked_contribution(contribution_id):
         "time": contribution_to_show.time,
         "user": contribution_to_show.username,
         "kind": contribution_to_show.kind,
-        "comment": return_comments_of_contribution(contribution_id)
+        "zcomment": return_comments_of_contribution(contribution_id)
     }
-    return json
+    return jsonify(json)
 
 
 def return_comments_of_contribution(contribution):
@@ -454,28 +454,11 @@ def return_comments_of_contribution(contribution):
             "text": c.text,
             "contribution_id": c.contribution_id,
             "parent_id": c.parent_id,
+            "replies": Comment.get_json_comments(repository, c.id)
         }
-        comments_to_show.append(new_attributes)
-    return Response(json.dumps(comments_to_show), mimetype='application/json')
-
-
-@app.route('/api/getComments/<comment>', methods=['GET'])
-def return_comments(comment):
-    childs = Comment.get_comments_by_parent(repository, comment)
-    if len(childs) != 0:
-        info_to_show = []
-        for c in childs:
-            new_attributes = {
-                "id": c.id,
-                "username": c.username,
-                "time": c.time,
-                "text": c.text,
-                "contribution_id": c.contribution_id,
-                "parent_id": c.parent_id
-            }
-            children = return_comments(c.id)
-            info_to_show.append(new_attributes)
-        return Response(json.dumps(info_to_show), mimetype='application/json')
+        if c.parent_id is 0:
+            comments_to_show.append(new_attributes)
+    return jsonify(comments_to_show)
 
 
 @app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
