@@ -518,7 +518,7 @@ def vote_contribution_api(contribution_id):
     return return_asked_contribution(contribution_id)
 
 
-@app.route('/api/contributions/<contribution_id>/comment', methods=['POST'])
+@app.route('/api/contributions/<contribution_id>/comments', methods=['POST'])
 def create_new_comment(contribution_id):
     if 'Authorization' not in request.headers:
         return '', 401
@@ -531,6 +531,23 @@ def create_new_comment(contribution_id):
     comment = Comment(username, datetime.datetime.now(), json['text'], contribution_id, None)
     comment.save(repository)
     return jsonify(comment.toJSON())
+
+
+@app.route('/api/comments/<parent_id>/replies', methods=['POST'])
+def create_new_reply(parent_id):
+    if 'Authorization' not in request.headers:
+        return '', 401
+    username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
+    if not Comment.exists_comment(repository, parent_id):
+        return '', 404
+    json = request.get_json()
+    parent_comment = Comment.get_comment(repository, parent_id )
+    comment = Comment(username, datetime.datetime.now(), json['text'], parent_comment.contribution_id, parent_id)
+    comment.save(repository)
+    return jsonify(comment.toJSON())
+
 
 @app.route('/api/comments/<comment_id>/vote', methods=['POST', 'DELETE'])
 def vote_comment_api(comment_id):
