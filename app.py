@@ -75,7 +75,7 @@ def login():
     try:
         validate_token(token)
     except ValueError:
-        return '', 403
+        return jsonify('Forbidden'), 403
 
     exists = User.exists(repository, email)
     if not exists:
@@ -340,10 +340,10 @@ def return_asks():
 @app.route('/api/asks', methods=['POST'])
 def create_new_ask():
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify(''), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify(''), 401
     json = request.get_json()
     ask = Contribution(title=json['title'], url=None, text=json['text'], time=datetime.datetime.now(),
                        username=username, kind=ContributionTypes.ASK.value)
@@ -375,7 +375,7 @@ def return_news():
 def return_threads(username):
     user = User.get(repository, username)
     if user is None:
-        return '', 404
+        return jsonify('Not Found'), 404
     if user is not None:
         comments = get_user_comments(username)
         return jsonify(comments)
@@ -384,10 +384,10 @@ def return_threads(username):
 @app.route('/api/news', methods=['POST'])
 def create_new_new():
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify(''), 401
     json = request.get_json()
     new = Contribution(title=json['title'], url=json['url'], text=None, time=datetime.datetime.now(),
                        username=username, kind=ContributionTypes.NEW.value)
@@ -411,14 +411,14 @@ def return_newest_contributions():
 def return_asked_user(user):
     user_to_show = User.get(repository, user)
     if user_to_show is None:
-        return '', 404
+        return jsonify(''), 404
     return jsonify(user_to_show.toJSON())
 
 
 @app.route('/api/contributions/<contribution_id>', methods=['GET'])
 def return_asked_contribution(contribution_id):
     if not Contribution.exists_contribution(repository, contribution_id):
-        return '', 404
+        return jsonify('Not Found'), 404
     contribution_to_show = Contribution.get_contribution(repository, contribution_id)
     contribution = {
         "id": contribution_to_show.id,
@@ -474,15 +474,15 @@ def get_user_comments(user):
 @app.route('/api/contributions/<contribution_id>', methods=['DELETE'])
 def delete_contribution_api(contribution_id):
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     if not Contribution.exists_contribution(repository, contribution_id):
-        return '', 404
+        return jsonify('Not Found'), 404
     contribution = Contribution.get_contribution(repository, contribution_id)
     if contribution.username != username:
-        return '', 403
+        return jsonify('Forbidden'), 403
     Comment.delete_comments_from_contribution(repository, contribution_id)
     Contribution.delete_contribution(repository, contribution_id)
     return '', 200
@@ -491,15 +491,15 @@ def delete_contribution_api(contribution_id):
 @app.route('/api/comments/<comment_id>', methods=['DELETE'])
 def delete_comment_api(comment_id):
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     if not Comment.exists_comment(repository, comment_id):
-        return '', 404
+        return jsonify('Not Found'), 404
     comment = Comment.get_comment(repository, comment_id)
     if comment.username != username:
-        return '', 403
+        return jsonify('Forbidden'), 403
     Comment.delete_comment(repository, comment_id)
     return '', 200
 
@@ -507,23 +507,23 @@ def delete_comment_api(comment_id):
 @app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
 def vote_contribution_api(contribution_id):
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     if not Contribution.exists_contribution(repository, contribution_id):
-        return '', 404
+        return jsonify('Not Found'), 404
     contribution = Contribution.get_contribution(repository, contribution_id)
     if contribution.username == username:
-        return '', 403
+        return jsonify('Forbidden'), 403
     contribution_voted = UserContributionVoted(username, contribution_id)
     if request.method == 'POST':
         if UserContributionVoted.exists(repository, contribution_id, username):
-            return '', 409
+            return jsonify('Conflict'), 409
         contribution_voted.save(repository)
     elif request.method == 'DELETE':
         if not UserContributionVoted.exists(repository, contribution_id, username):
-            return '', 404
+            return jsonify('Not Found'), 404
         contribution_voted.delete(repository)
     return return_asked_contribution(contribution_id)
 
@@ -531,12 +531,12 @@ def vote_contribution_api(contribution_id):
 @app.route('/api/contributions/<contribution_id>/comments', methods=['POST'])
 def create_new_comment(contribution_id):
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     if not Contribution.exists_contribution(repository, contribution_id):
-        return '', 404
+        return jsonify('Not Found'), 404
     json = request.get_json()
     comment = Comment(username, datetime.datetime.now(), json['text'], contribution_id, None)
     comment.save(repository)
@@ -546,12 +546,12 @@ def create_new_comment(contribution_id):
 @app.route('/api/comments/<parent_id>/replies', methods=['POST'])
 def create_new_reply(parent_id):
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     if not Comment.exists_comment(repository, parent_id):
-        return '', 404
+        return jsonify('Not Found'), 404
     json = request.get_json()
     parent_comment = Comment.get_comment(repository, parent_id)
     comment = Comment(username, datetime.datetime.now(), json['text'], parent_comment.contribution_id, parent_id)
@@ -562,23 +562,23 @@ def create_new_reply(parent_id):
 @app.route('/api/comments/<comment_id>/vote', methods=['POST', 'DELETE'])
 def vote_comment_api(comment_id):
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     if not Comment.exists_comment(repository, comment_id):
-        return '', 404
+        return jsonify('Not Found'), 404
     comment = Comment.get_comment(repository, comment_id)
     if comment.username == username:
-        return '', 403
+        return jsonify('Forbidden'), 403
     comment_voted = UserCommentVoted(username, comment_id)
     if request.method == 'POST':
         if UserCommentVoted.exists(repository, comment_id, username):
-            return '', 409
+            return jsonify('Conflict'), 409
         comment_voted.save(repository)
     elif request.method == 'DELETE':
         if not UserCommentVoted.exists(repository, comment_id, username):
-            return '', 404
+            return jsonify('Not Found'), 404
         comment_voted.delete(repository)
     return return_asked_contribution(str(comment.contribution_id))
 
@@ -586,12 +586,12 @@ def vote_comment_api(comment_id):
 @app.route('/api/users/<userput>', methods=['PUT'])
 def return_updated_user(userput):
     if 'Authorization' not in request.headers:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
-        return '', 401
+        return jsonify('Unauthorized'), 401
     if username != userput:
-        return '', 403
+        return jsonify('Forbidden'), 403
     json = request.get_json()
     user_to_return = User.get(repository, username)
     user_to_return.update(repository, json['about'])
