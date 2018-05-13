@@ -103,7 +103,7 @@ def voteContribution():
             contribution_voted.save(repository)
         elif action == 'unvote':
             contribution_voted.delete(repository)
-    resp = make_response(redirect(''))
+    resp = make_response(redirect(request.form['view']))
     return resp
 
 
@@ -118,7 +118,7 @@ def voteComment():
             comment_voted.save(repository)
         elif action == 'unvote':
             comment_voted.delete(repository)
-    resp = make_response(redirect(''))
+    resp = make_response(redirect(request.form['view']))
     return resp
 
 

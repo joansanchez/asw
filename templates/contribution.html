@@ -23,6 +23,7 @@
                                             <form id="voteContribution{{ contribution.id }}" action="voteContribution" method="post" style="display: none">
                                                 <input type="hidden" name="contribution" value="{{ contribution.id }}">
                                                 <input type="hidden" name="action" value="vote">
+                                                <input type="hidden" name="view" value="contribution?id={{ contribution.id }}">
                                             </form>
                                                 <div class="votearrow" title="upvote"></div>
                                             </a>
@@ -65,6 +66,7 @@
                                                 <form id="voteContribution{{ contribution.id }}" action="voteContribution" method="post" style="display: none">
                                                     <input type="hidden" name="contribution" value="{{ contribution.id }}">
                                                     <input type="hidden" name="action" value="unvote">
+                                                    <input type="hidden" name="view" value="contribution?id={{ contribution.id }}">
                                                 </form>
                                                 unvote
                                             </a>
@@ -116,6 +118,7 @@
                                                         <form id="voteComment{{ c.id }}" action="voteComment" method="post" style="display: none">
                                                             <input type="hidden" name="comment" value="{{ c.id }}">
                                                             <input type="hidden" name="action" value="vote">
+                                                            <input type="hidden" name="view" value="contribution?id={{ contribution.id }}">
                                                         </form>
                                                             <div class="votearrow" title="upvote"></div>
                                                         </a>
@@ -145,6 +148,7 @@
                                                                         <form id="voteComment{{ c.id }}" action="voteComment" method="post" style="display: none">
                                                                             <input type="hidden" name="comment" value="{{ c.id }}">
                                                                             <input type="hidden" name="action" value="unvote">
+                                                                            <input type="hidden" name="view" value="contribution?id={{ contribution.id }}">
                                                                         </form>
                                                                         unvote
                                                                     </a>
@@ -176,6 +180,7 @@
                                                                 <form id="voteComment{{ child.id }}" action="voteComment" method="post" style="display: none">
                                                                     <input type="hidden" name="comment" value="{{ child.id }}">
                                                                     <input type="hidden" name="action" value="vote">
+                                                                    <input type="hidden" name="view" value="contribution?id={{ contribution.id }}">
                                                                 </form>
                                                                 <div class="votearrow" style="display: inline-block;" title="upvote"></div>
                                                                 </a>
@@ -201,6 +206,7 @@
                                                                         <form id="voteComment{{ child.id }}" action="voteComment" method="post" style="display: none">
                                                                             <input type="hidden" name="comment" value="{{ child.id }}">
                                                                             <input type="hidden" name="action" value="unvote">
+                                                                            <input type="hidden" name="view" value="contribution?id={{ contribution.id }}">
                                                                         </form>
                                                                         unvote
                                                                     </a>

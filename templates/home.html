@@ -19,6 +19,7 @@
                                 <form id="voteContribution{{ i.id }}" action="voteContribution" method="post" style="display: none">
                                     <input type="hidden" name="contribution" value="{{ i.id }}">
                                     <input type="hidden" name="action" value="vote">
+                                    <input type="hidden" name="view" value="">
                                 </form>
                                 <div class="votearrow" title="upvote"></div>
                             </a>
@@ -54,6 +55,7 @@
                                 <form id="voteContribution{{ i.id }}" action="voteContribution" method="post" style="display: none">
                                     <input type="hidden" name="contribution" value="{{ i.id }}">
                                     <input type="hidden" name="action" value="unvote">
+                                    <input type="hidden" name="view" value="">
                                 </form>
                                 unvote
                             </a>
