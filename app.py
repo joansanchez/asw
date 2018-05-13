@@ -361,15 +361,13 @@ def return_news():
     return Response(json.dumps(news_to_show), mimetype='application/json')
 
 
-@app.route('/api/threads')
-def return_threads():
-    if 'Authorization' not in request.headers:
-        return '', 401
-    username = decode_auth_token(request.headers['Authorization'])
-    if username is None:
-        return '', 401
-    if username is not None:
-        comments = get_user_comments(username)
+@app.route('/api/threads/<userID>')
+def return_threads(userID):
+    user = User.get(repository, userID)
+    if user is None:
+        return '', 404
+    if user is not None:
+        comments = get_user_comments(userID)
         return jsonify(comments)
 
 
@@ -493,7 +491,7 @@ def delete_comment_api(comment_id):
     comment = Comment.get_comment(repository, comment_id)
     if comment.username != username:
         return '', 403
-    #TODO: aqui has de posar el codi q falta
+    Comment.delete_comment(repository, comment_id)
     return '', 200
 
 
