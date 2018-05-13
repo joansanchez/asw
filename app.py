@@ -205,9 +205,9 @@ def new_post():
         error = "ERROR: You must be logged to make a new post"
         return redirect("submit?error={0}".format(error))
     elif url != '' and text == '' and title != '' and not Contribution.exists(repository, url):
-        contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
+        contribution = Contribution(title, url, None, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '' and title != '':
-        contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)
+        contribution = Contribution(title, None, text, time, user, ContributionTypes.ASK.value, 0)
     elif text != '' and url != '':
         error = "ERROR: You can only fill URL or Text but not both"
         return redirect("submit?error={0}".format(error))
