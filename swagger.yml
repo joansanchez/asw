@@ -102,7 +102,7 @@ paths:
         401:
             description: "Forbidden, missing authentication"
         409:
-            description: "Conflict, specified URL already posted"
+            description: "Conflict, specified URL already posted. Returning existing post"
             schema:
               $ref: "#/definitions/New"
       security:
@@ -126,7 +126,7 @@ paths:
               items:
                 $ref: "#/definitions/Contribution"
 
-  /threads/{userID}:
+  /threads:
     get:
       tags:
         - "comment"
@@ -136,10 +136,30 @@ paths:
       - "application/json"
       produces:
       - "application/json"
+      parameters: []
+      responses:
+        200:
+            description: "Successful operation. Returns the array of comments"
+            schema:
+              type: "array"
+              items:
+                $ref: "#/definitions/Comment"
+        401:
+          description: "Forbidden, missing authentication"
+  /users/{userID}/threads:
+    get:
+      tags:
+        - "user"
+      summary: "Endpoint to get the comments of an specific user"
+      description: "Returns all the comments of the user"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       parameters:
         - in: "path"
           name: "userID"
-          description: "ID of the user the comments of which we want to return"
+          description: "ID of threads to return"
           required: true
           type: "string"
       responses:
@@ -151,6 +171,7 @@ paths:
                 $ref: "#/definitions/Comment"
         404:
             description: "User not found"
+
 
   /contributions/{contributionID}:
     get:
@@ -195,14 +216,14 @@ paths:
       responses:
         200:
             description: "Suuccesscul operation. Contribution deleted"
+        400:
+            description: "Bad request, there are missing parameteres or they do not have a valid format"
         401:
             description: "Forbidden. Missing Authentication"
         403:
             description: "Unauthorized. Missing permissions to delete the contribution"
         404:
             description: "Contribution not found"
-      security:
-      - api_key: []
 
   /contributions/{contributionID}/vote:
     post:
@@ -266,7 +287,37 @@ paths:
         404:
             description: "Contribution not found"
         409:
-            description: "Conflict. You have already vote for this contribution"
+            description: "Conflict. You have already unvote this contribution"
+      security:
+      - api_key: []
+
+  /contributions/{contributionID}/comment:
+    post:
+      tags:
+        - "contribution"
+      summary: "Endpoint to comment a specific contribution"
+      description: "Returns created comment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "contributionID"
+          description: "ID of contribution to comment"
+          required: true
+          type: "string"
+      responses:
+        200:
+            description: "Successful operation. Returns created comment"
+            schema:
+              $ref: "#/definitions/Comment"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+        404:
+            description: "Contribution not found"
       security:
       - api_key: []
 
@@ -294,33 +345,33 @@ paths:
         400:
             description: "Bad request, there are missing parameters or they do not have valid format"
         404:
-            description: "Comment not found"
+            description: "Contribution not found"
     delete:
       tags:
         - "comment"
-      summary: "Endpoint to delete an specific comment"
-      description: "Deletes an specific comment and all of it's sons"
+      summary: "Endpoint to get delete a specific comment"
+      description: "Delete a single comment"
       consumes:
-        - "application/json"
+      - "application/json"
       produces:
-        - "application/json"
+      - "application/json"
       parameters:
         - in: "path"
           name: "commentID"
-          description: "ID of the comment to delete"
+          description: "ID of comment to delete"
           required: true
           type: "string"
       responses:
         200:
-            description: "Suuccesscul operation. Comment deleted"
+            description: "Successful operation. Returns asked comment"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
         401:
-            description: "Forbidden. Missing Authentication"
+            description: "Forbidden, missing authentication"
         403:
-            description: "Unauthorized. Missing permissions to delete the comment"
+            description: "Unauthorized. Missing permissions to update the resources"
         404:
             description: "Comment not found"
-      security:
-      - api_key: []
 
   /comments/{commentID}/vote:
     post:
@@ -384,7 +435,7 @@ paths:
         404:
             description: "Comment not found"
         409:
-            description: "Conflict. You have already vote for this comment"
+            description: "Conflict. You have already unvote this comment"
       security:
       - api_key: []
 
