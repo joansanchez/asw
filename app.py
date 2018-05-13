@@ -360,13 +360,13 @@ def return_news():
     return Response(json.dumps(news_to_show), mimetype='application/json')
 
 
-@app.route('/api/threads/<userID>')
-def return_threads(userID):
-    user = User.get(repository, userID)
+@app.route('/api/users/<username>/threads')
+def return_threads(username):
+    user = User.get(repository, username)
     if user is None:
         return '', 404
     if user is not None:
-        comments = get_user_comments(userID)
+        comments = get_user_comments(username)
         return jsonify(comments)
 
 
