@@ -4,6 +4,8 @@ from logging import basicConfig, INFO
 
 from flask import Flask, logging, render_template, request, redirect, url_for, make_response, jsonify, json, Response
 from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
+from yaml import Loader, load
 
 from comment import Comment
 from contribution import Contribution, ContributionTypes
@@ -16,6 +18,15 @@ from usercontributionvoted import UserContributionVoted
 
 app = Flask(__name__, static_folder='./static')
 CORS(app)
+
+SWAGGER_URL = '/api/docs'
+swagger_path = os.environ['SWAGGER']
+
+swagger_yml = load(open(swagger_path, 'r'), Loader=Loader)
+
+blueprint = get_swaggerui_blueprint(SWAGGER_URL, swagger_path, config={'spec': swagger_yml})
+
+app.register_blueprint(blueprint, url_prefix=SWAGGER_URL)
 
 
 @app.route('/')
@@ -543,7 +554,7 @@ def create_new_reply(parent_id):
     if not Comment.exists_comment(repository, parent_id):
         return '', 404
     json = request.get_json()
-    parent_comment = Comment.get_comment(repository, parent_id )
+    parent_comment = Comment.get_comment(repository, parent_id)
     comment = Comment(username, datetime.datetime.now(), json['text'], parent_comment.contribution_id, parent_id)
     comment.save(repository)
     return jsonify(comment.toJSON())
