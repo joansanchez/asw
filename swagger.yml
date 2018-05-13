@@ -126,26 +126,7 @@ paths:
               items:
                 $ref: "#/definitions/Contribution"
 
-  /threads:
-    get:
-      tags:
-        - "comment"
-      summary: "Endpoint to get the comments of an specific user"
-      description: "Returns all the comments of the user"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-            description: "Successful operation. Returns the array of comments"
-            schema:
-              type: "array"
-              items:
-                $ref: "#/definitions/Comment"
-        401:
-          description: "Forbidden, missing authentication"
+
   /users/{userID}/threads:
     get:
       tags:
