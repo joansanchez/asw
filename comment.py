@@ -31,10 +31,11 @@ class Comment:
     @staticmethod
     def get_comments_by_contribution(repository, contribution_id):
         result = repository.list(
-            'SELECT *, c.text AS \'text\', c.user AS \'user\', c.id AS id FROM comment c WHERE c.contribution_id = \'' + contribution_id + '\' ORDER BY c.time DESC')
+            'SELECT *, c.text AS \'text\', c.user AS \'user\', c.id AS id, COUNT(v.user) AS n_votes FROM comment c LEFT JOIN user_comment_voted v ON c.id = v.comment WHERE c.contribution_id = \'' + contribution_id + '\' GROUP BY v.comment ORDER BY c.time DESC')
         comments = []
         for r in result:
             comment = Comment(r['user'], r['time'], r['text'], r['contribution_id'], r['parent_id'], r['id'])
+            comment.n_votes = r['n_votes']
             comments.append(comment)
         return comments
 
@@ -83,39 +84,17 @@ class Comment:
                 comment = Comment(result['user'], result['time'], result['text'], result['contribution_id'],
                                   result['parent_id'], comment_id=result['id'])
                 comment.contribution_title = result['title']
+                votes = repository.get('SELECT COUNT(*) AS n_votes FROM user_comment_voted WHERE comment = \'' + str(
+                    parent_id) + '\' GROUP BY comment')
+                comment.n_votes = 0
+                if votes is not None:
+                    comment.n_votes = votes[0]
                 children = Comment.get_comments_by_parent(repository, comment.id)
                 comment.children = children
                 comments.append(comment)
             return comments
         else:
             return []
-
-    @staticmethod
-    def get_json_comments(repository, parent_id):
-        sql_script = 'SELECT *, c.id AS id, c.text AS \'text\', c.time AS \'time\', c.user AS \'user\' FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.parent_id = ' + str(
-            parent_id)
-        results = repository.list(sql_script)
-        if results:
-            comments = []
-            for result in results:
-                comment = Comment(result['user'], result['time'], result['text'], result['contribution_id'],
-                                  result['parent_id'], comment_id=result['id'])
-                comment.contribution_title = result['title']
-                json = {
-                    "id": comment.id,
-                    "time": comment.time,
-                    "username": comment.username,
-                    "text": comment.text,
-                    "contribution_id": comment.contribution_id,
-                    "parent_id": comment.parent_id,
-                    "children": Comment.get_comments_by_parent(repository, comment.id)
-                }
-                comments.append(json)
-
-            return comments
-        else:
-            return []
-
 
     def toJSON(self):
         json = {

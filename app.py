@@ -437,6 +437,7 @@ def parse_comment(comment):
         "contribution_id": comment.contribution_id,
         "parent_id": comment.parent_id,
         "children": parsed_children,
+        "n_votes": comment.n_votes
     }
 
 
@@ -458,24 +459,6 @@ def get_user_comments(user):
             result = parse_comment(comment)
             results.append(result)
     return results
-
-
-def return_comments_of_contribution(contribution):
-    comments = Comment.get_comments_by_contribution(repository, contribution)
-    comments_to_show = []
-    for c in comments:
-        new_attributes = {
-            "id": c.id,
-            "username": c.username,
-            "time": c.time,
-            "text": c.text,
-            "contribution_id": c.contribution_id,
-            "parent_id": c.parent_id,
-            "replies": Comment.get_json_comments(repository, c.id)
-        }
-        if c.parent_id is 0:
-            comments_to_show.append(new_attributes)
-    return Response(json.dumps(comments_to_show), mimetype='application/json')
 
 
 @app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
