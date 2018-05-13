@@ -10,6 +10,8 @@
 
 Live demo with latest code can be found on [http://myhackernews.tk/](http://myhackernews.tk/)
 
+Swagger documentation can be found on [http://myhackernews.tk/api/docs](http://myhackernews.tk/api/docs)
+
 # Basic setup
 
 Download and install _Python 3.6_
