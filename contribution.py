@@ -95,6 +95,10 @@ class Contribution:
         return repository.exists('SELECT * FROM contribution WHERE url = \'' + url + '\'')
 
     @staticmethod
+    def exists_contribution(repository, contribution_id):
+        return repository.exists('SELECT * FROM contribution WHERE id = \'' + contribution_id + '\'')
+
+    @staticmethod
     def get_contribution_by_url(repository, url):
         result = repository.get(
             'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(u.\'user\') AS n_votes FROM contribution c LEFT JOIN user_contribution_voted u ON c.id = u.contribution WHERE c.url = \'' + url + '\' GROUP BY c.id ORDER BY time DESC;')

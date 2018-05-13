@@ -24,8 +24,8 @@ class Comment:
                             'text' TEXT,
                             contribution_id INTEGER NOT NULL,
                             parent_id INTEGER,
-                            FOREIGN KEY('parent_id') REFERENCES 'id' (comment) ON DELETE CASCADE,
-                            FOREIGN KEY('contribution_id') REFERENCES 'id' (contribution)
+                            FOREIGN KEY('parent_id') REFERENCES comment ('id') ON DELETE CASCADE,
+                            FOREIGN KEY('contribution_id') REFERENCES contribution ('id')
                             )'''
 
     @staticmethod
@@ -46,7 +46,7 @@ class Comment:
     @staticmethod
     def delete_comment(repository, comment_id):
         repository.delete(
-            'DELETE FROM comment WHERE id = \'' + comment_id + '\'')
+            'DELETE FROM comment WHERE id = ' + comment_id)
 
     @staticmethod
     def delete_comments_from_contribution(repository, contribution_id):
@@ -90,6 +90,33 @@ class Comment:
         else:
             return []
 
+    @staticmethod
+    def get_json_comments(repository, parent_id):
+        sql_script = 'SELECT *, c.id AS id, c.text AS \'text\', c.time AS \'time\', c.user AS \'user\' FROM comment c JOIN contribution co ON c.contribution_id = co.id WHERE c.parent_id = ' + str(
+            parent_id)
+        results = repository.list(sql_script)
+        if results:
+            comments = []
+            for result in results:
+                comment = Comment(result['user'], result['time'], result['text'], result['contribution_id'],
+                                  result['parent_id'], comment_id=result['id'])
+                comment.contribution_title = result['title']
+                json = {
+                    "id": comment.id,
+                    "time": comment.time,
+                    "username": comment.username,
+                    "text": comment.text,
+                    "contribution_id": comment.contribution_id,
+                    "parent_id": comment.parent_id,
+                    "children": Comment.get_comments_by_parent(repository, comment.id)
+                }
+                comments.append(json)
+
+            return comments
+        else:
+            return []
+
+
     def toJSON(self):
         json = {
             "id": self.id,
@@ -100,3 +127,5 @@ class Comment:
             "parent_id": self.parent_id
         }
         return json
+
+
