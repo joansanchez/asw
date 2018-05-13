@@ -24,6 +24,7 @@ HOST -> host to listen
 PORT -> port to deploy
 LOG -> path to log file
 SECRET_KEY -> secret to generate tokens
+SWAGGER -> absolute path to yml file
 ```
 
 You can generate a key on a Python console with:
