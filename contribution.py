@@ -85,12 +85,10 @@ class Contribution:
     def get_contribution(repository, contribution_id):
         result = repository.get(
             'SELECT c.id, c.title, c.url, c.text, c.time, c.\'user\', c.kind, count(u.\'user\') AS n_votes FROM contribution c LEFT JOIN user_contribution_voted u ON c.id = u.contribution WHERE c.id = \'' + contribution_id + '\' GROUP BY c.id ORDER BY time DESC;')
-        if result is not None:
-            contribution = Contribution(result[1], result[2], result[3], result[4], result[5], result[6],
-                                        contribution_id=result[0])
-            contribution.n_votes = result[7]
-            return contribution
-        return result
+        contribution = Contribution(result[1], result[2], result[3], result[4], result[5], result[6],
+                                    contribution_id=result[0])
+        contribution.n_votes = result[7]
+        return contribution
 
     @staticmethod
     def exists(repository, url):
