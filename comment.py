@@ -89,7 +89,7 @@ class Comment:
                 comment = Comment(result['user'], result['time'], result['text'], result['contribution_id'],
                                   result['parent_id'], comment_id=result['id'])
                 comment.contribution_title = result['title']
-                comment.n_votes = Comment.get_number_votes_of_a_comment(parent_id, repository)
+                comment.n_votes = Comment.get_number_votes_of_a_comment(comment.id, repository)
                 children = Comment.get_comments_by_parent(repository, comment.id)
                 comment.children = children
                 comments.append(comment)
