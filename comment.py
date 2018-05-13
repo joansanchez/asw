@@ -62,6 +62,7 @@ class Comment:
         for r in result:
             comment = Comment(r['user'], r['time'], r['text'], r['contribution_id'], r['parent_id'], r['id'])
             comment.contribution_title = r['title']
+            comment.n_votes = Comment.get_number_votes_of_a_comment(comment.id, repository)
             comments.append(comment)
         return comments
 

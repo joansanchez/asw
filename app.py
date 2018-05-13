@@ -190,7 +190,10 @@ def new_post():
     text = request.form["text"]
     time = datetime.datetime.now()
     user = decode_auth_token(request.cookies.get('token'))
-    if url != '' and text == '' and title != '' and not Contribution.exists(repository, url):
+    if user is None:
+        error = "ERROR: You must be logged to make a new post"
+        return redirect("submit?error={0}".format(error))
+    elif url != '' and text == '' and title != '' and not Contribution.exists(repository, url):
         contribution = Contribution(title, url, text, time, user, ContributionTypes.NEW.value, 0)
     elif text != '' and url == '' and title != '':
         contribution = Contribution(title, url, text, time, user, ContributionTypes.ASK.value, 0)
