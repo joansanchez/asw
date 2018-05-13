@@ -131,7 +131,7 @@ paths:
     get:
       tags:
         - "user"
-      summary: "Endpoint to get the comments of an specific user"
+      summary: "Endpoint to get the comments of a specific user"
       description: "Returns all the comments of the user"
       consumes:
       - "application/json"
@@ -157,7 +157,7 @@ paths:
     get:
       tags:
         - "contribution"
-      summary: "Endpoint to get an specific contribution"
+      summary: "Endpoint to get a specific contribution"
       description: "Returns a single contribution"
       consumes:
       - "application/json"
@@ -181,7 +181,7 @@ paths:
     delete:
       tags:
         - "contribution"
-      summary: "Endpoint to delete an especific contribution"
+      summary: "Endpoint to delete a especific contribution"
       description: "Deletes a contribution and all of it's comments"
       consumes:
         - 'application/json'
@@ -209,7 +209,7 @@ paths:
     post:
       tags:
         - "contribution"
-      summary: "Endpoint to vote an specific contribution"
+      summary: "Endpoint to vote a specific contribution"
       description: "Returns a single contribution"
       consumes:
       - "application/json"
@@ -241,7 +241,7 @@ paths:
     delete:
       tags:
         - "contribution"
-      summary: "Endpoint to unvote an specific contribution"
+      summary: "Endpoint to unvote a specific contribution"
       description: "Returns a single contribution"
       consumes:
       - "application/json"
@@ -287,6 +287,12 @@ paths:
           description: "ID of contribution to comment"
           required: true
           type: "string"
+        - in: "body"
+          name: "comment"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/New_Comment"
       responses:
         200:
             description: "Successful operation. Returns created comment"
@@ -305,7 +311,7 @@ paths:
     get:
       tags:
         - "comment"
-      summary: "Endpoint to get an specific comment"
+      summary: "Endpoint to get a specific comment"
       description: "Returns a single comment"
       consumes:
       - "application/json"
@@ -357,7 +363,7 @@ paths:
     post:
       tags:
         - "comment"
-      summary: "Endpoint to vote an specific comment"
+      summary: "Endpoint to vote a specific comment"
       description: "Returns a single comment"
       consumes:
       - "application/json"
@@ -389,7 +395,7 @@ paths:
     delete:
       tags:
         - "comment"
-      summary: "Endpoint to unvote an specific comment"
+      summary: "Endpoint to unvote a specific comment"
       description: "Returns a single comment"
       consumes:
       - "application/json"
@@ -423,7 +429,7 @@ paths:
     get:
       tags:
         - "user"
-      summary: "Endpoint to get an specific users"
+      summary: "Endpoint to get a specific users"
       description: "Returns a single user"
       consumes:
       - "application/json"
@@ -464,7 +470,7 @@ paths:
         description: ""
         required: true
         schema:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/Update_User"
       responses:
         200:
             description: "Successful operation. Returns updated user"
@@ -496,6 +502,13 @@ definitions:
       karma:
         type: "integer"
         format: "int64"
+      about:
+        type: "string"
+  Update_User:
+    type: "object"
+    required:
+      - "email"
+    properties:
       about:
         type: "string"
 
@@ -610,3 +623,8 @@ definitions:
       n_votes:
         type: "integer"
         format: "int64"
+  New_Comment:
+    type: "object"
+    properties:
+      text:
+        type: "string"
