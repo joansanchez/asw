@@ -440,7 +440,7 @@ def return_asked_contribution(contribution_id):
         "kind": contribution_to_show.kind,
         "zcomment": return_comments_of_contribution(contribution_id)
     }
-    return jsonify(json)
+    return json
 
 
 def return_comments_of_contribution(contribution):
@@ -458,7 +458,7 @@ def return_comments_of_contribution(contribution):
         }
         if c.parent_id is 0:
             comments_to_show.append(new_attributes)
-    return jsonify(comments_to_show)
+    return Response(json.dumps(comments_to_show), mimetype='application/json')
 
 
 @app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
