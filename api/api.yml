@@ -271,7 +271,7 @@ paths:
       security:
       - api_key: []
 
-  /contributions/{contributionID}/comment:
+  /contributions/{contributionID}/comments:
     post:
       tags:
         - "contribution"
@@ -285,6 +285,41 @@ paths:
         - in: "path"
           name: "contributionID"
           description: "ID of contribution to comment"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "comment"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/New_Comment"
+      responses:
+        200:
+            description: "Successful operation. Returns created comment"
+            schema:
+              $ref: "#/definitions/Comment"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        401:
+            description: "Forbidden, missing authentication"
+        404:
+            description: "Contribution not found"
+      security:
+      - api_key: []
+  /comments/{parentID}/replies:
+    post:
+      tags:
+        - "comment"
+      summary: "Endpoint to reply to a specific contribution"
+      description: "Returns created comment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "parentID"
+          description: "ID of comment to reply"
           required: true
           type: "string"
         - in: "body"
