@@ -172,6 +172,33 @@ paths:
             description: "Bad request, there are missing parameters or they do not have valid format"
         404:
             description: "Contribution not found"
+    delete:
+      tags:
+        - "contribution"
+      summary: "Endpoint to delete an especific contribution and all of it's comments"
+      description: "Deletes a contribution and all of it's comments"
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: "path"
+          name: "contributionID"
+          description: "ID of the contribution to delete"
+          required: true
+          type: "string"
+      responses:
+        200:
+            description: "Suuccesscul operation. Contribution deleted"
+        400:
+            description: "Bad request, there are missing parameteres or they do not have a valid format"
+        401:
+            description: "Forbidden. Missing Authentication"
+        403:
+            description: "Unauthorized. Missing permissions to delete the contribution"
+        404:
+            description: "Contribution not found"
+
   /contributions/{contributionID}/vote:
     post:
       tags:
