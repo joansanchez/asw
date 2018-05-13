@@ -466,9 +466,8 @@ def get_user_comments(user):
     comments = Comment.get_comments_by_user(repository, user)
     results = []
     for comment in comments:
-        if comment.parent_id is None:
-            result = parse_comment(comment)
-            results.append(result)
+        result = parse_comment(comment)
+        results.append(result)
     return results
 
 
