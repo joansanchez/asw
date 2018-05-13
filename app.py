@@ -411,7 +411,7 @@ def return_newest_contributions():
 def return_asked_user(user):
     user_to_show = User.get(repository, user)
     if user_to_show is None:
-        return jsonify(''), 404
+        return jsonify('Not Found'), 404
     return jsonify(user_to_show.toJSON())
 
 
