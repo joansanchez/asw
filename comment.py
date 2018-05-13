@@ -40,6 +40,10 @@ class Comment:
         return comments
 
     @staticmethod
+    def exists_comment(repository, comment_id):
+        return repository.exists('SELECT * FROM comment WHERE id = \'' + comment_id + '\'')
+
+    @staticmethod
     def get_number_comments_by_contribution(repository, contribution_id):
         return repository.list(
             'SELECT count(*) AS n_comments FROM comment WHERE contribution_id = \'' + contribution_id + '\' ORDER BY time DESC')

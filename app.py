@@ -481,6 +481,22 @@ def delete_contribution_api(contribution_id):
     return '', 200
 
 
+@app.route('/api/comments/<comment_id>', methods=['DELETE'])
+def delete_comment_api(comment_id):
+    if 'Authorization' not in request.headers:
+        return '', 401
+    username = decode_auth_token(request.headers['Authorization'])
+    if username is None:
+        return '', 401
+    if not Comment.exists_comment(repository, comment_id):
+        return '', 404
+    comment = Comment.get_comment(repository, comment_id)
+    if comment.username != username:
+        return '', 403
+    #TODO: aqui has de posar el codi q falta
+    return '', 200
+
+
 @app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
 def vote_contribution_api(contribution_id):
     if 'Authorization' not in request.headers:

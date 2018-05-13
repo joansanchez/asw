@@ -175,7 +175,7 @@ paths:
     delete:
       tags:
         - "contribution"
-      summary: "Endpoint to delete an especific contribution and all of it's comments"
+      summary: "Endpoint to delete an especific contribution"
       description: "Deletes a contribution and all of it's comments"
       consumes:
         - 'application/json'
@@ -288,6 +288,32 @@ paths:
               $ref: "#/definitions/Comment"
         400:
             description: "Bad request, there are missing parameters or they do not have valid format"
+        404:
+            description: "Comment not found"
+    delete:
+      tags:
+        - "comment"
+      summary: "Endpoint to delete an specific comment"
+      description: "Deletes an specific comment and all of it's sons"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "commentID"
+          description: "ID of the comment to delete"
+          required: true
+          type: "string"
+      responses:
+        200:
+            description: "Suuccesscul operation. Comment deleted"
+        400:
+            description: "Bad request, there are missing parameteres or they do not have a valid format"
+        401:
+            description: "Forbidden. Missing Authentication"
+        403:
+            description: "Unauthorized. Missing permissions to delete the comment"
         404:
             description: "Comment not found"
 
