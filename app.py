@@ -540,7 +540,7 @@ def vote_comment_api(comment_id):
         if not UserCommentVoted.exists(repository, comment_id, username):
             return '', 404
         comment_voted.delete(repository)
-    return return_asked_comment(comment_id)
+    return_asked_contribution(comment.contribution_id)
 
 
 @app.route('/api/users/<userput>', methods=['PUT'])
