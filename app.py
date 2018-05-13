@@ -360,13 +360,13 @@ def return_news():
     return Response(json.dumps(news_to_show), mimetype='application/json')
 
 
-@app.route('/api/threads/<userID>')
-def return_threads(userID):
-    user = User.get(repository, userID)
+@app.route('/api/users/<username>/threads')
+def return_threads(username):
+    user = User.get(repository, username)
     if user is None:
         return '', 404
     if user is not None:
-        comments = get_user_comments(userID)
+        comments = get_user_comments(username)
         return jsonify(comments)
 
 
@@ -501,9 +501,9 @@ def vote_contribution_api(contribution_id):
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
         return '', 401
-    contribution = Contribution.get_contribution(repository, contribution_id)
-    if contribution is None:
+    if not Contribution.exists_contribution(repository, contribution_id):
         return '', 404
+    contribution = Contribution.get_contribution(repository, contribution_id)
     if contribution.username == username:
         return '', 403
     contribution_voted = UserContributionVoted(username, contribution_id)
@@ -556,9 +556,9 @@ def vote_comment_api(comment_id):
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
         return '', 401
-    comment = Comment.get_comment(repository, comment_id)
-    if comment is None:
+    if not Comment.exists_comment(repository, comment_id):
         return '', 404
+    comment = Comment.get_comment(repository, comment_id)
     if comment.username == username:
         return '', 403
     comment_voted = UserCommentVoted(username, comment_id)
