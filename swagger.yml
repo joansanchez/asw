@@ -195,14 +195,14 @@ paths:
       responses:
         200:
             description: "Suuccesscul operation. Contribution deleted"
-        400:
-            description: "Bad request, there are missing parameteres or they do not have a valid format"
         401:
             description: "Forbidden. Missing Authentication"
         403:
             description: "Unauthorized. Missing permissions to delete the contribution"
         404:
             description: "Contribution not found"
+      security:
+      - api_key: []
 
   /contributions/{contributionID}/vote:
     post:
@@ -313,14 +313,14 @@ paths:
       responses:
         200:
             description: "Suuccesscul operation. Comment deleted"
-        400:
-            description: "Bad request, there are missing parameteres or they do not have a valid format"
         401:
             description: "Forbidden. Missing Authentication"
         403:
             description: "Unauthorized. Missing permissions to delete the comment"
         404:
             description: "Comment not found"
+      security:
+      - api_key: []
 
   /comments/{commentID}/vote:
     post:
