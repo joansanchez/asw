@@ -153,7 +153,6 @@ paths:
         404:
             description: "User not found"
 
-
   /contributions/{contributionID}:
     get:
       tags:
@@ -197,14 +196,14 @@ paths:
       responses:
         200:
             description: "Suuccesscul operation. Contribution deleted"
-        400:
-            description: "Bad request, there are missing parameteres or they do not have a valid format"
         401:
             description: "Forbidden. Missing Authentication"
         403:
             description: "Unauthorized. Missing permissions to delete the contribution"
         404:
             description: "Contribution not found"
+      security:
+      - api_key: []
 
   /contributions/{contributionID}/vote:
     post:
@@ -345,14 +344,14 @@ paths:
       responses:
         200:
             description: "Successful operation. Returns asked comment"
-        400:
-            description: "Bad request, there are missing parameters or they do not have valid format"
         401:
             description: "Forbidden, missing authentication"
         403:
             description: "Unauthorized. Missing permissions to update the resources"
         404:
             description: "Comment not found"
+      security:
+      - api_key: []
 
   /comments/{commentID}/vote:
     post:
