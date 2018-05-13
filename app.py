@@ -501,9 +501,9 @@ def vote_contribution_api(contribution_id):
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
         return '', 401
-    contribution = Contribution.get_contribution(repository, contribution_id)
-    if contribution is None:
+    if not Contribution.exists_contribution(repository, contribution_id):
         return '', 404
+    contribution = Contribution.get_contribution(repository, contribution_id)
     if contribution.username == username:
         return '', 403
     contribution_voted = UserContributionVoted(username, contribution_id)
@@ -556,9 +556,9 @@ def vote_comment_api(comment_id):
     username = decode_auth_token(request.headers['Authorization'])
     if username is None:
         return '', 401
-    comment = Comment.get_comment(repository, comment_id)
-    if comment is None:
+    if not Comment.exists_comment(repository, comment_id):
         return '', 404
+    comment = Comment.get_comment(repository, comment_id)
     if comment.username == username:
         return '', 403
     comment_voted = UserCommentVoted(username, comment_id)
