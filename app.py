@@ -464,7 +464,7 @@ def return_asked_contribution(contribution_id):
     if not Contribution.exists_contribution(repository, contribution_id):
         return '', 404
     contribution_to_show = Contribution.get_contribution(repository, contribution_id)
-    json = {
+    contribution = {
         "id": contribution_to_show.id,
         "title": contribution_to_show.title,
         "url": contribution_to_show.time,
@@ -472,9 +472,37 @@ def return_asked_contribution(contribution_id):
         "time": contribution_to_show.time,
         "user": contribution_to_show.username,
         "kind": contribution_to_show.kind,
-        "zcomment": return_comments_of_contribution(contribution_id)
+        "n_votes": contribution_to_show.n_votes,
+        "comments": get_contribution_comments(contribution_id)
     }
-    return json
+    return jsonify(contribution)
+
+
+def parse_comment(comment):
+    children = Comment.get_comments_by_parent(repository, comment.id)
+    parsed_children = []
+    for child in children:
+        parsed_child = parse_comment(child)
+        parsed_children.append(parsed_child)
+    return {
+        "id": comment.id,
+        "username": comment.username,
+        "time": comment.time,
+        "text": comment.text,
+        "contribution_id": comment.contribution_id,
+        "parent_id": comment.parent_id,
+        "children": parsed_children,
+    }
+
+
+def get_contribution_comments(contribution_id):
+    comments = Comment.get_comments_by_contribution(repository, contribution_id)
+    results = []
+    for comment in comments:
+        if comment.parent_id is None:
+            result = parse_comment(comment)
+            results.append(result)
+    return results
 
 
 def return_comments_of_contribution(contribution):
