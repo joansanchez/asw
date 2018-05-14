@@ -181,7 +181,7 @@ paths:
     delete:
       tags:
         - "contribution"
-      summary: "Endpoint to delete a especific contribution"
+      summary: "Endpoint to delete a specific contribution"
       description: "Deletes a contribution and all of it's comments"
       consumes:
         - 'application/json'
@@ -194,8 +194,8 @@ paths:
           required: true
           type: "string"
       responses:
-        200:
-            description: "Suuccesscul operation. Contribution deleted"
+        204:
+            description: "Successful operation. Contribution deleted"
         401:
             description: "Forbidden. Missing Authentication"
         403:
@@ -347,7 +347,7 @@ paths:
       tags:
         - "comment"
       summary: "Endpoint to get delete a specific comment"
-      description: "Delete a single comment"
+      description: "Delete a single comment and its children"
       consumes:
       - "application/json"
       produces:
@@ -359,8 +359,8 @@ paths:
           required: true
           type: "string"
       responses:
-        200:
-            description: "Successful operation. Returns asked comment"
+        204:
+            description: "Successful operation. Comment deleted"
         401:
             description: "Forbidden, missing authentication"
         403:

@@ -485,7 +485,7 @@ def delete_contribution_api(contribution_id):
         return jsonify('Forbidden'), 403
     Comment.delete_comments_from_contribution(repository, contribution_id)
     Contribution.delete_contribution(repository, contribution_id)
-    return '', 200
+    return jsonify('Successful delete'), 204
 
 
 @app.route('/api/comments/<comment_id>', methods=['DELETE'])
@@ -501,7 +501,7 @@ def delete_comment_api(comment_id):
     if comment.username != username:
         return jsonify('Forbidden'), 403
     Comment.delete_comment(repository, comment_id)
-    return '', 200
+    return jsonify('Successful delete'), 204
 
 
 @app.route('/api/contributions/<contribution_id>/vote', methods=['POST', 'DELETE'])
