@@ -83,10 +83,11 @@ def login():
         user.save(repository)
     resp = make_response(redirect(''))
     resp.set_cookie('token', encode_auth_token(email))
-    return resp\
+    return resp
+
 
 @app.route('/api/users', methods=['POST'])
-def crete_user():
+def create_user():
     json = request.get_json()
     token = json['token']
     email = json['email']
@@ -99,7 +100,7 @@ def crete_user():
     if not exists:
         user = User(email)
         user.save(repository)
-    return jsonify({"token": encode_auth_token(email)})
+    return jsonify({"token": encode_auth_token(email).decode("utf-8")})
 
 
 @app.route('/user', methods=['GET'])
@@ -183,7 +184,7 @@ def get_contribution():
         # TODO: Falta votar ultim child
     parents_comments = []
     for comment in comments:
-        if not comment.id in [c.id for c in all_children]:
+        if comment.id not in [c.id for c in all_children]:
             parents_comments.append(comment)
     if username is not None:
         user = User.get(repository, username)
