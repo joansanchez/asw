@@ -83,7 +83,23 @@ def login():
         user.save(repository)
     resp = make_response(redirect(''))
     resp.set_cookie('token', encode_auth_token(email))
-    return resp
+    return resp\
+
+@app.route('/api/users', methods=['POST'])
+def crete_user():
+    json = request.get_json()
+    token = json['token']
+    email = json['email']
+    try:
+        validate_token(token)
+    except ValueError:
+        return jsonify('Forbidden'), 403
+
+    exists = User.exists(repository, email)
+    if not exists:
+        user = User(email)
+        user.save(repository)
+    return jsonify({"token": encode_auth_token(email)})
 
 
 @app.route('/user', methods=['GET'])
