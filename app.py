@@ -341,6 +341,11 @@ def return_asks():
     for c in contributions:
         aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
         c['n_comments'] = aux[0]['n_comments']
+        aux = UserContributionVoted.get_votes_contribution(repository, str(c['id']))
+        contribution_votes = []
+        for aux_v in aux:
+            contribution_votes.append(aux_v['username'])
+        c['contribution_votes'] = contribution_votes
         new_attributes = {
             "id": c['id'],
             "title": c['title'],
@@ -348,7 +353,8 @@ def return_asks():
             "time": c['time'],
             "user": c['user'],
             "n_votes": c['n_votes'],
-            "n_comments": c['n_comments']
+            "n_comments": c['n_comments'],
+            "contribution_votes": c['contribution_votes']
         }
         news_to_show.append(new_attributes)
     return Response(json.dumps(news_to_show), mimetype='application/json')
@@ -375,6 +381,11 @@ def return_news():
     for c in contributions:
         aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
         c['n_comments'] = aux[0]['n_comments']
+        aux = UserContributionVoted.get_votes_contribution(repository, str(c['id']))
+        contribution_votes = []
+        for aux_v in aux:
+            contribution_votes.append(aux_v['username'])
+        c['contribution_votes'] = contribution_votes
         new_attributes = {
             "id": c['id'],
             "title": c['title'],
@@ -382,7 +393,8 @@ def return_news():
             "time": c['time'],
             "user": c['user'],
             "n_votes": c['n_votes'],
-            "n_comments": c['n_comments']
+            "n_comments": c['n_comments'],
+            "contribution_votes": c['contribution_votes']
         }
         news_to_show.append(new_attributes)
     return Response(json.dumps(news_to_show), mimetype='application/json')
@@ -421,6 +433,11 @@ def return_newest_contributions():
     for c in contributions:
         aux = Comment.get_number_comments_by_contribution(repository, str(c['id']))
         c['n_comments'] = aux[0]['n_comments']
+        aux = UserContributionVoted.get_votes_contribution(repository, str(c['id']))
+        contribution_votes = []
+        for aux_v in aux:
+            contribution_votes.append(aux_v['username'])
+        c['contribution_votes'] = contribution_votes
     return Response(json.dumps(contributions), mimetype='application/json')
 
 
