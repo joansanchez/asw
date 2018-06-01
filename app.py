@@ -458,8 +458,8 @@ def return_asked_contribution(contribution_id):
     contribution = {
         "id": contribution_to_show.id,
         "title": contribution_to_show.title,
-        "url": contribution_to_show.time,
-        "text": contribution_to_show.username,
+        "url": contribution_to_show.url,
+        "text": contribution_to_show.text,
         "time": contribution_to_show.time,
         "user": contribution_to_show.username,
         "kind": contribution_to_show.kind,
