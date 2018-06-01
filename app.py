@@ -98,9 +98,10 @@ def create_user():
 
     exists = User.exists(repository, email)
     if not exists:
-        user = User(email)
-        user.save(repository)
-    return jsonify({"token": encode_auth_token(email).decode("utf-8")})
+        User(email).save(repository)
+    user = User.get(repository, email)
+    user.token = encode_auth_token(email).decode("utf-8")
+    return jsonify(user.toJSON())
 
 
 @app.route('/user', methods=['GET'])
