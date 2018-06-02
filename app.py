@@ -471,6 +471,8 @@ def return_asked_contribution(contribution_id):
     for vote in votes:
         contribution_votes.append(vote['username'])
     contribution['contribution_votes'] = contribution_votes
+    contribution['n_comments'] = Comment.get_number_comments_by_contribution(repository, contribution_id)[0][
+        'n_comments']
     return jsonify(contribution)
 
 
