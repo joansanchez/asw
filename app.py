@@ -466,6 +466,11 @@ def return_asked_contribution(contribution_id):
         "n_votes": contribution_to_show.n_votes,
         "comments": get_contribution_comments(contribution_id)
     }
+    votes = UserContributionVoted.get_votes_contribution(repository, contribution_id)
+    contribution_votes = []
+    for vote in votes:
+        contribution_votes.append(vote['username'])
+    contribution['contribution_votes'] = contribution_votes
     return jsonify(contribution)
 
 
@@ -475,7 +480,7 @@ def parse_comment(comment):
     for child in children:
         parsed_child = parse_comment(child)
         parsed_children.append(parsed_child)
-    return {
+    parsed_comment = {
         "id": comment.id,
         "username": comment.username,
         "time": comment.time,
@@ -483,9 +488,11 @@ def parse_comment(comment):
         "contribution_id": comment.contribution_id,
         "parent_id": comment.parent_id,
         "children": parsed_children,
-        "n_votes": comment.n_votes,
-        "contribution_title": comment.contribution_title
+        "n_votes": comment.n_votes
     }
+    if hasattr(comment, 'contribution_title'):
+        parsed_comment['contribution_title'] = comment.contribution_title
+    return parsed_comment
 
 
 def get_contribution_comments(contribution_id):
