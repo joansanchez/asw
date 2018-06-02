@@ -16,7 +16,7 @@ class UserCommentVoted:
                              comment INTEGER,
                              PRIMARY KEY('user', comment),
                              FOREIGN KEY('user') REFERENCES 'user' (email),
-                             FOREIGN KEY('comment') REFERENCES 'comment' (id)
+                             FOREIGN KEY('comment') REFERENCES 'comment' (id) ON DELETE CASCADE 
                              )'''
 
     @staticmethod

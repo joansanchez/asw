@@ -16,7 +16,7 @@ class UserContributionVoted:
                              contribution INTEGER,
                              PRIMARY KEY('user', contribution),
                              FOREIGN KEY('user') REFERENCES 'user' (email),
-                             FOREIGN KEY('contribution') REFERENCES 'contribution' (id)
+                             FOREIGN KEY('contribution') REFERENCES 'contribution' (id) ON DELETE CASCADE 
                              )'''
 
     @staticmethod
