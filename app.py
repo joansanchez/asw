@@ -483,7 +483,8 @@ def parse_comment(comment):
         "contribution_id": comment.contribution_id,
         "parent_id": comment.parent_id,
         "children": parsed_children,
-        "n_votes": comment.n_votes
+        "n_votes": comment.n_votes,
+        "contribution_title": comment.contribution_title
     }
 
 
