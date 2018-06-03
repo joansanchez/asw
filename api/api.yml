@@ -343,6 +343,30 @@ paths:
       - api_key: []
 
   /comments/{commentID}:
+    get:
+      tags:
+        - "comment"
+      summary: "Endpoint to get a specific comment"
+      description: "Returns a single comment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "commentID"
+          description: "ID of comment to return"
+          required: true
+          type: "string"
+      responses:
+        200:
+            description: "Successful operation. Returns asked comment"
+            schema:
+              $ref: "#/definitions/Comment"
+        400:
+            description: "Bad request, there are missing parameters or they do not have valid format"
+        404:
+            description: "Comment not found"
     delete:
       tags:
         - "comment"
