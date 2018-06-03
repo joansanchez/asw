@@ -24,9 +24,18 @@ class UserCommentVoted:
         return repository.list('SELECT comment AS comment_id FROM user_comment_voted WHERE user = \'' + username + '\'')
 
     def delete(self, repository):
-        repository.delete('DELETE FROM user_comment_voted WHERE user = \'' + self.user + '\' AND  comment = \'' + self.comment+ '\'')
+        repository.delete(
+            'DELETE FROM user_comment_voted WHERE user = \'' + self.user + '\' AND  comment = \'' + self.comment + '\'')
 
     @staticmethod
     def exists(repository, comment_id, username):
         return repository.exists(
             'SELECT * FROM user_comment_voted WHERE comment = \'' + comment_id + '\' AND user = \'' + username + '\'')
+
+    @staticmethod
+    def get_votes_of_a_comment(comment_id, repository):
+        result = repository.list('SELECT user FROM user_comment_voted WHERE comment = ' + str(comment_id))
+        votes = []
+        for vote in result:
+            votes.append(vote['user'])
+        return votes

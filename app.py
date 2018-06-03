@@ -490,7 +490,8 @@ def parse_comment(comment):
         "contribution_id": comment.contribution_id,
         "parent_id": comment.parent_id,
         "children": parsed_children,
-        "n_votes": comment.n_votes
+        "n_votes": comment.n_votes,
+        "votes": comment.votes
     }
     if hasattr(comment, 'contribution_title'):
         parsed_comment['contribution_title'] = comment.contribution_title
@@ -501,6 +502,8 @@ def get_contribution_comments(contribution_id):
     comments = Comment.get_comments_by_contribution(repository, contribution_id)
     results = []
     for comment in comments:
+        votes = UserCommentVoted.get_votes_of_a_comment(comment.id, repository)
+        comment.votes = votes
         if comment.parent_id is None:
             result = parse_comment(comment)
             results.append(result)
@@ -511,6 +514,8 @@ def get_user_comments(user):
     comments = Comment.get_comments_by_user(repository, user)
     results = []
     for comment in comments:
+        votes = UserCommentVoted.get_votes_of_a_comment(comment.id, repository)
+        comment.votes = votes
         result = parse_comment(comment)
         results.append(result)
     return results
