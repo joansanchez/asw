@@ -475,6 +475,21 @@ def return_asked_contribution(contribution_id):
         'n_comments']
     return jsonify(contribution)
 
+@app.route('/api/comments/<comment_id>', methods=['GET'])
+def return_asked_comment(comment_id):
+    if not Comment.exists_comment(repository, comment_id):
+        return jsonify('Not Found'), 404
+    comment_to_show = Comment.get_comment(repository, comment_id)
+    contribution = {
+        "id": comment_to_show.id,
+        "username": comment_to_show.username,
+        "time": comment_to_show.time,
+        "text": comment_to_show.text,
+        "contribution_id": comment_to_show.contribution_id,
+        "parent_id": comment_to_show.parent_id,
+        #"n_votes": comment_to_show.n_votes
+    }
+    return jsonify(contribution)
 
 def parse_comment(comment):
     children = Comment.get_comments_by_parent(repository, comment.id)
