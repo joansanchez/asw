@@ -480,6 +480,8 @@ def parse_comment(comment):
     children = Comment.get_comments_by_parent(repository, comment.id)
     parsed_children = []
     for child in children:
+        votes = UserCommentVoted.get_votes_of_a_comment(child.id, repository)
+        child.votes = votes
         parsed_child = parse_comment(child)
         parsed_children.append(parsed_child)
     parsed_comment = {
